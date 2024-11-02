@@ -1,1 +1,20 @@
-/* You can add global styles to this file, and also import other style files */
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
+
+/* Order */
+@layer reset, primeng;
+
+/* Reset CSS */
+@layer reset {
+  button,
+  input {
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: none;
+    /* Add other reset styles as needed */
+  }
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

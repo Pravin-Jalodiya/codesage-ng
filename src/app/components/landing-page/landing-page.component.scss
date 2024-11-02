@@ -1,0 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Lato:wght@300&display=swap');
+
+/* General Body Styling */
+body {
+  background-image: url('/assets/background-image.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin: 0;
+  padding: 0;
+  font-family: 'Rubik', sans-serif;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header Styling */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 3vh 2vw;
+  height: 18vh;
+}
+
+/* Title Styling */
+.title {
+  font-size: 13vh;
+  font-weight: bold;
+  font-family: 'Montserrat', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to right, white, grey);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  white-space: nowrap;
+}
+
+.buttons {
+  display: flex;
+  gap: 1.5vw;
+}
+
+.p-button {
+  padding: 10px 20px;
+  border: 2px solid grey;
+  border-radius: 30px;
+  background-color: transparent;
+  color: whitesmoke;
+  box-sizing: border-box;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.p-button:hover {
+  background-color: rgba(200, 200, 200, 0.1);
+  border-color: darkgrey;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: calc(100vh - 25vh);
+  overflow: hidden;
+}
+
+/* Intro Text Styling */
+.intro-text {
+  font-size: 2.5vh;
+  line-height: 1.6;
+  color: whitesmoke;
+  margin: 0;
+  padding: 2vh 1.5vw;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 0 80px 80px 0;
+  max-width: 40%;
+}
+
+.intro-text p {
+  margin: 0;
+  padding-bottom: 1vh;
+}
+
+.intro-text-heading {
+  font-family: 'Lato', sans-serif;
+  margin: 0 0 1vh;
+  font-size: 3.5vh;
+}
+
+.intro-text strong {
+  font-weight: bold;
+}
+
+/* Responsive Media Queries */
+@media screen and (max-width: 768px) {
+  .title {
+    font-size: 10vh;
+  }
+
+  .buttons {
+    gap: 2vw;
+  }
+
+  .intro-text {
+    font-size: 2.5vh;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .title {
+    font-size: 8vh;
+  }
+
+  .container {
+    padding-left: 3vw;
+  }
+
+  .intro-text {
+    font-size: 2vh;
+  }
+}
