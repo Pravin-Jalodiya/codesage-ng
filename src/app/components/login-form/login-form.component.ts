@@ -42,6 +42,7 @@ export class LoginFormComponent {
           this.loading = false;
           console.error('Login failed', error);
           this.showError(error.error.message);
+
         },
         complete: () => {
           this.loading = false;
@@ -52,7 +53,7 @@ export class LoginFormComponent {
   }
 
   showError(message: string): void {
-    this.messageService.add({ severity: 'error', summary: 'Error', detail: message });
+    this.messageService.add({ severity: 'contrast', summary: 'Error', detail: message });
   }
 
 }

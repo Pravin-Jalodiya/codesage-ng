@@ -1,11 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-app-header',
+  selector: 'app-header',
   templateUrl: './app-header.component.html',
-  styleUrl: './app-header.component.scss'
+  styleUrls: ['./app-header.component.scss']
 })
+export class AppHeaderComponent implements OnInit {
+  role: "user" | "admin" | undefined = "admin"
 
-export class AppHeaderComponent {
-
+  ngOnInit(): void {
+    this.role = Math.random() > 0.5 ? 'admin' : 'user';
+  }
 }

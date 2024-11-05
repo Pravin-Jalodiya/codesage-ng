@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {provideRouter, RouterLink, RouterOutlet} from "@angular/router";
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule, provideHttpClient} from "@angular/common/http";
 import {BrowserModule} from "@angular/platform-browser";
 
@@ -22,16 +22,20 @@ import {Ripple} from "primeng/ripple";
 import {ProgressSpinnerModule} from "primeng/progressspinner";
 import {ToastModule} from "primeng/toast";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {AvatarModule} from "primeng/avatar";
+import {ProfileComponent} from "./components/profile/profile.component";
+import {DropdownModule} from "primeng/dropdown";
 
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    LandingPageComponent,
-    LoginFormComponent,
-    SignupFormComponent,
-    AppHeaderComponent
-  ],
+    declarations: [
+        AppComponent,
+        LandingPageComponent,
+        LoginFormComponent,
+        SignupFormComponent,
+        AppHeaderComponent,
+        ProfileComponent,
+    ],
   imports: [
     CommonModule,
     RouterOutlet,
@@ -47,9 +51,15 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
     Ripple,
     ProgressSpinnerModule,
     BrowserAnimationsModule,
-    ToastModule
+    ToastModule,
+    AvatarModule,
+    DropdownModule,
+    FormsModule,
   ],
-  bootstrap: [AppComponent],
-  providers: [AuthService, provideHttpClient(), provideRouter(routes), MessageService]
+    bootstrap: [AppComponent],
+    exports: [
+        AppHeaderComponent
+    ],
+    providers: [AuthService, provideHttpClient(), provideRouter(routes), MessageService]
 })
 export class AppModule { }

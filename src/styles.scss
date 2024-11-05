@@ -30,6 +30,14 @@ body {
   flex-direction: column;
 }
 
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 3vh 2vw;
+  height: 7.5vh;
+}
+
 .background {
   position: relative;
   background-image: url('/assets/background-image.png');
@@ -60,14 +68,14 @@ body {
 }
 
 .logo-text {
-  position: absolute;
-  top: 10px;
+  //position: absolute;
+  //top: 10px;
   left: 20px;
   font-size: 4vh;
   font-weight: bold;
   font-family: 'Montserrat', sans-serif;
   margin: 0;
-  padding: 2vh;
+  //padding: 1vh;
   background: linear-gradient(to right, white, grey);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
