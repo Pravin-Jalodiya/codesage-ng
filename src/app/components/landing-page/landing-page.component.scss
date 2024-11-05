@@ -76,6 +76,11 @@
   font-weight: bold;
 }
 
+.spinner {
+  z-index: 3
+}
+
+
 /* Responsive Media Queries */
 @media screen and (max-width: 768px) {
   .title {

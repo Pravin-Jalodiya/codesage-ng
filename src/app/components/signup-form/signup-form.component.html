@@ -2,6 +2,7 @@
   <div class="background">
     <div class="background-overlay">
       <div class="logo-text">Codesage</div>
+      <p-toast />
       <div class="signup-container">
         <div class="signup-form">
           <h2>Create an account</h2>
@@ -9,7 +10,7 @@
             <div class="p-grid">
               <div class="p-col-6">
                 <p-floatLabel>
-                  <input pInputText id="username" formControlName="username" required />
+                  <input pInputText class="transparent-input" id="username" formControlName="username" required />
                   <label for="username">Username*</label>
                 </p-floatLabel>
                 @if (signupForm.get('username')?.touched && signupForm.get('username')?.invalid) {
@@ -18,7 +19,7 @@
               </div>
               <div class="p-col-6">
                 <p-floatLabel>
-                  <input pInputText id="full-name" formControlName="fullName" required />
+                  <input pInputText class="transparent-input" id="full-name" formControlName="fullName" required />
                   <label for="full-name">Full Name*</label>
                 </p-floatLabel>
                 @if (signupForm.get('fullName')?.touched && signupForm.get('fullName')?.invalid) {
@@ -30,7 +31,7 @@
             <div class="p-grid">
               <div class="p-col-6">
                 <p-floatLabel>
-                  <input pInputText type="password" id="password" formControlName="password" required />
+                  <input pInputText class="transparent-input" type="password" id="password" formControlName="password" required />
                   <label for="password">Password*</label>
                 </p-floatLabel>
                 @if (signupForm.get('password')?.touched && signupForm.get('password')?.invalid) {
@@ -39,7 +40,12 @@
               </div>
               <div class="p-col-6">
                 <p-floatLabel>
-                  <input pInputText type="password" id="confirm-password" formControlName="confirmPassword" required />
+                  <input pInputText
+                         class="transparent-input"
+                         type="password"
+                         id="confirm-password"
+                         formControlName="confirmPassword"
+                         required />
                   <label for="confirm-password">Confirm Password*</label>
                 </p-floatLabel>
                 @if (signupForm.get('confirmPassword')?.touched && signupForm.get('confirmPassword')?.invalid) {
@@ -51,7 +57,7 @@
             <div class="p-grid">
               <div class="p-col-6">
                 <p-floatLabel>
-                  <input pInputText type="email" id="email" formControlName="email" required />
+                  <input pInputText class="transparent-input" type="email" id="email" formControlName="email" required />
                   <label for="email">Email*</label>
                 </p-floatLabel>
                 @if (signupForm.get('email')?.touched && signupForm.get('email')?.invalid) {
@@ -60,7 +66,7 @@
               </div>
               <div class="p-col-6">
                 <p-floatLabel>
-                  <input pInputText id="leetcode-id" formControlName="leetcodeId" required />
+                  <input pInputText class="transparent-input" id="leetcode-id" formControlName="leetcodeId" required />
                   <label for="leetcode-id">LeetCode ID*</label>
                 </p-floatLabel>
                 @if (signupForm.get('leetcodeId')?.touched && signupForm.get('leetcodeId')?.invalid) {
@@ -72,7 +78,7 @@
             <div class="p-grid">
               <div class="p-col-6">
                 <p-floatLabel>
-                  <input pInputText id="country" formControlName="country" required />
+                  <input pInputText class="transparent-input" id="country" formControlName="country" required />
                   <label for="country">Country*</label>
                 </p-floatLabel>
                 @if (signupForm.get('country')?.touched && signupForm.get('country')?.invalid) {
@@ -81,7 +87,7 @@
               </div>
               <div class="p-col-6">
                 <p-floatLabel>
-                  <input pInputText id="organization" formControlName="organization" required />
+                  <input pInputText class="transparent-input" id="organization" formControlName="organization" required />
                   <label for="organization">Organization*</label>
                 </p-floatLabel>
                 @if (signupForm.get('organization')?.touched && signupForm.get('organization')?.invalid) {
@@ -89,10 +95,15 @@
                 }
               </div>
             </div>
-            <button pButton pRipple type="submit" label="Signup" class="signup-button" [disabled]="signupForm.invalid"></button>
+            <button pButton pRipple
+                    type="submit"
+                    label="Signup"
+                    class="signup-button no-box-shadow"
+                    [disabled]="signupForm.invalid">
+            </button>
           </form>
           <div class="additional-options">
-            <p>Already have an account? <a routerLink="/login" class="signup-link">Login</a></p>
+            <p>Already have an account? <a routerLink="/login" class="login-link"><b>Login</b></a></p>
           </div>
         </div>
       </div>

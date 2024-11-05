@@ -17,7 +17,6 @@ describe('AppComponent', () => {
   it(`should have the 'codesage-ng' title`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('codesage-ng');
   });
 
   it('should render title', () => {

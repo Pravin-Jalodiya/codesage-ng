@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { MessageService } from 'primeng/api';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 import {AuthService} from "../../shared/services/auth/auth.service";
 
@@ -12,7 +15,11 @@ import {AuthService} from "../../shared/services/auth/auth.service";
 export class LoginFormComponent {
   loginForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {
+  err: string | undefined;
+
+  loading: boolean = false;
+
+  constructor(private fb: FormBuilder, private authService: AuthService, private messageService: MessageService) {
     this.loginForm = this.fb.group({
       username: ['', [Validators.required]],
       password: ['', [Validators.required]],
@@ -20,7 +27,9 @@ export class LoginFormComponent {
   }
 
   onSubmit(): void {
+    console.log(this.loginForm.value);
     if (this.loginForm.valid) {
+      this.loading = true;
       const { username, password } = this.loginForm.value;
       this.authService.login(username, password).subscribe({
         next: (response: any) => {
@@ -30,13 +39,20 @@ export class LoginFormComponent {
             localStorage.setItem('userRole', response.role);
         }},
         error: (error: any) => {
+          this.loading = false;
           console.error('Login failed', error);
-          // handle error logic here
+          this.showError(error.error.message);
         },
         complete: () => {
+          this.loading = false;
           console.log('Login request complete');
         }
       });
     }
   }
+
+  showError(message: string): void {
+    this.messageService.add({ severity: 'error', summary: 'Error', detail: message });
+  }
+
 }

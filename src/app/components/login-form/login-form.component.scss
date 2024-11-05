@@ -4,25 +4,11 @@
   position: absolute;
   top: 50%;
   left: 50%;
+  z-index: 2;
   transform: translate(-50%, -50%);
   background: transparent;
   padding: 30px 20px;
   text-align: center;
-}
-
-.logo-text {
-  position: absolute;
-  top: 10px;
-  left: 20px;
-  font-size: 4vh;
-  font-weight: bold;
-  font-family: 'Montserrat', sans-serif;
-  margin: 0;
-  padding: 2vh;
-  background: linear-gradient(to right, white, grey);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  white-space: nowrap;
 }
 
 label{
@@ -35,7 +21,7 @@ label{
 }
 
 .input-field {
-  margin-bottom: 3.5vh;
+  margin-bottom: 3.9vh;
 }
 
 .transparent-input {
@@ -73,16 +59,27 @@ label{
   background-color: #f0f0f0;
 }
 
+.login-button:disabled {
+  cursor: not-allowed;
+}
+
 .signup-link-container, .forgot-password-container {
   margin-top: 20px;
+  color: white;
 }
 
 .signup-link, .forgot-password-link {
   color: white;
-  font-size: 0.9em;
+  font-size: 2vh;
   text-decoration: none;
 }
 
 .signup-link:hover, .forgot-password-link:hover {
   text-decoration: underline;
+}
+
+.error-message {
+  color: lightcoral;
+  font-size: 0.875em;
+  margin-top: 6px;
 }

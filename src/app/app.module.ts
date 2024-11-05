@@ -6,6 +6,7 @@ import {HttpClientModule, provideHttpClient} from "@angular/common/http";
 import {BrowserModule} from "@angular/platform-browser";
 
 import {ButtonDirective} from "primeng/button";
+import { MessageService } from 'primeng/api';
 
 import {AppComponent} from "./app.component";
 import {LandingPageComponent} from "./components/landing-page/landing-page.component";
@@ -18,6 +19,9 @@ import {FloatLabelModule} from "primeng/floatlabel";
 import {InputTextModule} from "primeng/inputtext";
 import {PasswordModule} from "primeng/password";
 import {Ripple} from "primeng/ripple";
+import {ProgressSpinnerModule} from "primeng/progressspinner";
+import {ToastModule} from "primeng/toast";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 
 @NgModule({
@@ -40,9 +44,12 @@ import {Ripple} from "primeng/ripple";
     FloatLabelModule,
     InputTextModule,
     PasswordModule,
-    Ripple
+    Ripple,
+    ProgressSpinnerModule,
+    BrowserAnimationsModule,
+    ToastModule
   ],
   bootstrap: [AppComponent],
-  providers: [AuthService, provideHttpClient(), provideRouter(routes)]
+  providers: [AuthService, provideHttpClient(), provideRouter(routes), MessageService]
 })
 export class AppModule { }
