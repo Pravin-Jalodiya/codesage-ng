@@ -1,121 +1,101 @@
 <body>
-  <div class="background">
-    <div class="background-overlay"></div>
-    <div class="signup-container">
-      <div class="logo-text">Codesage</div>
-      <div class="signup-form">
-        <h2>Create an Account</h2>
-        <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
-          <div class="form-group_row">
-            <div class="input-container_half">
-              <input
-                type="text"
-                id="username"
-                formControlName="username"
-                required
-              />
+<div class="background">
+  <div class="background-overlay"></div>
+  <div class="signup-container">
+    <div class="logo-text">Codesage</div>
+    <div class="signup-form">
+      <h2>Create an Account</h2>
+      <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+        <div class="p-grid">
+          <div class="p-col-6">
+            <p-floatLabel>
+              <input pInputText id="username" formControlName="username" required />
               <label for="username">Username*</label>
-              @if (signupForm.get('username')?.touched && signupForm.get('username')?.invalid) {
-                <div class="error-message">Please enter your username.</div>
-              }
-            </div>
-            <div class="input-container_half">
-              <input
-                type="text"
-                id="full-name"
-                formControlName="fullName"
-                required
-              />
+            </p-floatLabel>
+            @if (signupForm.get('username')?.touched && signupForm.get('username')?.invalid) {
+              <div class="error-message">Please enter your username</div>
+            }
+          </div>
+          <div class="p-col-6">
+            <p-floatLabel>
+              <input pInputText id="full-name" formControlName="fullName" required />
               <label for="full-name">Full Name*</label>
-              @if (signupForm.get('fullName')?.touched && signupForm.get('fullName')?.invalid) {
-                <div class="error-message">Please enter your full name.</div>
-              }
-            </div>
+            </p-floatLabel>
+            @if (signupForm.get('fullName')?.touched && signupForm.get('fullName')?.invalid) {
+              <div class="error-message">Please enter your full name</div>
+            }
           </div>
-          <div class="form-group_row">
-            <div class="input-container_half">
-              <input
-                type="password"
-                id="password"
-                formControlName="password"
-                required
-              />
-              <label for="password">Password*</label>
-              @if (signupForm.get('password')?.touched && signupForm.get('password')?.invalid) {
-                <div class="error-message">Please enter your password.</div>
-              }
-            </div>
-            <div class="input-container_half">
-              <input
-                type="password"
-                id="confirm-password"
-                formControlName="confirmPassword"
-                required
-              />
-              <label for="confirm-password">Confirm Password*</label>
-              @if (signupForm.get('confirmPassword')?.touched && signupForm.get('confirmPassword')?.invalid) {
-                <div class="error-message">Please confirm your password.</div>
-              }
-            </div>
-          </div>
-          <div class="form-group_row">
-            <div class="input-container_half">
-              <input
-                type="email"
-                id="email"
-                formControlName="email"
-                required
-              />
-              <label for="email">Email*</label>
-              @if (signupForm.get('email')?.touched && signupForm.get('email')?.invalid) {
-                <div class="error-message">Please enter a valid email.</div>
-              }
-            </div>
-            <div class="input-container_half">
-              <input
-                type="text"
-                id="leetcode-id"
-                formControlName="leetcodeId"
-                required
-              />
-              <label for="leetcode-id">LeetCode ID*</label>
-              @if (signupForm.get('leetcodeId')?.touched && signupForm.get('leetcodeId')?.invalid) {
-                <div class="error-message">Please enter your LeetCode ID.</div>
-              }
-            </div>
-          </div>
-          <div class="form-group_row">
-            <div class="input-container_half">
-              <input
-                type="text"
-                id="country"
-                formControlName="country"
-                required
-              />
-              <label for="country">Country*</label>
-              @if (signupForm.get('country')?.touched && signupForm.get('country')?.invalid) {
-                <div class="error-message">Please enter your country.</div>
-              }
-            </div>
-            <div class="input-container_half">
-              <input
-                type="text"
-                id="organization"
-                formControlName="organization"
-                required
-              />
-              <label for="organization">Organization*</label>
-              @if (signupForm.get('organization')?.touched && signupForm.get('organization')?.invalid) {
-                <div class="error-message">Please enter your organization.</div>
-              }
-            </div>
-          </div>
-          <button type="submit" class="signup-button" [disabled]="signupForm.invalid">Signup</button>
-        </form>
-        <div class="additional-options">
-          <p>Already have an account? <a href="#" class="signup-link">Login</a></p>
         </div>
+
+        <div class="p-grid">
+          <div class="p-col-6">
+            <p-floatLabel>
+              <input pInputText type="password" id="password" formControlName="password" required />
+              <label for="password">Password*</label>
+            </p-floatLabel>
+            @if (signupForm.get('password')?.touched && signupForm.get('password')?.invalid) {
+              <div class="error-message">Please enter your password</div>
+            }
+          </div>
+          <div class="p-col-6">
+            <p-floatLabel>
+              <input pInputText type="password" id="confirm-password" formControlName="confirmPassword" required />
+              <label for="confirm-password">Confirm Password*</label>
+            </p-floatLabel>
+            @if (signupForm.get('confirmPassword')?.touched && signupForm.get('confirmPassword')?.invalid) {
+              <div class="error-message">Please confirm your password</div>
+            }
+          </div>
+        </div>
+
+        <div class="p-grid">
+          <div class="p-col-6">
+            <p-floatLabel>
+              <input pInputText type="email" id="email" formControlName="email" required />
+              <label for="email">Email*</label>
+            </p-floatLabel>
+            @if (signupForm.get('email')?.touched && signupForm.get('email')?.invalid) {
+              <div class="error-message">Please enter a valid email</div>
+            }
+          </div>
+          <div class="p-col-6">
+            <p-floatLabel>
+              <input pInputText id="leetcode-id" formControlName="leetcodeId" required />
+              <label for="leetcode-id">LeetCode ID*</label>
+            </p-floatLabel>
+            @if (signupForm.get('leetcodeId')?.touched && signupForm.get('leetcodeId')?.invalid) {
+              <div class="error-message">Please enter your LeetCode ID</div>
+            }
+          </div>
+        </div>
+
+        <div class="p-grid">
+          <div class="p-col-6">
+            <p-floatLabel>
+              <input pInputText id="country" formControlName="country" required />
+              <label for="country">Country*</label>
+            </p-floatLabel>
+            @if (signupForm.get('country')?.touched && signupForm.get('country')?.invalid) {
+              <div class="error-message">Please enter your country</div>
+            }
+          </div>
+          <div class="p-col-6">
+            <p-floatLabel>
+              <input pInputText id="organization" formControlName="organization" required />
+              <label for="organization">Organization*</label>
+            </p-floatLabel>
+            @if (signupForm.get('organization')?.touched && signupForm.get('organization')?.invalid) {
+              <div class="error-message">Please enter your organization</div>
+            }
+          </div>
+        </div>
+
+        <button pButton type="submit" label="Signup" class="signup-button" [disabled]="signupForm.invalid"></button>
+      </form>
+      <div class="additional-options">
+        <p>Already have an account? <a routerLink="/login" class="signup-link">Login</a></p>
       </div>
     </div>
   </div>
+</div>
 </body>

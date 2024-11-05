@@ -1,8 +1,7 @@
-// auth.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import {Observable } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root'
@@ -18,17 +17,6 @@ export class AuthService {
       'Content-Type': 'application/json'
     });
 
-    return this.http.post(`http://localhost:8080/auth/login`, loginPayload, { headers })
-      .pipe(
-        map((response: any) => {
-          if (response.code === 200) {
-            localStorage.setItem('authToken', response.token);
-            localStorage.setItem('userRole', response.role);
-            return response;
-          } else {
-            throw new Error('Login not successful');
-          }
-        })
-      );
+    return this.http.post(`${this.baseUrl}/login`, loginPayload, { headers })
   }
 }

@@ -1,46 +1,36 @@
 <body>
-<div class="background">
-  <div class="background-overlay"></div>
-  <div class="login-container">
-    <div class="logo-text">Codesage</div>
-    <div class="login-form">
-      <h2>Login to your account</h2>
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-        <div class="form-group">
-          <div class="input-container">
-            <input
-              type="text"
-              id="username"
-              formControlName="username"
-              placeholder="Username*"
-              required
-            />
-            <label for="username">Username*</label>
-            @if (loginForm.get('username')?.touched && loginForm.get('username')?.invalid) {
-              <div class="error-message">Please enter your username.</div>
-            }
+  <div class="background">
+    <div class="home-background-overlay">
+      <div class="container">
+        <div class="w-auto h-auto mx-2 my-4">
+          <h1>Login to your account</h1>
+          <form>
+            <div class="input-field my-4">
+              <p-floatLabel>
+                <input pInputText id="username" class="custom-input w-full" type="text" />
+                <label for="username">Username</label>
+              </p-floatLabel>
+            </div>
+            <div class="input-field my-4">
+              <p-floatLabel>
+                <input pInputText id="password" type="password" class="custom-input w-full" />
+                <label>Password</label>
+              </p-floatLabel>
+            </div>
+            <div class="flex justify-content-center my-4">
+              <button pButton pRipple label="Login" class="custom-purple-button w-full"></button>
+            </div>
+          </form>
+          <div class="card flex justify-content-center gap-3 custom-link">
+            <a routerLink="/signup" class="custom-link-text">
+              Don’t have an account yet? <b>Signup</b>
+            </a>
           </div>
-          <div class="input-container">
-            <input
-              type="password"
-              id="password"
-              formControlName="password"
-              placeholder="Password*"
-              required
-            />
-            <label for="password">Password*</label>
-            @if (loginForm.get('password')?.touched && loginForm.get('password')?.invalid) {
-              <div class="error-message">Please enter your password.</div>
-            }
+          <div class="flex justify-content-end my-4">
+            <a routerLink="/forgot-password" class="forgot-password-link">Forgot password?</a>
           </div>
         </div>
-        <button type="submit" class="login-button" [disabled]="loginForm.invalid">Login</button>
-      </form>
-      <div class="additional-options">
-        <p>Don't have an account yet? <a href="#" class="signup-link">Signup</a></p>
-        <p><a href="#" class="forgot-password">Forgot Password?</a></p>
       </div>
     </div>
   </div>
-</div>
 </body>

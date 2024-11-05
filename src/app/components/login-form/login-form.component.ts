@@ -1,20 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
 
 import {AuthService} from "../../shared/services/auth/auth.service";
 
 @Component({
   selector: 'app-login-form',
-  standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    HttpClientModule
-  ],
   templateUrl: './login-form.component.html',
   styleUrls: ['./login-form.component.scss'],
-  providers: [AuthService]
 })
+
 export class LoginFormComponent {
   loginForm: FormGroup;
 
@@ -31,8 +25,10 @@ export class LoginFormComponent {
       this.authService.login(username, password).subscribe({
         next: (response: any) => {
           console.log('Login successful:', response);
-          // handle additional successful login logic here
-        },
+          if (response.code === 200) {
+            localStorage.setItem('authToken', response.token);
+            localStorage.setItem('userRole', response.role);
+        }},
         error: (error: any) => {
           console.error('Login failed', error);
           // handle error logic here

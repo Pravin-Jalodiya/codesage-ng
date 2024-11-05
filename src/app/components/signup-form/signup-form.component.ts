@@ -3,26 +3,18 @@ import {
   FormBuilder,
   FormGroup,
   Validators,
-  ReactiveFormsModule,
   AbstractControl,
   ValidationErrors,
   ValidatorFn,
   AbstractControlOptions
 } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-signup-form',
-  standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    HttpClientModule,
-    CommonModule
-  ],
   templateUrl: './signup-form.component.html',
   styleUrls: ['./signup-form.component.scss']
 })
+
 export class SignupFormComponent implements OnInit {
   signupForm: FormGroup;
 
