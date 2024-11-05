@@ -1,80 +1,88 @@
-.container {
-  max-width: 400px; /* Limit the container width for better layout */
-  width: 100%; /* Make it responsive */
-  background: white; /* White background for form */
-  border-radius: 10px; /* Rounded corners */
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+.form-container {
+  width: 90%;
+  max-width: 400px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: transparent;
+  padding: 30px 20px;
+  text-align: center;
 }
 
-h1 {
-  text-align: center;
-  color: #4a148c; /* Dark purple for heading */
-  margin-bottom: 20px; /* Space below the heading */
+.logo-text {
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  font-size: 4vh;
+  font-weight: bold;
+  font-family: 'Montserrat', sans-serif;
+  margin: 0;
+  padding: 2vh;
+  background: linear-gradient(to right, white, grey);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  white-space: nowrap;
+}
+
+label{
+  color: white;
+}
+
+.form-heading {
+  color: white;
+  margin-bottom: 40px;
 }
 
 .input-field {
-  position: relative;
+  margin-bottom: 3.5vh;
 }
 
-.custom-input {
+.transparent-input {
   width: 100%;
-  padding: 12px 10px;
-  border: 1px solid #ddd; /* Light border */
-  border-radius: 5px; /* Rounded input */
-  transition: border-color 0.3s ease; /* Smooth border transition */
+  padding: 12px;
+  background-color: rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 20px;
+  color: white;
 }
 
-.custom-input:focus {
-  border-color: #4a148c; /* Purple border on focus */
-  outline: none; /* Remove default outline */
+.transparent-input:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.6);
+  background-color: rgba(255, 255, 255, 0.6);
+  box-shadow: none;
 }
 
-.custom-purple-button {
-  background-color: #4a148c; /* Dark purple */
-  color: white; /* White text */
-  border: none; /* No border */
-  padding: 12px; /* Padding for the button */
-  border-radius: 5px; /* Rounded button */
-  transition: background-color 0.3s ease; /* Smooth transition */
+.button-container {
+  margin-top: 20px;
 }
 
-.custom-purple-button:hover {
-  background-color: #6a1b9a; /* Lighter purple on hover */
+.login-button {
+  width: 100%;
+  padding: 12px;
+  background-color: white;
+  color: black;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-.custom-link-text {
-  color: #4a148c; /* Dark purple for the link */
-  text-decoration: none; /* Remove underline */
+.login-button:hover {
+  background-color: #f0f0f0;
 }
 
-.custom-link-text:hover {
-  text-decoration: underline; /* Underline on hover */
+.signup-link-container, .forgot-password-container {
+  margin-top: 20px;
 }
 
-.forgot-password-link {
-  color: #4a148c; /* Dark purple for the link */
-  font-size: 0.9em; /* Slightly smaller font size */
+.signup-link, .forgot-password-link {
+  color: white;
+  font-size: 0.9em;
+  text-decoration: none;
 }
 
-.separator {
-  text-align: center;
-  margin: 20px 0;
-  position: relative;
-}
-
-.separator::before,
-.separator::after {
-  content: '';
-  flex: 1;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
-  margin: auto;
-  position: relative;
-  top: 50%;
-}
-
-.separator span {
-  background: #f4f4f4; /* Background for the "Or" text */
-  padding: 0 10px; /* Padding for the text */
-  position: relative;
-  z-index: 1; /* Above the lines */
+.signup-link:hover, .forgot-password-link:hover {
+  text-decoration: underline;
 }

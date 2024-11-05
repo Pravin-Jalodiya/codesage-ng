@@ -1,31 +1,45 @@
 .signup-container {
-  position: relative;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   z-index: 2;
-  max-width: 500px;
+  max-width: 700px;
   width: 100%;
-  background: white;
-  padding: 40px;
+  background: transparent; /* Make the form background transparent */
+  padding: 50px;
   border-radius: 10px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+label {
+  color: white;
 }
 
 .logo-text {
-  font-size: 2em;
-  color: #4a148c;
-  text-align: center;
-  margin-bottom: 20px;
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  font-size: 4vh;
+  font-weight: bold;
+  font-family: 'Montserrat', sans-serif;
+  margin: 0;
+  padding: 2vh;
+  background: linear-gradient(to right, white, grey);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  white-space: nowrap;
 }
 
 .signup-form h2 {
   text-align: center;
-  color: #4a148c;
-  margin-bottom: 20px;
+  color: white; /* Make heading white */
+  margin-bottom: 30px;
 }
 
 .p-grid {
   display: flex;
   flex-wrap: wrap;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
 .p-col-6 {
@@ -36,42 +50,55 @@
 input {
   width: 100%;
   padding: 12px 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  transition: border-color 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 20px;
+  color: white;
 }
 
 input:focus {
-  border-color: #4a148c;
   outline: none;
+  border-color: rgba(255, 255, 255, 0.6);
+  background-color: rgba(255, 255, 255, 0.6);
+  box-shadow: none;
 }
 
 .error-message {
   color: lightcoral;
   font-size: 0.875em;
-  margin-top: 5px;
+  margin-top: 6px;
 }
 
 .signup-button {
-  background-color: #4a148c;
-  color: white;
-  border: none;
-  padding: 12px;
-  border-radius: 5px;
   width: 100%;
-  transition: background-color 0.3s ease;
+  padding: 12px;
+  background-color: white;
+  color: black;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:disabled {
+    opacity: 1;
+
+    &:hover{
+      cursor: not-allowed;
+    }
+  }
 }
 
 .signup-button:hover {
-  background-color: #6a1b9a;
+  background-color: #f0f0f0;
 }
 
 .additional-options {
   text-align: center;
+  color: white;
 }
 
 .signup-link {
-  color: #4a148c;
+  color: white;
   text-decoration: none;
 }
 
