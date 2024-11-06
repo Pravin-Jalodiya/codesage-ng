@@ -50,9 +50,8 @@
 .dropdown-content {
   display: none;
   position: absolute;
-  background-color: rgba(0, 0, 0, 0.5);
-  min-width: 165px;
-  //box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.9);
+  min-width: 9vw;
   z-index: 1;
   border-radius: 10px;
 }
@@ -62,7 +61,7 @@
 }
 
 .dropdown-item {
-  padding: 1.5vw 1vw;
+  padding: 1.25vw 1vw;
   cursor: pointer;
   color: white;
   font-size: 1.85vh;

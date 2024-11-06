@@ -5,7 +5,21 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  margin: 8vh auto;
+  margin: 3vh auto 1vh;
+}
+
+.edit-profile-form {
+  width: 50%;
+  max-width: 1200px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 15px;
+  margin: 0 auto;
+}
+
+.profile-container {
+  width: 100%;
 }
 
 .profile-picture {
@@ -17,5 +31,106 @@
 .profile-edit {
   width: 50%;
   display: flex;
-  justify-content: flex-end; /* Align edit button to the right */
+  justify-content: flex-end;
+}
+
+.edit-button {
+  width: 20%;
+  padding: 12px;
+  background-color: white;
+  color: black;
+  font-size: 1vw;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.profile-heading {
+  width: 60%;
+  font-family: 'Raleway', sans-serif;
+  font-weight: bold;
+  border-radius: 50px;
+  //background-color: rgba(0, 0, 0, 0.7);
+  color: whitesmoke;
+  font-size: 3vw;
+  text-align: left;
+  margin: 4vh auto 0;
+  padding: 10px;
+}
+
+
+.edit-button:hover {
+  background-color: #f0f0f0;
+}
+
+label {
+  color: white;
+  font-weight: bold;
+}
+
+.user-name, .user-email {
+  color: white;
+  margin: 0;
+  font-size: 1.8vh;
+  padding: 5px;
+}
+
+.user-email {
+  color: darkgrey;
+}
+
+.p-grid {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+.p-col-6 {
+  flex: 0 0 50%;
+  padding: 0 10px;
+}
+
+.transparent-input {
+  width: 100%;
+  padding: 12px 10px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: .3px solid rgba(255, 255, 255, 0.4);
+  border-radius: 20px;
+  color: white;
+}
+
+input:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.2);
+  box-shadow: none;
+}
+
+.profile-save {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.save-button {
+  width: 30%;
+  padding: 12px;
+  background-color: white;
+  color: black;
+  font-size: 1vw;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.error-message {
+  color: lightcoral;
+  font-size: 0.875em;
+  margin-top: 6px;
 }

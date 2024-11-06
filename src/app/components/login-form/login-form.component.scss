@@ -13,6 +13,7 @@
 
 label{
   color: white;
+  font-weight: bold;
 }
 
 .form-heading {
@@ -27,16 +28,16 @@ label{
 .transparent-input {
   width: 100%;
   padding: 12px;
-  background-color: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.1);
+  border: .3px solid rgba(255, 255, 255, 0.4);
   border-radius: 20px;
   color: white;
 }
 
 .transparent-input:focus {
   outline: none;
-  border-color: rgba(255, 255, 255, 0.1);
-  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.2);
   box-shadow: none;
 }
 

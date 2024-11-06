@@ -3,20 +3,104 @@
     <div class="background-overlay">
       <p-toast />
       <app-header/>
+      <div class="profile-heading">
+        Profile
+      </div>
       <div class="profile-header-container">
         <div class="profile-picture">
           <p-avatar
-            image="https://primefaces.org/cdn/primeng/images/demo/avatar/asiyajavayant.png"
+            image="assets/asiyajavayant.png"
             styleClass="mr-2"
             size="xlarge"
             shape="circle" />
+          <div>
+            <p class="user-name">
+              Ziya
+            </p>
+            <p class="user-email">
+              Ziya$gmail.com
+            </p>
+          </div>
         </div>
         <div class="profile-edit">
-          <button pButton type="text" id="edit">
+          <button pButton class="edit-button no-box-shadow" type="button" id="edit">
             Edit
           </button>
         </div>
       </div>
+        <form [formGroup]="profileForm" class="edit-profile-form">
+          <div class="profile-container">
+            <div class="p-grid">
+              <div class="p-col-6">
+                <p-floatLabel>
+                  <input pInputText class="transparent-input" type="text" id="username" formControlName="username" required />
+                  <label for="username">Username*</label>
+                </p-floatLabel>
+                <!--          @if (signupForm.get('email')?.touched && signupForm.get('email')?.invalid) {-->
+                <!--            <div class="error-message">Please enter a valid email</div>-->
+                <!--          }-->
+              </div>
+              <div class="p-col-6">
+                <p-floatLabel>
+                  <input pInputText class="transparent-input" id="fullname" formControlName="fullname" required />
+                  <label for="fullname">Full Name*</label>
+                </p-floatLabel>
+                <!--          @if (signupForm.get('leetcodeId')?.touched && signupForm.get('leetcodeId')?.invalid) {-->
+                <!--            <div class="error-message">Please enter your LeetCode ID</div>-->
+                <!--          }-->
+              </div>
+            </div>
+
+            <div class="p-grid">
+              <div class="p-col-6">
+                <p-floatLabel>
+                  <input pInputText class="transparent-input" type="password" id="password" formControlName="password" required />
+                  <label for="password">Password*</label>
+                </p-floatLabel>
+                <!--          @if (signupForm.get('email')?.touched && signupForm.get('email')?.invalid) {-->
+                <!--            <div class="error-message">Please enter a valid email</div>-->
+                <!--          }-->
+              </div>
+              <div class="p-col-6">
+                <p-floatLabel>
+                  <input pInputText class="transparent-input" id="email" formControlName="email" required />
+                  <label for="email">Email*</label>
+                </p-floatLabel>
+                <!--          @if (signupForm.get('leetcodeId')?.touched && signupForm.get('leetcodeId')?.invalid) {-->
+                <!--            <div class="error-message">Please enter your LeetCode ID</div>-->
+                <!--          }-->
+              </div>
+            </div>
+
+            <div class="p-grid">
+              <div class="p-col-6">
+                <p-floatLabel>
+                  <input pInputText class="transparent-input" type="text" id="country" formControlName="country" required />
+                  <label for="country">Country*</label>
+                </p-floatLabel>
+                <!--          @if (signupForm.get('email')?.touched && signupForm.get('email')?.invalid) {-->
+                <!--            <div class="error-message">Please enter a valid email</div>-->
+                <!--          }-->
+              </div>
+              <div class="p-col-6">
+                <p-floatLabel>
+                  <input pInputText class="transparent-input" id="organisation" formControlName="organisation" required />
+                  <label for="organisation">Organisation*</label>
+                </p-floatLabel>
+                <!--          @if (signupForm.get('leetcodeId')?.touched && signupForm.get('leetcodeId')?.invalid) {-->
+                <!--            <div class="error-message">Please enter your LeetCode ID</div>-->
+                <!--          }-->
+              </div>
+            </div>
+
+            <div class="profile-save">
+              <button pButton class="save-button no-box-shadow" type="button" id="save">
+                Save
+              </button>
+            </div>
+
+          </div>
+        </form>
     </div>
   </div>
 </body>
