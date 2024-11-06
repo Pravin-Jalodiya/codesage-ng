@@ -1,0 +1,119 @@
+.card {
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+  background-color: #f9f9f9;
+  max-width: 100%;
+}
+
+.p-fileupload {
+  border-radius: 8px;
+  background-color: #ffffff;
+  padding: 1.5rem;
+  border: 1px solid #e0e0e0;
+}
+
+.flex-wrap {
+  gap: 1rem;
+}
+
+p-button {
+  border-radius: 50%;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s ease;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+p-button:hover {
+  background-color: #e3e3e3;
+}
+
+p-progressBar {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.exceeded-progress-bar .p-progressbar-value {
+  background-color: #ff7f7f;
+}
+
+.p-progressbar .p-progressbar-value {
+  background-color: #4caf50;
+}
+
+/* Center the file cards */
+.card.m-0 {
+  border-radius: 8px;
+  background-color: #ffffff;
+  padding: 0.75rem; /* Reduced padding for compactness */
+  border: 1px solid #e0e0e0;
+  transition: box-shadow 0.2s ease;
+  max-width: 240px; /* Increased the width here */
+  text-align: center;
+  margin: 0.5rem auto; /* Center the card */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* Align items to the top to avoid space below */
+}
+
+/* Card hover effect */
+.card.m-0:hover {
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.card.m-0 img {
+  border-radius: 4px;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Reduce the file name size */
+.font-semibold {
+  font-weight: 600;
+  font-size: 0.85rem; /* Smaller file name */
+  margin-top: 0.5rem; /* Reduced margin for more compact appearance */
+}
+
+h5 {
+  color: #4a4a4a;
+  font-weight: 500;
+  margin-top: 1.5rem;
+}
+
+p-badge {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+p-badge[severity="warning"],
+p-badge[severity="success"] {
+  background-color: transparent;
+  border-radius: 4px;
+}
+
+.p-fileupload .p-fileupload-empty {
+  text-align: center;
+  color: #666;
+  padding: 2rem;
+}
+
+.p-fileupload .p-fileupload-empty i {
+  color: #cccccc;
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+.p-fileupload .p-fileupload-empty p {
+  font-size: 1rem;
+  color: #999999;
+}
+
+:host::ng-deep .p-fileupload-content{
+  height: 40vh;
+  overflow-y: auto;
+}

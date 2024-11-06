@@ -4,9 +4,21 @@ import {provideRouter, RouterLink, RouterOutlet} from "@angular/router";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule, provideHttpClient} from "@angular/common/http";
 import {BrowserModule} from "@angular/platform-browser";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
-import {ButtonDirective} from "primeng/button";
+import {ButtonDirective, ButtonModule} from "primeng/button";
 import { MessageService } from 'primeng/api';
+import {FloatLabelModule} from "primeng/floatlabel";
+import {InputTextModule} from "primeng/inputtext";
+import {PasswordModule} from "primeng/password";
+import {Ripple} from "primeng/ripple";
+import {ProgressSpinnerModule} from "primeng/progressspinner";
+import {ToastModule} from "primeng/toast";
+import {AvatarModule} from "primeng/avatar";
+import {FileUploadModule} from "primeng/fileupload";
+import {ProgressBarModule} from "primeng/progressbar";
+import {BadgeModule} from "primeng/badge";
+import {DropdownModule} from "primeng/dropdown";
 
 import {AppComponent} from "./app.component";
 import {LandingPageComponent} from "./components/landing-page/landing-page.component";
@@ -15,16 +27,9 @@ import {SignupFormComponent} from "./components/signup-form/signup-form.componen
 import {AuthService} from "./shared/services/auth/auth.service";
 import {AppHeaderComponent} from "./components/app-header/app-header.component";
 import {routes} from "./app.routes";
-import {FloatLabelModule} from "primeng/floatlabel";
-import {InputTextModule} from "primeng/inputtext";
-import {PasswordModule} from "primeng/password";
-import {Ripple} from "primeng/ripple";
-import {ProgressSpinnerModule} from "primeng/progressspinner";
-import {ToastModule} from "primeng/toast";
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {AvatarModule} from "primeng/avatar";
 import {ProfileComponent} from "./components/profile/profile.component";
-import {DropdownModule} from "primeng/dropdown";
+import {FileUploadComponent} from './components/upload-file/file-upload.component';
+import { AddQuestionComponent } from './components/add-question/add-question.component';
 
 
 @NgModule({
@@ -35,6 +40,8 @@ import {DropdownModule} from "primeng/dropdown";
         SignupFormComponent,
         AppHeaderComponent,
         ProfileComponent,
+        FileUploadComponent,
+        AddQuestionComponent,
     ],
   imports: [
     CommonModule,
@@ -48,6 +55,10 @@ import {DropdownModule} from "primeng/dropdown";
     FloatLabelModule,
     InputTextModule,
     PasswordModule,
+    FileUploadModule,
+    ButtonModule,
+    BadgeModule,
+    ProgressBarModule,
     Ripple,
     ProgressSpinnerModule,
     BrowserAnimationsModule,
@@ -57,9 +68,7 @@ import {DropdownModule} from "primeng/dropdown";
     FormsModule,
   ],
     bootstrap: [AppComponent],
-    exports: [
-        AppHeaderComponent
-    ],
+    exports: [AppHeaderComponent],
     providers: [AuthService, provideHttpClient(), provideRouter(routes), MessageService]
 })
 export class AppModule { }
