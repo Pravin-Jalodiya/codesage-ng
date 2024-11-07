@@ -17,7 +17,7 @@ export class LoginFormComponent {
 
   err: string | undefined;
 
-  loading: boolean = false;
+  loading: boolean = true;
 
   constructor(private fb: FormBuilder, private authService: AuthService, private messageService: MessageService) {
     this.loginForm = this.fb.group({

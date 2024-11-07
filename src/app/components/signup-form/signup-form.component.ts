@@ -21,6 +21,8 @@ import {MessageService} from "primeng/api";
 export class SignupFormComponent implements OnInit {
   signupForm: FormGroup;
 
+  loading: boolean = false;
+
   constructor(private fb: FormBuilder, private authService: AuthService, private messageService: MessageService) {
     this.signupForm = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(3)]],
@@ -40,6 +42,7 @@ export class SignupFormComponent implements OnInit {
 
   onSubmit(): void {
     if (this.signupForm.valid) {
+      this.loading = true;
       const { username, password, fullName, email, organization, country, leetcodeId } = this.signupForm.value;
       this.authService.signup(username, password, fullName, email, organization, country, leetcodeId).subscribe({
         next: (response: any) => {
@@ -52,10 +55,12 @@ export class SignupFormComponent implements OnInit {
           }
         },
         error: (error: any) => {
+          this.loading = false;
           console.error('Signup failed', error);
-          this.showError(error.error.message || 'Signup failed. Please try again.');
+          this.showError(error.error.message ?? 'Signup failed. Please try again.');
         },
         complete: () => {
+          this.loading = false;
           console.log('Signup request complete');
         }
       });

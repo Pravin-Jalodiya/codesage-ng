@@ -83,14 +83,22 @@ body {
 }
 
 .blur-bg {
-  filter: blur(5px);
+  position: fixed;
+  backdrop-filter: blur(5px);
+  background-color: rgba(0, 0, 0, 0.5);
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
   pointer-events: none;
-  z-index: 1000;
+  z-index: 100;
   -webkit-filter: blur(5px);
 }
 
 .spinner {
-  z-index: 1001;
+  top: 0;
+  position: fixed;
+  z-index: 101;
 }
 
 .no-box-shadow{

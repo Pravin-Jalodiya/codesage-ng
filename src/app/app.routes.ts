@@ -5,11 +5,13 @@ import {LoginFormComponent} from "./components/login-form/login-form.component";
 import {SignupFormComponent} from "./components/signup-form/signup-form.component";
 import {ProfileComponent} from "./components/profile/profile.component";
 import {AddQuestionComponent} from "./components/add-question/add-question.component";
+import {QuestionsTableComponent} from "./components/questions-table/questions-table.component";
 
 export const routes: Routes = [
   { path: '', component: LandingPageComponent },
   { path: 'login', component: LoginFormComponent },
   { path: 'signup', component: SignupFormComponent },
   { path: 'profile', component: ProfileComponent},
-  { path: 'questions', component: AddQuestionComponent}
+  { path: 'add-questions', component: AddQuestionComponent},
+  { path: 'delete-question', component: QuestionsTableComponent}
 ];

@@ -30,6 +30,7 @@ import {routes} from "./app.routes";
 import {ProfileComponent} from "./components/profile/profile.component";
 import {FileUploadComponent} from './components/upload-file/file-upload.component';
 import { AddQuestionComponent } from './components/add-question/add-question.component';
+import { QuestionsTableComponent } from './components/questions-table/questions-table.component';
 
 
 @NgModule({
@@ -42,6 +43,7 @@ import { AddQuestionComponent } from './components/add-question/add-question.com
         ProfileComponent,
         FileUploadComponent,
         AddQuestionComponent,
+        QuestionsTableComponent,
     ],
   imports: [
     CommonModule,
