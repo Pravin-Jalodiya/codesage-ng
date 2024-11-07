@@ -6,6 +6,7 @@ import {SignupFormComponent} from "./components/signup-form/signup-form.componen
 import {ProfileComponent} from "./components/profile/profile.component";
 import {AddQuestionComponent} from "./components/add-question/add-question.component";
 import {QuestionsTableComponent} from "./components/questions-table/questions-table.component";
+import { UsersTableComponent } from './components/users-table/users-table.component';
 
 export const routes: Routes = [
   { path: '', component: LandingPageComponent },
@@ -13,5 +14,6 @@ export const routes: Routes = [
   { path: 'signup', component: SignupFormComponent },
   { path: 'profile', component: ProfileComponent},
   { path: 'add-questions', component: AddQuestionComponent},
-  { path: 'delete-question', component: QuestionsTableComponent}
+  { path: 'delete-question', component: QuestionsTableComponent},
+  { path: 'manage-users', component: UsersTableComponent}
 ];

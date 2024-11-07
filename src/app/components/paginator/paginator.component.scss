@@ -1,0 +1,16 @@
+
+:host::ng-deep .p-paginator {
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 30px;
+  padding: 0;
+  margin-bottom: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+:host::ng-deep .p-element.p-paginator-last.p-paginator-element.p-link.ng-star-inserted {
+  display: none;
+}
+
+:host::ng-deep .p-element.p-paginator-first.p-paginator-element.p-link.ng-star-inserted {
+  display: none;
+}

@@ -10,7 +10,10 @@ interface FilterOption {
   templateUrl: './questions-table.component.html',
   styleUrls: ['./questions-table.component.scss']
 })
+
 export class QuestionsTableComponent {
+  role: "admin" | "user" = "user";
+
   companies: FilterOption[] | undefined;
   topics: FilterOption[] | undefined;
   difficulties: FilterOption[] | undefined;
@@ -39,5 +42,9 @@ export class QuestionsTableComponent {
       { name: 'Medium', code: 'MED' },
       { name: 'Hard', code: 'HARD' }
     ];
+  }
+
+  onQuestionDelete(){
+
   }
 }

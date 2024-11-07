@@ -2,57 +2,188 @@
   <div class="background">
     <div class="background-overlay">
     <app-header></app-header>
-    <div class="heading">
-      Delete Question
-    </div>
+    @if(role=="admin"){
+      <div class="heading">
+        Delete Question
+      </div>
+    }
       <div class="questions-table-container">
-        <div class="questions-table-top">
-          <div class="search-bar">
-            <i class="pi pi-search" style="color: black"></i>
-            <input type="text" pInputText placeholder="Search question by title or ID" class="search-bar no-box-shadow" />
+
+
+        <div class="upper-half">
+          <div class="questions-table-top">
+            <div class="search-bar">
+              <i class="pi pi-search" style="color: black"></i>
+              <input type="text" pInputText placeholder="Search question by title or ID" class="search-bar no-box-shadow" />
+            </div>
+            <div class="filters">
+              <p-dropdown
+                #companyDropdown
+                [options]="companies"
+                [(ngModel)]="selectedCompany"
+                placeholder="Company"
+                [showClear]="true"
+                [checkmark]="true"
+                [editable]="true"
+                optionLabel="name"
+                (click)="companyDropdown.show()">
+              </p-dropdown>
+              <p-dropdown
+                #topicDropdown
+                [options]="topics"
+                [(ngModel)]="selectedTopic"
+                placeholder="Topic"
+                [editable]="true"
+                [checkmark]="true"
+                [showClear]="true"
+                optionLabel="name"
+                (click)="topicDropdown.show()">
+              </p-dropdown>
+              <p-dropdown
+                #difficultyDropdown
+                [options]="difficulties"
+                [(ngModel)]="selectedDifficulty"
+                placeholder="Difficulty"
+                [showClear]="true"
+                [checkmark]="true"
+                [editable]="true"
+                optionLabel="name"
+                (click)="difficultyDropdown.show()">
+              </p-dropdown>
+              @if(role=="user"){
+                <button pButton pRipple type="button" class="icon-button">
+                  <label>Pick one</label>
+                  <img src="../../../assets/random.png" alt="icon" class="button-icon" />
+                </button>
+              }
+            </div>
           </div>
-          <div class="filters">
-            <p-dropdown
-              #companyDropdown
-              [options]="companies"
-              [(ngModel)]="selectedCompany"
-              placeholder="Company"
-              [editable]="true"
-              optionLabel="name"
-              (click)="companyDropdown.show()">
-            </p-dropdown>
 
-            <p-dropdown
-              #topicDropdown
-              [options]="topics"
-              [(ngModel)]="selectedTopic"
-              placeholder="Topic"
-              [editable]="true"
-              optionLabel="name"
-              (click)="topicDropdown.show()">
-            </p-dropdown>
 
-            <p-dropdown
-              #difficultyDropdown
-              [options]="difficulties"
-              [(ngModel)]="selectedDifficulty"
-              placeholder="Difficulty"
-              [editable]="true"
-              optionLabel="name"
-              (click)="difficultyDropdown.show()">
-            </p-dropdown>
 
-            <button pButton pRipple type="button" label="Pick one" class="icon-button">
-              <img src="assets/random.png" alt="icon" class="button-icon" />
-            </button>
+          <div class="column-headings">
+            <div class="column-heading-1 flex-1 flex justify-content-center">ID</div>
+            <div class="column-heading-2 flex-1 flex justify-content-center">Title</div>
+            <div class="column-heading-3 flex-1 flex justify-content-center">Difficulty</div>
+            @if(role=="admin"){
+              <div class="column-heading-4 flex-1 flex justify-content-center">Action</div>
+            }
+          </div>
 
+
+          <div class="question flex">
+            <div class="question-id flex flex-1 justify-content-center align-items-center">
+                4
+            </div>
+            <div class="question-title flex flex-1 justify-content-center align-items-center">
+                Dancing Tornado
+            </div>
+            <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
+                Easy
+            </div>
+            @if(role=="admin"){
+              <div class="action flex flex-1 justify-content-center">
+                <img class="delete-icon" src="../../../assets/trash-icon.png" (click)="onQuestionDelete()">
+              </div>
+            }
+          </div>
+
+
+
+          <div class="question2 flex">
+            <div class="question-id flex flex-1 justify-content-center align-items-center">
+                4
+            </div>
+            <div class="question-title flex flex-1 justify-content-center align-items-center">
+                Dancing Tornado
+            </div>
+            <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
+                Easy
+            </div>
+            @if(role=="admin"){
+              <div class="action flex flex-1 justify-content-center">
+                <img class="delete-icon" src="../../../assets/trash-icon.png" (click)="onQuestionDelete()">
+              </div>
+            }
+          </div>
+
+
+
+          <div class="question flex">
+            <div class="question-id flex flex-1 justify-content-center align-items-center">
+                4
+            </div>
+            <div class="question-title flex flex-1 justify-content-center align-items-center">
+                Dancing Tornado
+            </div>
+            <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
+                Easy
+            </div>
+            @if(role=="admin"){
+              <div class="action flex flex-1 justify-content-center">
+                <img class="delete-icon" src="../../../assets/trash-icon.png" (click)="onQuestionDelete()">
+              </div>
+            }
+          </div>
+
+
+
+
+
+
+          <div class="question flex">
+            <div class="question-id flex flex-1 justify-content-center align-items-center">
+                4
+            </div>
+            <div class="question-title flex flex-1 justify-content-center align-items-center">
+                Dancing Tornado
+            </div>
+            <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
+                Easy
+            </div>
+            @if(role=="admin"){
+              <div class="action flex flex-1 justify-content-center">
+                <img class="delete-icon" src="../../../assets/trash-icon.png" (click)="onQuestionDelete()">
+              </div>
+            }
+          </div>
+
+
+
+
+
+          <div class="question flex">
+            <div class="question-id flex flex-1 justify-content-center align-items-center">
+                4
+            </div>
+            <div class="question-title flex flex-1 justify-content-center align-items-center">
+                Dancing Tornado
+            </div>
+            <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
+                Easy
+            </div>
+            @if(role=="admin"){
+              <div class="action flex flex-1 justify-content-center">
+                <img class="delete-icon" src="../../../assets/trash-icon.png" (click)="onQuestionDelete()">
+              </div>
+            }
           </div>
         </div>
-        <div class="column-headings"></div>
-        <div class="question"></div>
-        <div class="question"></div>
-        <div class="question"></div>
-        <div class="paginator"></div>
+
+
+
+          <div class="paginator w-full flex justify-content-center align-items-center">
+            <div class="w-21rem">
+              <app-paginator></app-paginator>
+            </div>
+          </div>
+
+
+
+
+
+
+
       </div>
     </div>
   </div>

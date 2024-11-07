@@ -19,6 +19,7 @@ import {FileUploadModule} from "primeng/fileupload";
 import {ProgressBarModule} from "primeng/progressbar";
 import {BadgeModule} from "primeng/badge";
 import {DropdownModule} from "primeng/dropdown";
+import { PaginatorModule } from 'primeng/paginator';
 
 import {AppComponent} from "./app.component";
 import {LandingPageComponent} from "./components/landing-page/landing-page.component";
@@ -31,6 +32,8 @@ import {ProfileComponent} from "./components/profile/profile.component";
 import {FileUploadComponent} from './components/upload-file/file-upload.component';
 import { AddQuestionComponent } from './components/add-question/add-question.component';
 import { QuestionsTableComponent } from './components/questions-table/questions-table.component';
+import { PaginatorComponent } from './components/paginator/paginator.component';
+import { UsersTableComponent } from './components/users-table/users-table.component';
 
 
 @NgModule({
@@ -44,6 +47,8 @@ import { QuestionsTableComponent } from './components/questions-table/questions-
         FileUploadComponent,
         AddQuestionComponent,
         QuestionsTableComponent,
+        PaginatorComponent,
+        UsersTableComponent
     ],
   imports: [
     CommonModule,
@@ -59,6 +64,7 @@ import { QuestionsTableComponent } from './components/questions-table/questions-
     PasswordModule,
     FileUploadModule,
     ButtonModule,
+    PaginatorModule,
     BadgeModule,
     ProgressBarModule,
     Ripple,

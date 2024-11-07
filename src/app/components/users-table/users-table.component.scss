@@ -12,13 +12,11 @@
 }
 
 .questions-table-container {
-  // display: flex;
   background-color: rgba(255, 255, 255, 0.6);
   width: fit-content;
-  height: 40rem;
-  max-width: 80%;
-  min-width: 60%;
-  margin: 3vh auto 2vh;
+  max-height: 70vh;
+  min-width: 95%;
+  margin: 3vh auto 4vh;
   padding: 2rem;
   border-radius: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.9);
@@ -64,7 +62,7 @@
 }
 
 .filters {
-  width: 60%;
+  width: 25%;
   display: flex;
   gap: 10px;
   justify-content: space-between;
@@ -150,13 +148,4 @@
   transform: scale(1.1);
   background-color: transparent;
   // box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-.paginator {
-  width: 35%;
-  margin: 2vh auto 2vh;
-}
-
-.upper-half{
-  height: 32rem;
 }
