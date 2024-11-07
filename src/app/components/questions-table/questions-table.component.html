@@ -7,8 +7,46 @@
     </div>
       <div class="questions-table-container">
         <div class="questions-table-top">
-          <div class="search-bar"></div>
-          <div class="filters"></div>
+          <div class="search-bar">
+            <i class="pi pi-search" style="color: black"></i>
+            <input type="text" pInputText placeholder="Search question by title or ID" class="search-bar no-box-shadow" />
+          </div>
+          <div class="filters">
+            <p-dropdown
+              #companyDropdown
+              [options]="companies"
+              [(ngModel)]="selectedCompany"
+              placeholder="Company"
+              [editable]="true"
+              optionLabel="name"
+              (click)="companyDropdown.show()">
+            </p-dropdown>
+
+            <p-dropdown
+              #topicDropdown
+              [options]="topics"
+              [(ngModel)]="selectedTopic"
+              placeholder="Topic"
+              [editable]="true"
+              optionLabel="name"
+              (click)="topicDropdown.show()">
+            </p-dropdown>
+
+            <p-dropdown
+              #difficultyDropdown
+              [options]="difficulties"
+              [(ngModel)]="selectedDifficulty"
+              placeholder="Difficulty"
+              [editable]="true"
+              optionLabel="name"
+              (click)="difficultyDropdown.show()">
+            </p-dropdown>
+
+            <button pButton pRipple type="button" label="Pick one" class="icon-button">
+              <img src="assets/random.png" alt="icon" class="button-icon" />
+            </button>
+
+          </div>
         </div>
         <div class="column-headings"></div>
         <div class="question"></div>

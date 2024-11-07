@@ -40,6 +40,8 @@
 .dropdown {
   position: relative;
   display: inline-block;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.9);
+  border-radius: 15px;
 }
 
 .dropdown-button {
@@ -51,26 +53,32 @@
   display: none;
   position: absolute;
   background-color: rgba(0, 0, 0, 0.9);
-  min-width: 9.5vw;
+  min-width: 8.5vw;
+  max-width: 9vw;
   z-index: 1;
-  border-radius: 10px;
+  border-radius: 25px;
 }
 
 .dropdown:hover .dropdown-content {
   display: block;
 }
 
+.add-questions-btn, .remove-question-btn {
+  color: white;
+}
+
 .dropdown-item {
-  padding: 1.25vw 1vw;
+  padding: 1.5vw 1vw;
   cursor: pointer;
   color: white;
-  font-size: 1.85vh;
+  font-size: 1.6vh;
   text-align: left;
+  border-radius: 25px;
   transition: background-color 0.3s, color 0.3s;
 }
 
 .dropdown-item:hover {
   background-color: rgba(255, 255, 255, 0.1);
   color: lightgray;
-  border-radius: 8px;
+  border-radius: 25px;
 }

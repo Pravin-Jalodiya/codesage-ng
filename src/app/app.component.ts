@@ -8,7 +8,6 @@ import {PrimeNGConfig} from "primeng/api";
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-
   constructor(private primengConfig: PrimeNGConfig) {}
 
   ngOnInit() {

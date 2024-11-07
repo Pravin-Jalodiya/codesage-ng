@@ -70,7 +70,6 @@ import { QuestionsTableComponent } from './components/questions-table/questions-
     FormsModule,
   ],
     bootstrap: [AppComponent],
-    exports: [AppHeaderComponent],
     providers: [AuthService, provideHttpClient(), provideRouter(routes), MessageService]
 })
 export class AppModule { }
