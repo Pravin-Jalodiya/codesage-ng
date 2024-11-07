@@ -12,10 +12,9 @@
 }
 
 .questions-table-container {
-  // display: flex;
   background-color: rgba(255, 255, 255, 0.6);
   width: fit-content;
-  height: 40rem;
+  height: 43em;
   max-width: 80%;
   min-width: 60%;
   margin: 3vh auto 2vh;
@@ -154,9 +153,14 @@
 
 .paginator {
   width: 35%;
-  margin: 2vh auto 2vh;
+  margin: 3vh auto 2vh;
 }
 
-.upper-half{
-  height: 32rem;
+.upper-half {
+  height: 35em;
+}
+
+.questions-list {
+  height: 30em;
+  overflow-y: scroll;
 }

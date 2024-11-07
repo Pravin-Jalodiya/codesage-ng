@@ -5,6 +5,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule, provideHttpClient} from "@angular/common/http";
 import {BrowserModule} from "@angular/platform-browser";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
 import {ButtonDirective, ButtonModule} from "primeng/button";
 import { MessageService } from 'primeng/api';
@@ -74,6 +75,7 @@ import { UsersTableComponent } from './components/users-table/users-table.compon
     AvatarModule,
     DropdownModule,
     FormsModule,
+    MatSlideToggleModule
   ],
     bootstrap: [AppComponent],
     providers: [AuthService, provideHttpClient(), provideRouter(routes), MessageService]

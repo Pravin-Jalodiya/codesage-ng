@@ -62,10 +62,7 @@
 }
 
 .filters {
-  width: 25%;
-  display: flex;
-  gap: 10px;
-  justify-content: space-between;
+  width: 15%;
   align-items: center;
 }
 
@@ -137,6 +134,8 @@
   padding-bottom: 6px;
 }
 
+
+
 .delete-icon {
   cursor: pointer;
   background-color: transparent;
@@ -148,4 +147,18 @@
   transform: scale(1.1);
   background-color: transparent;
   // box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.paginator {
+  width: 35%;
+  margin: 2vh auto 2vh;
+}
+
+.upper-half {
+  height: 33em;
+}
+
+.questions-list {
+  height: 27em;
+  overflow-y: scroll;
 }
