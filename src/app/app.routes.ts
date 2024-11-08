@@ -7,6 +7,7 @@ import {ProfileComponent} from "./components/profile/profile.component";
 import {AddQuestionComponent} from "./components/add-question/add-question.component";
 import {QuestionsTableComponent} from "./components/questions-table/questions-table.component";
 import { UsersTableComponent } from './components/users-table/users-table.component';
+import {StatsComponent} from "./components/stats/stats.component";
 
 export const routes: Routes = [
   { path: '', component: LandingPageComponent },
@@ -15,5 +16,7 @@ export const routes: Routes = [
   { path: 'profile', component: ProfileComponent},
   { path: 'add-questions', component: AddQuestionComponent},
   { path: 'delete-question', component: QuestionsTableComponent},
-  { path: 'manage-users', component: UsersTableComponent}
+  { path: 'manage-users', component: UsersTableComponent},
+  { path: 'progress', component: StatsComponent},
+  { path: 'platform', component: StatsComponent}
 ];

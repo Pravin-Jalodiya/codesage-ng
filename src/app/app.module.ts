@@ -6,6 +6,7 @@ import {HttpClientModule, provideHttpClient} from "@angular/common/http";
 import {BrowserModule} from "@angular/platform-browser";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {CircleProgressOptions, NgCircleProgressModule} from 'ng-circle-progress';
 
 import {ButtonDirective, ButtonModule} from "primeng/button";
 import { MessageService } from 'primeng/api';
@@ -35,6 +36,7 @@ import { AddQuestionComponent } from './components/add-question/add-question.com
 import { QuestionsTableComponent } from './components/questions-table/questions-table.component';
 import { PaginatorComponent } from './components/paginator/paginator.component';
 import { UsersTableComponent } from './components/users-table/users-table.component';
+import { StatsComponent } from './components/stats/stats.component';
 
 
 @NgModule({
@@ -49,7 +51,8 @@ import { UsersTableComponent } from './components/users-table/users-table.compon
         AddQuestionComponent,
         QuestionsTableComponent,
         PaginatorComponent,
-        UsersTableComponent
+        UsersTableComponent,
+        StatsComponent
     ],
   imports: [
     CommonModule,
@@ -75,9 +78,10 @@ import { UsersTableComponent } from './components/users-table/users-table.compon
     AvatarModule,
     DropdownModule,
     FormsModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    NgCircleProgressModule
   ],
     bootstrap: [AppComponent],
-    providers: [AuthService, provideHttpClient(), provideRouter(routes), MessageService]
+    providers: [AuthService, provideHttpClient(), provideRouter(routes), MessageService, CircleProgressOptions]
 })
 export class AppModule { }

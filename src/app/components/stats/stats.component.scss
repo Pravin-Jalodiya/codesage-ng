@@ -1,0 +1,32 @@
+.stats-container {
+  height: 90%;
+  width: 80%;
+  margin: auto;
+}
+
+.upper-half {
+  height: 50%;
+}
+
+.lower-half {
+  height: 50%;
+}
+
+.codesage-stats, .leetcode-stats {
+
+}
+
+.codesage-stats-bundle, .leetcode-stats-bundle {
+  height: 70%;
+  width: 80%;
+  border-radius: 30px;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+}
+
+.codesage-stats-heading, .leetcode-stats-heading {
+  color: white;
+  font-size: 1.8vw;
+  text-align: center;
+  font-family: 'Raleway', sans-serif;
+}

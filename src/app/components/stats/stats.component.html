@@ -1,0 +1,106 @@
+<body>
+  <div class="background">
+    <div class="background-overlay">
+      <app-header></app-header>
+      <div class="stats-container ">
+        <div class="upper-half flex">
+          <div class="codesage-stats flex flex-1 justify-content-center align-items-center">
+            <div class="codesage-stats-bundle">
+              <div class="codesage-stats-heading p-2 m-2">
+                Codesage Stats
+              </div>
+              <div class="codesage-stats-content flex justify-content-evenly align-items-center h-auto">
+                <div class="codesage-circular-progress-bar flex flex1 justify-content-center align-items-center">
+                  <circle-progress
+                    [radius]="60"
+                    [space]="-10"
+                    [percent]="74"
+                    [maxPercent]="100"
+                    [outerStrokeGradient]="true"
+                    [outerStrokeWidth]="10"
+                    [showTitle]="true"
+                    [showSubtitle]="true"
+                    [outerStrokeColor]="'#ab75ff'"
+                    [outerStrokeGradientStopColor]="'#c69dff'"
+                    [innerStrokeColor]="'#e7e8ea'"
+                    [innerStrokeWidth]="10"
+                    [title]="'74/100'"
+                    [subtitle]="'Solved'"
+                    titleColor="white"
+                    subtitleColor="white"
+                    [animateTitle]="false"
+                    [animationDuration]="1000"
+                    [showUnits]="false"
+                    [showBackground]="false"
+                    [clockwise]="true"
+                    [startFromZero]="true"
+                    [lazy]="true">
+                  </circle-progress>
+                </div>
+                <div class="codesage-question-stats flex flex1 justify-content-center align-items-center">
+                  <div class="difficulty-easy">asd</div>
+                  <div class="difficulty-medium">asd</div>
+                  <div class="difficulty-hard">asd</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="leetcode-stats flex flex-1 justify-content-center align-items-center">
+            <div class="leetcode-stats-bundle">
+              <div class="leetcode-stats-heading p-2 m-2">
+                Leetcode Stats
+              </div>
+              <div class="leetcode-stats-content">
+                <div class="leetcode-circular-progress-bar"></div>
+                <div class="leetcode-question-stats">
+                  <div class="difficulty-easy"></div>
+                  <div class="difficulty-medium"></div>
+                  <div class="difficulty-hard"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="lower-half flex">
+          <div class="recent-submissions flex flex-1 justify-content-center align-items-center bg-pink-100">
+            <div class="recent-submissions-table">
+              <div class="submissions-table-heading"></div>
+              <div class="submissions-list">
+                <div class="question"></div>
+                <div class="question"></div>
+                <div class="question"></div>
+                <div class="question"></div>
+              </div>
+            </div>
+          </div>
+          <div class="tags flex flex-1 justify-content-center align-items-center bg-pink-100">
+            <div class="topic-tags flex flex-1 justify-content-center align-items-center bg-pink-100">
+              <div class="topic-tags-heading"></div>
+              <div class="topic-tags-content">
+                <div class="topic-tag-cards">
+                  <div class="topic-tag-card"></div>
+                  <div class="topic-tag-card"></div>
+                  <div class="topic-tag-card"></div>
+                  <div class="topic-tag-card"></div>
+                </div>
+              </div>
+            </div>
+            <div class="company-tags flex flex-1 justify-content-center align-items-center bg-pink-100">
+              <div class="company-tags flex flex-1 justify-content-center align-items-center bg-pink-100">
+                <div class="company-tags-heading"></div>
+                <div class="company-tags-content">
+                  <div class="company-tag-cards">
+                    <div class="company-tag-card"></div>
+                    <div class="company-tag-card"></div>
+                    <div class="company-tag-card"></div>
+                    <div class="company-tag-card"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
