@@ -2,7 +2,7 @@
     <div class="logo-text">Codesage</div>
         <div class="right-header">
           <div class="navbar-options">
-            @if(role=="admin"){
+            @if(role==Role.ADMIN){
             <div class="dropdown">
             <div class="dropdown-button">Questions
               <i class="pi pi-angle-down"></i>
@@ -25,16 +25,16 @@
           <div class="option">Questions</div>
           <div class="option">Progress</div>
           }
-          @if(role=="admin"){
-          <div class="option">Platform</div>
-          <div class="option">Users</div>
+          @if(role==Role.ADMIN){
+          <div class="option" routerLink="/platform">Platform</div>
+          <div class="option" routerLink="/manage-users">Users</div>
           }
           </div>
         <p-avatar
           image="assets/asiyajavayant.png"
           styleClass="mr-2"
           size="large"
-          shape="circle" />
+          shape="circle" routerLink="/profile"/>
         </div>
     </div>
 <div class="separator"><hr></div>

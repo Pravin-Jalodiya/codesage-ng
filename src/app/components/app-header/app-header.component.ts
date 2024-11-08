@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {Role} from "../../shared/config/roles.config";
 
 @Component({
   selector: 'app-header',
@@ -11,4 +12,6 @@ export class AppHeaderComponent implements OnInit {
   ngOnInit(): void {
     this.role = Math.random() > 0.5 ? 'admin' : 'user';
   }
+
+  protected readonly Role = Role;
 }

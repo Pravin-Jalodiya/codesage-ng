@@ -16,6 +16,7 @@ export const routes: Routes = [
   { path: 'profile', component: ProfileComponent},
   { path: 'add-questions', component: AddQuestionComponent},
   { path: 'delete-question', component: QuestionsTableComponent},
+  { path: 'questions', component: QuestionsTableComponent},
   { path: 'manage-users', component: UsersTableComponent},
   { path: 'progress', component: StatsComponent},
   { path: 'platform', component: StatsComponent}

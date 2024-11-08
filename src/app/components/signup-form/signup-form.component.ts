@@ -11,6 +11,7 @@ import {
 
 import {AuthService} from "../../shared/services/auth/auth.service";
 import {MessageService} from "primeng/api";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-signup-form',
@@ -23,7 +24,7 @@ export class SignupFormComponent implements OnInit {
 
   loading: boolean = false;
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private messageService: MessageService) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private messageService: MessageService, private router: Router) {
     this.signupForm = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(3)]],
       fullName: ['', [Validators.required]],
@@ -47,6 +48,7 @@ export class SignupFormComponent implements OnInit {
       this.authService.signup(username, password, fullName, email, organization, country, leetcodeId).subscribe({
         next: (response: any) => {
           if (response.code === 200) {
+            this.router.navigate(['/login']);
             this.messageService.add({
               severity: 'success',
               summary: 'Signup Successful',

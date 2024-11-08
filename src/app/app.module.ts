@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {provideRouter, RouterLink, RouterOutlet} from "@angular/router";
+import {provideRouter, Router, RouterLink, RouterOutlet} from "@angular/router";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {HttpClientModule, provideHttpClient} from "@angular/common/http";
+import {HttpClientModule, provideHttpClient, withInterceptors} from "@angular/common/http";
 import {BrowserModule} from "@angular/platform-browser";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {CircleProgressOptions, NgCircleProgressModule} from 'ng-circle-progress';
 
 import {ButtonDirective, ButtonModule} from "primeng/button";
-import { MessageService } from 'primeng/api';
+import {ConfirmationService, MessageService} from 'primeng/api';
 import {FloatLabelModule} from "primeng/floatlabel";
 import {InputTextModule} from "primeng/inputtext";
 import {PasswordModule} from "primeng/password";
@@ -37,6 +37,8 @@ import { QuestionsTableComponent } from './components/questions-table/questions-
 import { PaginatorComponent } from './components/paginator/paginator.component';
 import { UsersTableComponent } from './components/users-table/users-table.component';
 import { StatsComponent } from './components/stats/stats.component';
+import {AuthInterceptor} from "./shared/interceptors/auth.interceptor";
+import {ConfirmDialogModule} from "primeng/confirmdialog";
 
 
 @NgModule({
@@ -52,7 +54,7 @@ import { StatsComponent } from './components/stats/stats.component';
         QuestionsTableComponent,
         PaginatorComponent,
         UsersTableComponent,
-        StatsComponent
+        StatsComponent,
     ],
   imports: [
     CommonModule,
@@ -79,9 +81,10 @@ import { StatsComponent } from './components/stats/stats.component';
     DropdownModule,
     FormsModule,
     MatSlideToggleModule,
-    NgCircleProgressModule
+    NgCircleProgressModule,
+    ConfirmDialogModule
   ],
-    bootstrap: [AppComponent],
-    providers: [AuthService, provideHttpClient(), provideRouter(routes), MessageService, CircleProgressOptions]
+    bootstrap: [AppComponent, ],
+    providers: [AuthService, provideHttpClient(withInterceptors([AuthInterceptor])), provideRouter(routes), MessageService, CircleProgressOptions, ConfirmationService]
 })
 export class AppModule { }

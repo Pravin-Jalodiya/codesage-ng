@@ -1,313 +1,127 @@
-<body>
-  <div class="background">
-    <div class="background-overlay">
+<div class="background">
+  <div class="background-overlay">
+    <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+    <p-toast></p-toast>
     <app-header></app-header>
-    @if(role=="admin"){
+    @if (role === Role.ADMIN) {
       <div class="heading">
         Delete Question
       </div>
     }
-      <div class="questions-table-container">
 
-        <div class="upper-half">
-          <div class="questions-table-top">
-            <div class="search-bar">
-              <i class="pi pi-search" style="color: black"></i>
-              <input type="text" pInputText placeholder="Search question by title or ID" class="search-bar no-box-shadow" />
-            </div>
-            <div class="filters">
-              <p-dropdown
-                #companyDropdown
-                [options]="companies"
-                [(ngModel)]="selectedCompany"
-                placeholder="Company"
-                [showClear]="true"
-                [checkmark]="true"
-                [editable]="true"
-                optionLabel="name"
-                (click)="companyDropdown.show()">
-              </p-dropdown>
-              <p-dropdown
-                #topicDropdown
-                [options]="topics"
-                [(ngModel)]="selectedTopic"
-                placeholder="Topic"
-                [editable]="true"
-                [checkmark]="true"
-                [showClear]="true"
-                optionLabel="name"
-                (click)="topicDropdown.show()">
-              </p-dropdown>
-              <p-dropdown
-                #difficultyDropdown
-                [options]="difficulties"
-                [(ngModel)]="selectedDifficulty"
-                placeholder="Difficulty"
-                [showClear]="true"
-                [checkmark]="true"
-                [editable]="true"
-                optionLabel="name"
-                (click)="difficultyDropdown.show()">
-              </p-dropdown>
-              @if(role=="user"){
-                <button pButton pRipple type="button" class="icon-button">
-                  <label>Pick one</label>
-                  <img src="../../../assets/random.png" alt="icon" class="button-icon" />
-                </button>
-              }
-            </div>
+    <div class="questions-table-container">
+      <div class="upper-half">
+        <div class="questions-table-top">
+          <div class="search-bar">
+            <i class="pi pi-search" style="color: black"></i>
+            <input
+              type="text"
+              pInputText
+              [ngModel]="searchQuery()"
+              (ngModelChange)="searchQuery.set($event)"
+              placeholder="Search question by title or ID"
+              class="search-bar no-box-shadow" />
           </div>
 
+          <div class="filters">
+            <p-dropdown
+              #companyDropdown
+              [options]="companies()"
+              [ngModel]="selectedCompany()"
+              (ngModelChange)="onCompanySelect($event)"
+              placeholder="Company"
+              [showClear]="true"
+              [checkmark]="true"
+              [editable]="true"
+              optionLabel="name"
+              (click)="companyDropdown.show()">
+            </p-dropdown>
 
+            <p-dropdown
+              #topicDropdown
+              [options]="topics()"
+              [ngModel]="selectedTopic()"
+              (ngModelChange)="onTopicSelect($event)"
+              placeholder="Topic"
+              [editable]="true"
+              [checkmark]="true"
+              [showClear]="true"
+              optionLabel="name"
+              (click)="topicDropdown.show()">
+            </p-dropdown>
 
-          <div class="column-headings flex justify-content-center align-items-center">
-            <div class="column-heading-1 flex-1 flex justify-content-center">ID</div>
-            <div class="column-heading-2 flex-1 flex justify-content-center">Title</div>
-            <div class="column-heading-3 flex-1 flex justify-content-center">Difficulty</div>
-            @if(role=="admin"){
-              <div class="column-heading-4 flex-1 flex justify-content-center">Action</div>
+            <p-dropdown
+              #difficultyDropdown
+              [options]="difficulties"
+              [ngModel]="selectedDifficulty()"
+              (ngModelChange)="onDifficultySelect($event)"
+              placeholder="Difficulty"
+              [showClear]="true"
+              [checkmark]="true"
+              [editable]="true"
+              optionLabel="name"
+              (click)="difficultyDropdown.show()">
+            </p-dropdown>
+
+            @if (role === Role.USER) {
+              <button pButton pRipple type="button" class="icon-button" (click)="pickRandomQuestion()">
+                <label>Pick one</label>
+                <img src="../../../assets/random.png" alt="icon" class="button-icon" />
+              </button>
             }
           </div>
+        </div>
 
-          <div class="questions-list">
-            <div class="question flex">
+        <div class="column-headings flex justify-content-center align-items-center">
+          <div class="column-heading-1 flex-1 flex justify-content-center">ID</div>
+          <div class="column-heading-2 flex-1 flex justify-content-center">Title</div>
+          <div class="column-heading-3 flex-1 flex justify-content-center">Difficulty</div>
+
+          @if (role === Role.ADMIN) {
+            <div class="column-heading-4 flex-1 flex justify-content-center">Action</div>
+          }
+        </div>
+
+        <div class="questions-list">
+          @for (question of paginatedQuestions(); track question.question_id; let i = $index) {
+            <div class="question flex" [ngStyle]="{'background-color': i % 2 === 1 ? '#dfdfdf' : ''}">
               <div class="question-id flex flex-1 justify-content-center align-items-center">
-                4
+                {{ question.question_id }}
               </div>
-              <div class="question-title flex flex-1 justify-content-center align-items-center">
-                Dancing Tornado
+              <div class="question-title flex flex-1 justify-content-center align-items-center"
+                   (click)="redirectToQuestion(question.question_link)">
+                {{ question.question_title }}
               </div>
               <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                Easy
+                {{ question.difficulty }}
               </div>
-              @if(role=="admin"){
+
+              @if (role === Role.ADMIN) {
                 <div class="action flex flex-1 justify-content-center">
-                  <img class="delete-icon" src="../../../assets/trash-icon.png" (click)="onQuestionDelete()">
+                  <img class="delete-icon" src="../../../assets/trash-icon.png"
+                       (click)="onQuestionDelete(question)">
                 </div>
               }
             </div>
-
-
-
-            <div class="question2 flex">
-              <div class="question-id flex flex-1 justify-content-center align-items-center">
-                4
-              </div>
-              <div class="question-title flex flex-1 justify-content-center align-items-center">
-                Dancing Tornado
-              </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                Easy
-              </div>
-              @if(role=="admin"){
-                <div class="action flex flex-1 justify-content-center">
-                  <img class="delete-icon" src="../../../assets/trash-icon.png" (click)="onQuestionDelete()">
-                </div>
-              }
+          } @empty {
+            <div class="no-questions flex justify-content-center align-items-center h-full">
+              No questions found
             </div>
+          }
+        </div>
+      </div>
 
-
-
-            <div class="question flex">
-              <div class="question-id flex flex-1 justify-content-center align-items-center">
-                4
-              </div>
-              <div class="question-title flex flex-1 justify-content-center align-items-center">
-                Dancing Tornado
-              </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                Easy
-              </div>
-              @if(role=="admin"){
-                <div class="action flex flex-1 justify-content-center">
-                  <img class="delete-icon" src="../../../assets/trash-icon.png" (click)="onQuestionDelete()">
-                </div>
-              }
-            </div>
-
-
-            <div class="question2 flex">
-              <div class="question-id flex flex-1 justify-content-center align-items-center">
-                4
-              </div>
-              <div class="question-title flex flex-1 justify-content-center align-items-center">
-                Dancing Tornado
-              </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                Easy
-              </div>
-              @if(role=="admin"){
-                <div class="action flex flex-1 justify-content-center">
-                  <img class="delete-icon" src="../../../assets/trash-icon.png" (click)="onQuestionDelete()">
-                </div>
-              }
-            </div>
-
-
-
-            <div class="question flex">
-              <div class="question-id flex flex-1 justify-content-center align-items-center">
-                4
-              </div>
-              <div class="question-title flex flex-1 justify-content-center align-items-center">
-                Dancing Tornado
-              </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                Easy
-              </div>
-              @if(role=="admin"){
-                <div class="action flex flex-1 justify-content-center">
-                  <img class="delete-icon" src="../../../assets/trash-icon.png" (click)="onQuestionDelete()">
-                </div>
-              }
-            </div>
-
-
-            <div class="question2 flex">
-              <div class="question-id flex flex-1 justify-content-center align-items-center">
-                4
-              </div>
-              <div class="question-title flex flex-1 justify-content-center align-items-center">
-                Dancing Tornado
-              </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                Easy
-              </div>
-              @if(role=="admin"){
-                <div class="action flex flex-1 justify-content-center">
-                  <img class="delete-icon" src="../../../assets/trash-icon.png" (click)="onQuestionDelete()">
-                </div>
-              }
-            </div>
-
-            <div class="question2 flex">
-              <div class="question-id flex flex-1 justify-content-center align-items-center">
-                4
-              </div>
-              <div class="question-title flex flex-1 justify-content-center align-items-center">
-                Dancing Tornado
-              </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                Easy
-              </div>
-              @if(role=="admin"){
-                <div class="action flex flex-1 justify-content-center">
-                  <img class="delete-icon" src="../../../assets/trash-icon.png" (click)="onQuestionDelete()">
-                </div>
-              }
-            </div>
-
-            <div class="question flex">
-              <div class="question-id flex flex-1 justify-content-center align-items-center">
-                4
-              </div>
-              <div class="question-title flex flex-1 justify-content-center align-items-center">
-                Dancing Tornado
-              </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                Easy
-              </div>
-              @if(role=="admin"){
-                <div class="action flex flex-1 justify-content-center">
-                  <img class="delete-icon" src="../../../assets/trash-icon.png" (click)="onQuestionDelete()">
-                </div>
-              }
-            </div>
-
-            <div class="question2 flex">
-              <div class="question-id flex flex-1 justify-content-center align-items-center">
-                4
-              </div>
-              <div class="question-title flex flex-1 justify-content-center align-items-center">
-                Dancing Tornado
-              </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                Easy
-              </div>
-              @if(role=="admin"){
-                <div class="action flex flex-1 justify-content-center">
-                  <img class="delete-icon" src="../../../assets/trash-icon.png" (click)="onQuestionDelete()">
-                </div>
-              }
-            </div>
-
-            <div class="question2 flex">
-              <div class="question-id flex flex-1 justify-content-center align-items-center">
-                4
-              </div>
-              <div class="question-title flex flex-1 justify-content-center align-items-center">
-                Dancing Tornado
-              </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                Easy
-              </div>
-              @if(role=="admin"){
-                <div class="action flex flex-1 justify-content-center">
-                  <img class="delete-icon" src="../../../assets/trash-icon.png" (click)="onQuestionDelete()">
-                </div>
-              }
-            </div>
-
-            <div class="question2 flex">
-              <div class="question-id flex flex-1 justify-content-center align-items-center">
-                4
-              </div>
-              <div class="question-title flex flex-1 justify-content-center align-items-center">
-                Dancing Tornado
-              </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                Easy
-              </div>
-              @if(role=="admin"){
-                <div class="action flex flex-1 justify-content-center">
-                  <img class="delete-icon" src="../../../assets/trash-icon.png" (click)="onQuestionDelete()">
-                </div>
-              }
-            </div>
-
-            <div class="question2 flex">
-              <div class="question-id flex flex-1 justify-content-center align-items-center">
-                4
-              </div>
-              <div class="question-title flex flex-1 justify-content-center align-items-center">
-                Dancing Tornado
-              </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                Easy
-              </div>
-              @if(role=="admin"){
-                <div class="action flex flex-1 justify-content-center">
-                  <img class="delete-icon" src="../../../assets/trash-icon.png" (click)="onQuestionDelete()">
-                </div>
-              }
-            </div>
-
-            <div class="question2 flex">
-              <div class="question-id flex flex-1 justify-content-center align-items-center">
-                4
-              </div>
-              <div class="question-title flex flex-1 justify-content-center align-items-center">
-                Dancing Tornado
-              </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                Easy
-              </div>
-              @if(role=="admin"){
-                <div class="action flex flex-1 justify-content-center">
-                  <img class="delete-icon" src="../../../assets/trash-icon.png" (click)="onQuestionDelete()">
-                </div>
-              }
-            </div>
-          </div>
-          </div>
-
-          <div class="paginator w-full flex justify-content-center align-items-center">
-            <div class="w-21rem">
-              <app-paginator></app-paginator>
-            </div>
-          </div>
-
+      <div class="paginator flex justify-content-center align-items-center">
+        <div class="w-21rem">
+          <p-paginator
+            [first]="first()"
+            [rows]="pageSize()"
+            [totalRecords]="totalRecords()"
+            (onPageChange)="onPageChange($event)"
+            >
+          </p-paginator>
+        </div>
       </div>
     </div>
   </div>
-</body>
+</div>

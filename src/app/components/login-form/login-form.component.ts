@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {Router} from "@angular/router";
 
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
@@ -19,7 +20,7 @@ export class LoginFormComponent {
 
   loading: boolean = false;
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private messageService: MessageService) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private messageService: MessageService, private router: Router) {
     this.loginForm = this.fb.group({
       username: ['', [Validators.required]],
       password: ['', [Validators.required]],
@@ -37,6 +38,8 @@ export class LoginFormComponent {
           if (response.code === 200) {
             localStorage.setItem('authToken', response.token);
             localStorage.setItem('userRole', response.role);
+            this.authService.userRole = response.role;
+            this.router.navigate(['/questions']);
         }},
         error: (error: any) => {
           this.loading = false;

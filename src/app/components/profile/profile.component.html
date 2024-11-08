@@ -1,107 +1,149 @@
-<body>
-  <div class="background">
-    <div class="background-overlay">
-      <p-toast />
-      <app-header/>
-      <div class="profile-heading">
-        Profile
+<div class="background">
+  <div class="background-overlay">
+    <p-toast />
+    <app-header/>
+    <div class="profile-heading">
+      Profile
+    </div>
+    <div class="profile-header-container">
+      <div class="profile-picture">
+        <p-avatar
+          image="assets/asiyajavayant.png"
+          styleClass="mr-2"
+          size="xlarge"
+          shape="circle" />
+        <div>
+          <p class="user-name">
+            {{profileForm.get('fullname')?.value || 'User'}}
+          </p>
+          <p class="user-email">
+            {{profileForm.get('email')?.value}}
+          </p>
+        </div>
       </div>
-      <div class="profile-header-container">
-        <div class="profile-picture">
-          <p-avatar
-            image="assets/asiyajavayant.png"
-            styleClass="mr-2"
-            size="xlarge"
-            shape="circle" />
-          <div>
-            <p class="user-name">
-              Ziya
-            </p>
-            <p class="user-email">
-              Ziya$gmail.com
-            </p>
+      <div class="profile-edit">
+        <button
+          pButton
+          class="edit-button no-box-shadow"
+          type="button"
+          *ngIf="!isEditing"
+          (click)="onEdit()"
+          label="Edit">
+        </button>
+      </div>
+    </div>
+
+    <form [formGroup]="profileForm" class="edit-profile-form">
+      <div class="profile-container">
+        <div class="p-grid">
+          <div class="p-col-6">
+            <p-floatLabel>
+              <input
+                pInputText
+                class="transparent-input"
+                type="text"
+                id="username"
+                formControlName="username" />
+              <label for="username">Username*</label>
+            </p-floatLabel>
+            <small class="p-error" *ngIf="profileForm.get('username')?.touched && profileForm.get('username')?.invalid">
+              {{getFieldError('username')}}
+            </small>
+          </div>
+          <div class="p-col-6">
+            <p-floatLabel>
+              <input
+                pInputText
+                class="transparent-input"
+                id="fullname"
+                formControlName="fullname" />
+              <label for="fullname">Full Name*</label>
+            </p-floatLabel>
+            <small class="p-error" *ngIf="profileForm.get('fullname')?.touched && profileForm.get('fullname')?.invalid">
+              {{getFieldError('fullname')}}
+            </small>
           </div>
         </div>
-        <div class="profile-edit">
-          <button pButton class="edit-button no-box-shadow" type="button" id="edit">
-            Edit
+
+        <div class="p-grid">
+          <div class="p-col-6">
+            <p-floatLabel>
+              <input
+                pInputText
+                class="transparent-input"
+                type="text"
+                id="leetcodeId"
+                formControlName="leetcodeId" />
+              <label for="leetcodeId">LeetCode ID*</label>
+            </p-floatLabel>
+            <small class="p-error" *ngIf="profileForm.get('leetcodeId')?.touched && profileForm.get('leetcodeId')?.invalid">
+              {{getFieldError('leetcodeId')}}
+            </small>
+          </div>
+          <div class="p-col-6">
+            <p-floatLabel>
+              <input
+                pInputText
+                class="transparent-input"
+                id="email"
+                formControlName="email" />
+              <label for="email">Email*</label>
+            </p-floatLabel>
+            <small class="p-error" *ngIf="profileForm.get('email')?.touched && profileForm.get('email')?.invalid">
+              {{getFieldError('email')}}
+            </small>
+          </div>
+        </div>
+
+        <div class="p-grid">
+          <div class="p-col-6">
+            <p-floatLabel>
+              <input
+                pInputText
+                class="transparent-input"
+                type="text"
+                id="country"
+                formControlName="country" />
+              <label for="country">Country*</label>
+            </p-floatLabel>
+            <small class="p-error" *ngIf="profileForm.get('country')?.touched && profileForm.get('country')?.invalid">
+              {{getFieldError('country')}}
+            </small>
+          </div>
+          <div class="p-col-6">
+            <p-floatLabel>
+              <input
+                pInputText
+                class="transparent-input"
+                id="organisation"
+                formControlName="organisation" />
+              <label for="organisation">Organisation*</label>
+            </p-floatLabel>
+            <small class="p-error" *ngIf="profileForm.get('organisation')?.touched && profileForm.get('organisation')?.invalid">
+              {{getFieldError('organisation')}}
+            </small>
+          </div>
+        </div>
+
+        <div class="profile-actions" *ngIf="isEditing">
+          <button
+            pButton
+            class="p-button-secondary mr-2"
+            type="button"
+            (click)="onCancel()"
+            label="Cancel">
+          </button>
+          <button
+            pButton
+            class="p-button-primary"
+            type="button"
+            (click)="onSave()"
+            [disabled]="profileForm.invalid || !hasFormChanged()"
+            label="Save">
           </button>
         </div>
+
       </div>
-        <form [formGroup]="profileForm" class="edit-profile-form">
-          <div class="profile-container">
-            <div class="p-grid">
-              <div class="p-col-6">
-                <p-floatLabel>
-                  <input pInputText class="transparent-input" type="text" id="username" formControlName="username" required />
-                  <label for="username">Username*</label>
-                </p-floatLabel>
-                <!--          @if (signupForm.get('email')?.touched && signupForm.get('email')?.invalid) {-->
-                <!--            <div class="error-message">Please enter a valid email</div>-->
-                <!--          }-->
-              </div>
-              <div class="p-col-6">
-                <p-floatLabel>
-                  <input pInputText class="transparent-input" id="fullname" formControlName="fullname" required />
-                  <label for="fullname">Full Name*</label>
-                </p-floatLabel>
-                <!--          @if (signupForm.get('leetcodeId')?.touched && signupForm.get('leetcodeId')?.invalid) {-->
-                <!--            <div class="error-message">Please enter your LeetCode ID</div>-->
-                <!--          }-->
-              </div>
-            </div>
-
-            <div class="p-grid">
-              <div class="p-col-6">
-                <p-floatLabel>
-                  <input pInputText class="transparent-input" type="password" id="password" formControlName="password" required />
-                  <label for="password">Password*</label>
-                </p-floatLabel>
-                <!--          @if (signupForm.get('email')?.touched && signupForm.get('email')?.invalid) {-->
-                <!--            <div class="error-message">Please enter a valid email</div>-->
-                <!--          }-->
-              </div>
-              <div class="p-col-6">
-                <p-floatLabel>
-                  <input pInputText class="transparent-input" id="email" formControlName="email" required />
-                  <label for="email">Email*</label>
-                </p-floatLabel>
-                <!--          @if (signupForm.get('leetcodeId')?.touched && signupForm.get('leetcodeId')?.invalid) {-->
-                <!--            <div class="error-message">Please enter your LeetCode ID</div>-->
-                <!--          }-->
-              </div>
-            </div>
-
-            <div class="p-grid">
-              <div class="p-col-6">
-                <p-floatLabel>
-                  <input pInputText class="transparent-input" type="text" id="country" formControlName="country" required />
-                  <label for="country">Country*</label>
-                </p-floatLabel>
-                <!--          @if (signupForm.get('email')?.touched && signupForm.get('email')?.invalid) {-->
-                <!--            <div class="error-message">Please enter a valid email</div>-->
-                <!--          }-->
-              </div>
-              <div class="p-col-6">
-                <p-floatLabel>
-                  <input pInputText class="transparent-input" id="organisation" formControlName="organisation" required />
-                  <label for="organisation">Organisation*</label>
-                </p-floatLabel>
-                <!--          @if (signupForm.get('leetcodeId')?.touched && signupForm.get('leetcodeId')?.invalid) {-->
-                <!--            <div class="error-message">Please enter your LeetCode ID</div>-->
-                <!--          }-->
-              </div>
-            </div>
-
-            <div class="profile-save">
-              <button pButton class="save-button no-box-shadow" type="button" id="save">
-                Save
-              </button>
-            </div>
-
-          </div>
-        </form>
-    </div>
+    </form>
   </div>
-</body>
-
+</div>
