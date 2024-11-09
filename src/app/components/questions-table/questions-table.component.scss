@@ -5,19 +5,31 @@
   border-radius: 50px;
   background-color: rgba(0, 0, 0, 0.7);
   color: whitesmoke;
-  font-size: 2.5vw;
+  font-size: 2.5em;
   text-align: center;
-  margin: 4vh auto 0;
+  margin: 3vh auto 1vh;
   padding: 10px;
 }
 
-.questions-table-container {
+.questions-table-container-admin {
   background-color: rgba(255, 255, 255, 0.6);
   width: fit-content;
-  height: 43em;
+  height: 45em;
   max-width: 80%;
   min-width: 60%;
-  margin: 3vh auto 2vh;
+  margin: 2vh auto 2vh;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.9);
+}
+
+.questions-table-container-user {
+  background-color: rgba(255, 255, 255, 0.6);
+  width: fit-content;
+  height: 52em;
+  max-width: 80%;
+  min-width: 60%;
+  margin: 2vh auto 2vh;
   padding: 2rem;
   border-radius: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.9);
@@ -26,17 +38,41 @@
 .questions-table-top {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   height: 2rem;
+  margin-bottom: 1rem;
+}
+
+.questions-list-admin {
+  height: 31em;
+  overflow-y: scroll;
+  -ms-overflow-style: none;  /* Hide scrollbar for IE and Edge */
+  scrollbar-width: none;     /* Hide scrollbar for Firefox */
+  padding: 10px;
+}
+
+.questions-list-user {
+  height: 38em;
+  overflow-y: scroll;
+  -ms-overflow-style: none;  /* Hide scrollbar for IE and Edge */
+  scrollbar-width: none;     /* Hide scrollbar for Firefox */
+  padding: 10px;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.questions-list::-webkit-scrollbar {
+  display: none;
 }
 
 .search-bar {
-  background-color: #ffffff;
-  border-radius: 30px;
-  min-width: 35%;
-  display: flex;
-  align-items: center;
-  padding: 0.5rem 1rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    border-radius: 30px;
+    height: 2rem;
+    min-width: 35%;
+    background: white;
+    padding: 0.5rem 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
 }
 
 .search-bar input[type="text"] {
@@ -65,9 +101,25 @@
 .filters {
   width: 60%;
   display: flex;
+  height: 2rem;
   gap: 10px;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
+
+  > div {
+    width: 25%; /* Fixed width for all filter components */
+    height: 100%; /* Fixed height for all filter components */
+  }
+
+  ::ng-deep .p-dropdown {
+    height: 100%; /* Match height with search bar */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+
+    .p-dropdown-label {
+      display: flex;
+      align-items: center;
+    }
+  }
 }
 
 .search-bar i {
@@ -80,28 +132,36 @@
   color: black;
 }
 
-.search-bar.no-box-shadow {
-  box-shadow: none;
-}
-
 .icon-button {
-    // width: 30%;
-    padding: 5px;
-    // display: flex;
-    background-color: white;
-    color: black;
-    font-size: 1vw;
-    gap: 10px;
-    // justify-content: center;
-    border: none;
-    border-radius: 30px;
-    cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.6);
-    transition: background-color 0.3s;
+  height: 100%;
+  width: 25%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+  background: white;
+  color: #333;
+  border: none;
+  padding: 0 1rem;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.2s ease;
 
-   label {
-     cursor : pointer;
-   }
+  &:hover {
+    background: #f8f9fa;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+  }
+
+  .button-icon {
+    height: 20px;
+    width: 20px;
+    object-fit: contain;
+  }
+
+  label {
+    cursor: pointer;
+  }
 }
 
 .button-icon {
@@ -113,33 +173,60 @@
   display: flex;
   font-family: 'Raleway', sans-serif;
   font-weight: bold;
+  font-size: 1.2vw;
+  padding: 10px;
   justify-content: space-between;
-  margin: 20px auto 20px;
+  margin: 10px auto 0px;
+}
+
+.column-heading-1, .column-heading-2, .column-heading-3, .column-heading-4 {
+  min-width: 25%;
+}
+
+.column-heading-2 {
+  flex-grow: 2;
+}
+
+.question-id, .question-title, .question-difficulty {
+  min-width: 25%;
+}
+
+.question-title {
+  flex-grow: 2;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .question {
   border-radius: 25px;
   height: 3rem;
+  margin-bottom: 4px;
   background-color: #ffffff;
   font-family: sans-serif;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.4);
+  /* Add smooth transition for transform and box-shadow */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.question2 {
-  border-radius: 25px;
-  height: 3rem;
-  background-color: #d7d7d7;
-  font-family: sans-serif;
+.question:hover {
+  /* Move up and scale slightly larger */
+  transform: translateY(-2px) scale(1.01);
+  /* Add larger, softer shadow for depth */
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.8);
 }
 
 .action {
   display: inline-block;
   padding-top: 6px;
+  min-width: 25%;
   background-color: transparent;
   padding-bottom: 6px;
 }
 
 .delete-icon {
   cursor: pointer;
+  min-width: 15%;
   background-color: transparent;
   object-fit: cover;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -153,7 +240,9 @@
 
 .paginator {
   width: 45%;
-  margin: 3vh auto 2vh;
+  margin: 2vh auto 2vh;
+  height: fit-content;
+  //padding: 1vh 0
 }
 
 :host::ng-deep .p-paginator {
@@ -161,7 +250,7 @@
   border-radius: 30px;
   padding: 0;
   margin-bottom: 4px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
 }
 
 :host::ng-deep .p-element.p-paginator-last.p-paginator-element.p-link.ng-star-inserted {
@@ -173,7 +262,6 @@
 }
 
 :host::ng-deep .p-button {
-  box-shadow: none;
   padding: 15px;
 }
 
@@ -186,15 +274,13 @@
 }
 
 .upper-half {
-  height: 35em;
-}
-
-.questions-list {
-  height: 30em;
-  overflow-y: scroll;
+  height: fit-content;
 }
 
 .question-title:hover {
   cursor: pointer;
 }
 
+.striped-background {
+  background-color: #dfdfdf;
+}

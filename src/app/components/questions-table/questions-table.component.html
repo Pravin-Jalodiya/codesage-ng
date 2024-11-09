@@ -1,131 +1,134 @@
 <div class="background">
   <div class="background-overlay">
     <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
-    <p-toast></p-toast>
-    <app-header></app-header>
-    @if (role === Role.ADMIN) {
-      <div class="heading">
-        Delete Question
-      </div>
-    }
-
-    <div class="questions-table-container">
-      <div class="upper-half">
-        <div class="questions-table-top">
-          <div class="search-bar">
-            <i class="pi pi-search" style="color: black"></i>
-            <input
-              type="text"
-              pInputText
-              [ngModel]="searchQuery()"
-              (ngModelChange)="searchQuery.set($event)"
-              placeholder="Search question by title or ID"
-              class="search-bar no-box-shadow" />
-          </div>
-
-          <div class="filters">
-            <div class="company-filter">
-              <p-dropdown
-              #companyDropdown
-              [options]="companies()"
-              [ngModel]="selectedCompany()"
-              (ngModelChange)="onCompanySelect($event)"
-              placeholder="Company"
-              [showClear]="true"
-              [checkmark]="true"
-              [editable]="true"
-              optionLabel="name"
-              (click)="companyDropdown.show()">
-            </p-dropdown>
+      <app-header></app-header>
+    <div class="flex-column justify-content-center align-content-center align-items-center h-fit w-full">
+      @if (role === Role.ADMIN) {
+        <div class="heading flex justify-content-center">
+          Delete Question
+        </div>
+      }
+      <div class="questions-table-container"
+           [ngClass]="{'questions-table-container-admin': role === Role.ADMIN,
+           'questions-table-container-user': role === Role.USER}">
+        <div class="upper-half flex-column">
+          <div class="questions-table-top">
+            <div class="search-bar">
+              <i class="pi pi-search"></i>
+              <input
+                type="text"
+                pInputText
+                class="no-box-shadow"
+                [ngModel]="searchQuery()"
+                (ngModelChange)="searchQuery.set($event)"
+                placeholder="Search question by title or ID" />
             </div>
-            <div class="topic-filter">
-              <p-dropdown
-                #topicDropdown
-                [options]="topics()"
-                [ngModel]="selectedTopic()"
-                (ngModelChange)="onTopicSelect($event)"
-                placeholder="Topic"
-                [editable]="true"
-                [checkmark]="true"
-                [showClear]="true"
-                optionLabel="name"
-                (click)="topicDropdown.show()">
-              </p-dropdown>
-            </div>
-            <div class="difficuty-filter"></div>
-            <p-dropdown
-              #difficultyDropdown
-              [options]="difficulties"
-              [ngModel]="selectedDifficulty()"
-              (ngModelChange)="onDifficultySelect($event)"
-              placeholder="Difficulty"
-              [showClear]="true"
-              [checkmark]="true"
-              [editable]="true"
-              optionLabel="name"
-              (click)="difficultyDropdown.show()">
-            </p-dropdown>
 
-            @if (role === Role.USER) {
-              <div class="random-pick">
+            <div class="filters">
+              <div class="company-filter">
+                <p-dropdown
+                  #companyDropdown
+                  [options]="companies()"
+                  [ngModel]="selectedCompany()"
+                  (ngModelChange)="onCompanySelect($event)"
+                  placeholder="Company"
+                  [showClear]="true"
+                  [checkmark]="true"
+                  [editable]="true"
+                  optionLabel="name"
+                  (click)="companyDropdown.show()">
+                </p-dropdown>
+              </div>
+
+              <div class="topic-filter">
+                <p-dropdown
+                  #topicDropdown
+                  [options]="topics()"
+                  [ngModel]="selectedTopic()"
+                  (ngModelChange)="onTopicSelect($event)"
+                  placeholder="Topic"
+                  [editable]="true"
+                  [checkmark]="true"
+                  [showClear]="true"
+                  optionLabel="name"
+                  (click)="topicDropdown.show()">
+                </p-dropdown>
+              </div>
+
+              <div class="difficulty-filter">
+                <p-dropdown
+                  #difficultyDropdown
+                  [options]="difficulties"
+                  [ngModel]="selectedDifficulty()"
+                  (ngModelChange)="onDifficultySelect($event)"
+                  placeholder="Difficulty"
+                  [showClear]="true"
+                  [checkmark]="true"
+                  [editable]="true"
+                  optionLabel="name"
+                  (click)="difficultyDropdown.show()">
+                </p-dropdown>
+              </div>
+              @if (role === Role.USER) {
                 <button pButton pRipple type="button" class="icon-button" (click)="pickRandomQuestion()">
                   Pick one
                   <img src="../../../assets/random.png" alt="icon" class="button-icon" />
                 </button>
+              }
+            </div>
+          </div>
+          <div class="column-headings flex justify-content-center align-items-center">
+            <div class="column-heading-1 flex-1 flex justify-content-center">ID</div>
+            <div class="column-heading-2 flex justify-content-center">Title</div>
+            <div class="column-heading-3 flex-1 flex justify-content-center">Difficulty</div>
+
+            @if (role === Role.ADMIN) {
+              <div class="column-heading-4 flex-1 flex justify-content-center">Action</div>
+            }
+          </div>
+          <div class="questions-list flex-column justify-content-center align-items-center"
+               [ngClass]="{'questions-list-admin': role === Role.ADMIN,
+                'questions-list-user': role === Role.USER}">
+            @for (question of paginatedQuestions(); track question.question_id; let i = $index) {
+              <div class="question flex" [ngClass]="{'striped-background': i % 2 === 1}">
+                <div class="question-id flex flex-1 justify-content-center align-items-center">
+                  {{ question.question_id }}
+                </div>
+                <div class="question-title column-heading-2 flex justify-content-center align-items-center"
+                     (click)="redirectToQuestion(question.question_link)">
+                  {{ question.question_title }}
+                </div>
+                <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
+                  {{ question.difficulty }}
+                </div>
+
+                @if (role === Role.ADMIN) {
+                  <div class="action flex flex-1 justify-content-center">
+                    <img class="delete-icon" src="../../../assets/trash-icon.png"
+                         (click)="onQuestionDelete(question)">
+                  </div>
+                }
+              </div>
+            } @empty {
+              <div class="no-questions flex justify-content-center align-items-center h-full">
+                No questions found
               </div>
             }
           </div>
         </div>
-
-        <div class="column-headings flex justify-content-center align-items-center">
-          <div class="column-heading-1 flex-1 flex justify-content-center">ID</div>
-          <div class="column-heading-2 flex-1 flex justify-content-center">Title</div>
-          <div class="column-heading-3 flex-1 flex justify-content-center">Difficulty</div>
-
-          @if (role === Role.ADMIN) {
-            <div class="column-heading-4 flex-1 flex justify-content-center">Action</div>
-          }
-        </div>
-        <div class="questions-list">
-          @for (question of paginatedQuestions(); track question.question_id; let i = $index) {
-            <div class="question flex" [ngStyle]="{'background-color': i % 2 === 1 ? '#dfdfdf' : ''}">
-              <div class="question-id flex flex-1 justify-content-center align-items-center">
-                {{ question.question_id }}
-              </div>
-              <div class="question-title flex flex-1 justify-content-center align-items-center"
-                   (click)="redirectToQuestion(question.question_link)">
-                {{ question.question_title }}
-              </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                {{ question.difficulty }}
-              </div>
-
-              @if (role === Role.ADMIN) {
-                <div class="action flex flex-1 justify-content-center">
-                  <img class="delete-icon" src="../../../assets/trash-icon.png"
-                       (click)="onQuestionDelete(question)">
-                </div>
-              }
-            </div>
-          } @empty {
-            <div class="no-questions flex justify-content-center align-items-center h-full">
-              No questions found
-            </div>
-          }
-        </div>
-      </div>
-
-      <div class="paginator flex justify-content-center align-items-center">
-        <div class="w-21rem">
-          <p-paginator
-            [first]="first()"
-            [rows]="pageSize()"
-            [totalRecords]="totalRecords()"
-            (onPageChange)="onPageChange($event)"
+        <div class="paginator flex justify-content-center align-items-center">
+          <div class="w-21rem">
+            <p-paginator
+              [first]="first()"
+              [rows]="pageSize()"
+              [totalRecords]="totalRecords()"
+              (onPageChange)="onPageChange($event)"
             >
-          </p-paginator>
+            </p-paginator>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+

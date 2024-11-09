@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {CommonModule, NgOptimizedImage} from '@angular/common';
 import {provideRouter, Router, RouterLink, RouterOutlet} from "@angular/router";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule, provideHttpClient, withInterceptors} from "@angular/common/http";
@@ -56,34 +56,35 @@ import {ConfirmDialogModule} from "primeng/confirmdialog";
         UsersTableComponent,
         StatsComponent,
     ],
-  imports: [
-    CommonModule,
-    RouterOutlet,
-    ReactiveFormsModule,
-    HttpClientModule,
-    CommonModule,
-    RouterLink,
-    BrowserModule,
-    ButtonDirective,
-    FloatLabelModule,
-    InputTextModule,
-    PasswordModule,
-    FileUploadModule,
-    ButtonModule,
-    PaginatorModule,
-    BadgeModule,
-    ProgressBarModule,
-    Ripple,
-    ProgressSpinnerModule,
-    BrowserAnimationsModule,
-    ToastModule,
-    AvatarModule,
-    DropdownModule,
-    FormsModule,
-    MatSlideToggleModule,
-    NgCircleProgressModule,
-    ConfirmDialogModule
-  ],
+    imports: [
+        CommonModule,
+        RouterOutlet,
+        ReactiveFormsModule,
+        HttpClientModule,
+        CommonModule,
+        RouterLink,
+        BrowserModule,
+        ButtonDirective,
+        FloatLabelModule,
+        InputTextModule,
+        PasswordModule,
+        FileUploadModule,
+        ButtonModule,
+        PaginatorModule,
+        BadgeModule,
+        ProgressBarModule,
+        Ripple,
+        ProgressSpinnerModule,
+        BrowserAnimationsModule,
+        ToastModule,
+        AvatarModule,
+        DropdownModule,
+        FormsModule,
+        MatSlideToggleModule,
+        NgCircleProgressModule,
+        ConfirmDialogModule,
+        NgOptimizedImage
+    ],
     bootstrap: [AppComponent, ],
     providers: [AuthService, provideHttpClient(withInterceptors([AuthInterceptor])), provideRouter(routes), MessageService, CircleProgressOptions, ConfirmationService]
 })
