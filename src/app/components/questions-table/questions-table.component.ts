@@ -31,21 +31,17 @@ export class QuestionsTableComponent implements OnInit {
 
   role = this.authService.userRole;
 
-  // Pagination signals
   currentPage = signal<number>(0);
   pageSize = signal<number>(15);
   first = signal<number>(0);
 
-  // State signals
   questions = signal<Question[]>([]);
   searchQuery = signal<string>('');
 
-  // Filter signals
   selectedCompany = signal<FilterOption | null>(null);
   selectedTopic = signal<FilterOption | null>(null);
   selectedDifficulty = signal<FilterOption | null>(null);
 
-  // Filter options
   companies = signal<FilterOption[]>([]);
   topics = signal<FilterOption[]>([]);
   difficulties: FilterOption[] = [
@@ -54,7 +50,6 @@ export class QuestionsTableComponent implements OnInit {
     { name: 'Hard' }
   ];
 
-  // Computed signal for filtered questions
   filteredQuestions = computed(() => {
     let filtered = this.questions();
     const search = this.searchQuery().toLowerCase();
@@ -83,14 +78,13 @@ export class QuestionsTableComponent implements OnInit {
 
     if (difficulty) {
       filtered = filtered.filter(q =>
-        q.difficulty === difficulty
+        q.difficulty === difficulty.toLowerCase()
       );
     }
 
     return filtered;
   });
 
-  // Computed signal for paginated questions
   paginatedQuestions = computed(() => {
     const filtered = this.filteredQuestions();
     const startIndex = this.first();
@@ -98,7 +92,6 @@ export class QuestionsTableComponent implements OnInit {
     return filtered.slice(startIndex, endIndex);
   });
 
-  // Computed total records for pagination
   totalRecords = computed(() => this.filteredQuestions().length);
 
   ngOnInit() {
@@ -122,14 +115,12 @@ export class QuestionsTableComponent implements OnInit {
     });
   }
 
-  // Updated pagination handler with PaginatorState
   onPageChange(event: PaginatorState) {
     if (event.first !== undefined) this.first.set(event.first);
     if (event.rows !== undefined) this.pageSize.set(event.rows);
     if (event.page !== undefined) this.currentPage.set(event.page);
   }
 
-  // Random question selector
   pickRandomQuestion() {
     const questions = this.filteredQuestions();
     if (questions.length > 0) {
@@ -142,22 +133,22 @@ export class QuestionsTableComponent implements OnInit {
   onSearch(event: Event) {
     const input = event.target as HTMLInputElement;
     this.searchQuery.set(input.value);
-    this.first.set(0); // Reset to first page when searching
+    this.first.set(0);
   }
 
   onCompanySelect(company: FilterOption | null) {
     this.selectedCompany.set(company);
-    this.first.set(0); // Reset to first page when filtering
+    this.first.set(0);
   }
 
   onTopicSelect(topic: FilterOption | null) {
     this.selectedTopic.set(topic);
-    this.first.set(0); // Reset to first page when filtering
+    this.first.set(0);
   }
 
   onDifficultySelect(difficulty: FilterOption | null) {
     this.selectedDifficulty.set(difficulty);
-    this.first.set(0); // Reset to first page when filtering
+    this.first.set(0);
   }
 
   onQuestionDelete(question: Question) {

@@ -18,8 +18,5 @@ export class PaginatorComponent {
 
   rows: number = 10;
 
-  onPageChange() {
-      // this.first = event.first;
-      // this.rows = event.rows;
-  }
+  onPageChange() {}
 }

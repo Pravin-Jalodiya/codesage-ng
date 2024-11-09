@@ -62,7 +62,6 @@ export class ProfileComponent implements OnInit {
               country: profile.country,
               organisation: profile.organisation
             });
-            // Store initial values for comparison
             this.initialFormValues = this.profileForm.value;
           }
         },

@@ -24,7 +24,8 @@
           </div>
 
           <div class="filters">
-            <p-dropdown
+            <div class="company-filter">
+              <p-dropdown
               #companyDropdown
               [options]="companies()"
               [ngModel]="selectedCompany()"
@@ -36,20 +37,22 @@
               optionLabel="name"
               (click)="companyDropdown.show()">
             </p-dropdown>
-
-            <p-dropdown
-              #topicDropdown
-              [options]="topics()"
-              [ngModel]="selectedTopic()"
-              (ngModelChange)="onTopicSelect($event)"
-              placeholder="Topic"
-              [editable]="true"
-              [checkmark]="true"
-              [showClear]="true"
-              optionLabel="name"
-              (click)="topicDropdown.show()">
-            </p-dropdown>
-
+            </div>
+            <div class="topic-filter">
+              <p-dropdown
+                #topicDropdown
+                [options]="topics()"
+                [ngModel]="selectedTopic()"
+                (ngModelChange)="onTopicSelect($event)"
+                placeholder="Topic"
+                [editable]="true"
+                [checkmark]="true"
+                [showClear]="true"
+                optionLabel="name"
+                (click)="topicDropdown.show()">
+              </p-dropdown>
+            </div>
+            <div class="difficuty-filter"></div>
             <p-dropdown
               #difficultyDropdown
               [options]="difficulties"
@@ -64,10 +67,12 @@
             </p-dropdown>
 
             @if (role === Role.USER) {
-              <button pButton pRipple type="button" class="icon-button" (click)="pickRandomQuestion()">
-                <label>Pick one</label>
-                <img src="../../../assets/random.png" alt="icon" class="button-icon" />
-              </button>
+              <div class="random-pick">
+                <button pButton pRipple type="button" class="icon-button" (click)="pickRandomQuestion()">
+                  Pick one
+                  <img src="../../../assets/random.png" alt="icon" class="button-icon" />
+                </button>
+              </div>
             }
           </div>
         </div>
@@ -81,7 +86,6 @@
             <div class="column-heading-4 flex-1 flex justify-content-center">Action</div>
           }
         </div>
-
         <div class="questions-list">
           @for (question of paginatedQuestions(); track question.question_id; let i = $index) {
             <div class="question flex" [ngStyle]="{'background-color': i % 2 === 1 ? '#dfdfdf' : ''}">
