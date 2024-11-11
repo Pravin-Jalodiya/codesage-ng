@@ -1,0 +1,181 @@
+<body>
+<div class="background">
+  <div class="background-overlay">
+    <app-header></app-header>
+    @if (loading()) {
+      <div class="blur-bg"></div>
+      <div class="card flex justify-content-center align-items-center h-screen w-screen spinner">
+        <p-progressSpinner ariaLabel="loading" />
+      </div>
+    }
+    <div class="stats-container">
+      <div class="upper-half flex">
+        <div class="codesage-stats flex flex-1 justify-content-center align-items-center">
+          <div class="codesage-stats-bundle">
+            <div class="codesage-stats-heading p-2 m-2 font-bold">
+              Codesage Stats
+            </div>
+            <div class="codesage-stats-content flex justify-content-evenly align-items-center h-auto">
+              <div class="codesage-circular-progress-bar flex flex1 justify-content-center align-items-center">
+                <circle-progress
+                  [radius]="80"
+                  [space]="-10"
+                  [percent]="(this.csTotalDone()/this.csTotalQuestions())*100"
+                  [maxPercent]="100"
+                  [outerStrokeGradient]="true"
+                  [outerStrokeWidth]="20"
+                  [showTitle]="true"
+                  [showSubtitle]="true"
+                  [outerStrokeColor]="'#ff2d34'"
+                  [outerStrokeGradientStopColor]="'rgba(255,107,170,0.51)'"
+                  [innerStrokeColor]="'#e7e8ea'"
+                  [innerStrokeWidth]="0"
+                  [title]="csTotalProgress()"
+                  [subtitle]="'Solved'"
+                  [titleFontSize]="'25px'"
+                  [subtitleFontSize]="'15px'"
+                  titleColor="white"
+                  subtitleColor="white"
+                  [animateTitle]="false"
+                  [animationDuration]="500"
+                  [showUnits]="false"
+                  [showBackground]="false"
+                  [clockwise]="true"
+                  [startFromZero]="true"
+                  [lazy]="true">
+                </circle-progress>
+              </div>
+              <div class="codesage-question-stats flex-column flex1 justify-content-between align-items-center h-full">
+                <div class="difficulty-easy-stat flex-column flex1 justify-content-center align-items-center">
+                  <div class="difficulty-title-easy flex  font-bold justify-content-center align-items-center">Easy</div>
+                  <div class="difficulty-easy-count p-1 flex justify-content-center align-items-center">{{ csEasyDone()}} / {{ csTotalEasy() }}</div>
+                </div>
+                <div class="difficulty-medium-stat flex-column flex1 justify-content-center align-items-center striped-background">
+                  <div class="difficulty-title-medium font-bold flex justify-content-center align-items-center">Medium</div>
+                  <div class="difficulty-medium-count p-1 flex justify-content-center align-items-center">
+                    {{ csMediumDone() }} / {{csTotalMedium()}}</div>
+                </div>
+                <div class="difficulty-hard-stat flex-column flex1 justify-content-center align-items-center">
+                  <div class="difficulty-title-hard font-bold flex justify-content-center align-items-center">Hard</div>
+                  <div class="difficulty-hard-count flex p-1 justify-content-center align-items-center">
+                    {{ csHardDone() }} / {{csTotalHard()}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="leetcode-stats flex flex-1 justify-content-center align-items-center">
+          <div class="leetcode-stats-bundle">
+            <div class="leetcode-stats-heading p-2 m-2 font-bold">
+              Leetcode Stats
+            </div>
+            <div class="leetcode-stats-content flex justify-content-evenly align-items-center h-auto">
+              <div class="leetcode-circular-progress-bar flex flex1 justify-content-center align-items-center">
+                <circle-progress
+                  [radius]="80"
+                  [space]="-10"
+                  [percent]="(this.lcTotalDone()/this.lcTotalQuestions())*100"
+                  [maxPercent]="100"
+                  [outerStrokeGradient]="true"
+                  [outerStrokeWidth]="20"
+                  [titleFontSize]="'25px'"
+                  [subtitleFontSize]="'15px'"
+                  [showTitle]="true"
+                  [showSubtitle]="true"
+                  [outerStrokeColor]="'#ff2d9d'"
+                  [outerStrokeGradientStopColor]="'rgba(255,107,170,0.51)'"
+                  [innerStrokeColor]="'#ff2d9d'"
+                  [innerStrokeWidth]="0"
+                  [title]="lcTotalProgress()"
+                  [subtitle]="'Solved'"
+                  titleColor="white"
+                  subtitleColor="white"
+                  [animateTitle]="false"
+                  [animationDuration]="600"
+                  [showUnits]="false"
+                  [showBackground]="false"
+                  [clockwise]="true"
+                  [startFromZero]="true"
+                  [lazy]="true">
+                </circle-progress>
+              </div>
+              <div class="leetcode-question-stats flex-column flex1 justify-content-between align-items-center h-full">
+                <div class="difficulty-easy-stat flex-column justify-content-center align-items-center">
+                  <div class="difficulty-title-easy flex font-bold justify-content-center align-items-center">Easy</div>
+                  <div class="difficulty-easy-count p-1 flex justify-content-center align-items-center">{{ lcEasyDone() }} / {{ lcTotalEasy() }}</div>
+                </div>
+                <div class="difficulty-medium-stat flex-column justify-content-center align-items-center striped-background">
+                  <div class="difficulty-title-medium flex font-bold justify-content-center align-items-center">Medium</div>
+                  <div class="difficulty-medium-count p-1 flex justify-content-center align-items-center">
+                    {{ lcMediumDone() }} / {{lcTotalMedium()}}</div>
+                </div>
+                <div class="difficulty-hard-stat flex-column justify-content-center align-items-center">
+                  <div class="difficulty-title-hard flex font-bold justify-content-center align-items-center">Hard</div>
+                  <div class="difficulty-hard-count p-1 flex justify-content-center align-items-center">{{ lcHardDone() }} / {{lcTotalHard()}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="lower-half flex">
+        <div class="recent-submissions flex flex-1 justify-content-center align-items-center">
+          <div class="recent-submissions-table flex-column justify-content-evenly align-items-center">
+            <div class="submissions-table-heading p-2 m-2 font-bold flex justify-content-center align-items-center">Recent AC Submissions</div>
+            <div class="submissions-list flex-column justify-content-center align-items-center">
+              @for(question of recentSubmissions(); track question.title; let i = $index){
+                <div class="question flex white-space-nowrap text-overflow-ellipsis min-w-full" [ngClass]="{'striped-background': i % 2 === 1}">
+                  <div class="question-title flex flex-1 justify-content-center align-items-center"
+                  (click)="redirectToSubmission(question.id)">
+                    {{ question.title }}
+                  </div>
+                </div>
+              } @empty {
+                <div class="no-questions flex justify-content-center align-items-center h-full">
+                  No data found
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+        <div class="tags flex flex-1 justify-content-between align-items-center">
+          <div class="topic-tags flex-column justify-content-evenly align-items-center">
+            <div class="topic-tags-heading p-2 m-2 font-bold">Topic Tags</div>
+            <div class="topic-tags-content">
+              <div class="company-tag-cards flex-wrap overflow-y-scroll">
+                @for(topic of Object.keys(topicStats()); track topic; let i = $index){
+                  <div class="topic-tag-card inline-block p-2 m-1 rounded-full">
+                    <span class="topic-tag-card-text" [ngClass]="{'striped-background': i % 2 === 1}">{{topic}}</span>
+                    <span class="topic-tag-card-number">x{{topicStats()[topic]}}</span>
+                  </div>
+                } @empty {
+                  <div class="no-topic-tags flex justify-content-center align-items-center h-full">
+                    No data found
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+          <div class="company-tags flex-column justify-content-evenly align-items-center">
+            <div class="company-tags-heading p-2 m-2 font-bold">Company Tags</div>
+            <div class="company-tags-content">
+              <div class="company-tag-cards flex-wrap overflow-y-scroll">
+                @for(company of Object.keys(companyStats()); track company; let i = $index){
+                  <div class="company-tag-card inline-block p-2 m-1 rounded-full">
+                    <span class="company-tag-card-text" [ngClass]="{'striped-background': i % 2 === 1}">{{company}}</span>
+                    <span class="company-tag-card-number">x{{companyStats()[company]}}</span>
+                  </div>
+                } @empty {
+                  <div class="no-company-tags flex justify-content-center align-items-center h-full">
+                    No data found
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>

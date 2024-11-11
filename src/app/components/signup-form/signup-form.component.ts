@@ -9,7 +9,7 @@ import {
   AbstractControlOptions
 } from '@angular/forms';
 
-import {AuthService} from "../../shared/services/auth/auth.service";
+import {AuthService} from "../../services/auth/auth.service";
 import {MessageService} from "primeng/api";
 import {Router} from "@angular/router";
 
@@ -50,7 +50,7 @@ export class SignupFormComponent implements OnInit {
           if (response.code === 200) {
             this.router.navigate(['/login']);
             this.messageService.add({
-              severity: 'success',
+              severity: 'info',
               summary: 'Signup Successful',
               detail: 'Your account has been created!'
             });

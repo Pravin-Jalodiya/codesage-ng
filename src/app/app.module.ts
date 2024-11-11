@@ -27,7 +27,7 @@ import {AppComponent} from "./app.component";
 import {LandingPageComponent} from "./components/landing-page/landing-page.component";
 import {LoginFormComponent} from "./components/login-form/login-form.component";
 import {SignupFormComponent} from "./components/signup-form/signup-form.component";
-import {AuthService} from "./shared/services/auth/auth.service";
+import {AuthService} from "./services/auth/auth.service";
 import {AppHeaderComponent} from "./components/app-header/app-header.component";
 import {routes} from "./app.routes";
 import {ProfileComponent} from "./components/profile/profile.component";
@@ -36,9 +36,11 @@ import { AddQuestionComponent } from './components/add-question/add-question.com
 import { QuestionsTableComponent } from './components/questions-table/questions-table.component';
 import { PaginatorComponent } from './components/paginator/paginator.component';
 import { UsersTableComponent } from './components/users-table/users-table.component';
-import { StatsComponent } from './components/stats/stats.component';
+import { ProgressComponent } from './components/progress/progress.component';
 import {AuthInterceptor} from "./shared/interceptors/auth.interceptor";
 import {ConfirmDialogModule} from "primeng/confirmdialog";
+import {DateAndTimePipe} from "./shared/pipes/dateAndTime.pipe";
+import {PlatformComponent} from "./components/platform/platform.component";
 
 
 @NgModule({
@@ -54,7 +56,9 @@ import {ConfirmDialogModule} from "primeng/confirmdialog";
         QuestionsTableComponent,
         PaginatorComponent,
         UsersTableComponent,
-        StatsComponent,
+        ProgressComponent,
+        PlatformComponent,
+        DateAndTimePipe
     ],
     imports: [
         CommonModule,
@@ -83,7 +87,7 @@ import {ConfirmDialogModule} from "primeng/confirmdialog";
         MatSlideToggleModule,
         NgCircleProgressModule,
         ConfirmDialogModule,
-        NgOptimizedImage
+        NgOptimizedImage,
     ],
     bootstrap: [AppComponent, ],
     providers: [AuthService, provideHttpClient(withInterceptors([AuthInterceptor])), provideRouter(routes), MessageService, CircleProgressOptions, ConfirmationService]

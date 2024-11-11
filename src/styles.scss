@@ -112,3 +112,11 @@ button {
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+:host::ng-deep .p-message {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+:host::ng-deep .p-toast-message-content, .p-toast-message-success, .p-toast-message-error, .p-toast-message-warning, .p-toast-message-warning, .p-toast-message-contrast {
+  background-color: rgba(255, 255, 255, 0.1);
+}

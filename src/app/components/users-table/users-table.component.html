@@ -1,348 +1,100 @@
-<body>
-  <div class="background">
-    <div class="background-overlay">
-      <app-header></app-header>
-      <div class="heading">
-        Manage Users
-      </div>
-      <div class="questions-table-container">
-
-        <div class="upper-half">
-          <div class="questions-table-top">
-            <div class="search-bar">
-              <i class="pi pi-search" style="color: black"></i>
-              <input type="text" pInputText placeholder="Search users by name" class="search-bar no-box-shadow" />
-            </div>
-            <div class="filters">
-              <p-dropdown
-                #companyDropdown
-                [options]="companies"
-                [(ngModel)]="selectedCompany"
-                placeholder="filter"
-                [showClear]="true"
-                [checkmark]="true"
-                [editable]="true"
-                optionLabel="name"
-                (click)="companyDropdown.show()">
-              </p-dropdown>
-            </div>
+<!-- users-table.component.html -->
+<div class="background">
+  <div class="background-overlay">
+    <app-header></app-header>
+    <p-confirmDialog></p-confirmDialog>
+    <div class="heading">
+      Manage Users
+    </div>
+    <div class="questions-table-container">
+      <div class="upper-half">
+        <div class="questions-table-top">
+          <div class="search-bar">
+            <i class="pi pi-search" style="color: black"></i>
+            <input
+              type="text"
+              pInputText
+              [ngModel]="searchQuery()"
+              (ngModelChange)="searchQuery.set($event)"
+              name="searchQuery"
+              placeholder="Search users by name"
+              class="search-bar no-box-shadow" />
           </div>
-          <div class="column-headings flex align-items-center justify-content-center">
-            <div class="column-heading-1 flex-1 flex justify-content-center">Username</div>
-            <div class="column-heading-2 flex-1 flex justify-content-center">Leetcode ID</div>
-            <div class="column-heading-3 flex-1 flex justify-content-center">Country</div>
-            <div class="column-heading-4 flex-1 flex justify-content-center">Last Seen</div>
-            <div class="column-heading-5 flex-1 flex justify-content-center">Status</div>
-            <div class="column-heading-6 flex-1 flex justify-content-center">Actions</div>
+          <div class="filters">
+            <p-dropdown
+              #stateDropdown
+              [options]="userStates"
+              [ngModel]="selectedState()"
+              (ngModelChange)="selectedState.set($event)"
+              name="stateFilter"
+              placeholder="filter"
+              [showClear]="true"
+              [checkmark]="true"
+              [editable]="true"
+              optionLabel="name"
+              (click)="stateDropdown.show()">
+            </p-dropdown>
           </div>
+        </div>
 
-          <div class="questions-list">
+        <div class="column-headings flex align-items-center justify-content-center">
+          <div class="column-heading-1 flex-1 flex justify-content-center">Username</div>
+          <div class="column-heading-2 flex-1 flex justify-content-center">Leetcode ID</div>
+          <div class="column-heading-3 flex-1 flex justify-content-center">Country</div>
+          <div class="column-heading-4 flex-1 flex justify-content-center">Last Seen</div>
+          <div class="column-heading-5 flex-1 flex justify-content-center">Status</div>
+          <div class="column-heading-6 flex-1 flex justify-content-center">Actions</div>
+        </div>
+
+        <div class="questions-list">
+          @for(user of filteredUsers(); track user.username; let i = $index){
             <div class="question flex">
               <div class="question-id flex flex-1 justify-content-center align-items-center">
-                Pravin
+                {{user.username}}
               </div>
               <div class="question-title flex flex-1 justify-content-center align-items-center">
-                RebelWithAGun
+                {{ user.leetcode_id }}
               </div>
               <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                India
+                {{ user.country }}
               </div>
               <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                12-Nov-2024 16:45:21
+                {{ user.last_seen | customDateAndTime }}
               </div>
               <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                Unbanned
+                <span [class.text-red-500]="user.is_banned" [class.text-green-500]="!user.is_banned">
+                  {{ user.is_banned ? 'Banned' : 'Active' }}
+                </span>
               </div>
               <div class="action flex flex-1 justify-content-around">
                 <div class="ban-toggle flex flex-1 justify-content-center align-items-center ml-7">
-                  <mat-slide-toggle>
+                  <mat-slide-toggle
+                    [checked]="user.is_banned"
+                    (change)="onToggleBanStatus($event, user)">
                   </mat-slide-toggle>
                 </div>
-                <div class="delete-btn flex flex-1 justify-content-evenly mr-7">
-                  <img class="delete-icon" src="../../../assets/trash-icon.png" (click)="onQuestionDelete()">
+                <div class="delete-btn flex flex-1 justify-content-center mr-7">
+                  <img
+                    class="delete-icon"
+                    src="../../../assets/trash-icon.png"
+                    (click)="onUserDelete(user)"
+                    alt="Delete user">
                 </div>
               </div>
             </div>
-            <div class="question2 flex">
-              <div class="question-id flex flex-1 justify-content-center align-items-center">
-                Anish
-              </div>
-              <div class="question-title flex flex-1 justify-content-center align-items-center">
-                RebelWithAPistol
-              </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                India
-              </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                16-Nov-2024 12:45:21
-              </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                Banned
-              </div>
-              <div class="action flex flex-1 justify-content-around">
-                <div class="ban-toggle flex flex-1 justify-content-center align-items-center ml-7">
-                  <mat-slide-toggle>
-                  </mat-slide-toggle>
-                </div>
-                <div class="delete-btn flex flex-1 justify-content-evenly mr-7">
-                  <img class="delete-icon" src="../../../assets/trash-icon.png" (click)="onQuestionDelete()">
-                </div>
-              </div>
+          } @empty {
+            <div class="flex justify-content-center align-items-center h-full">
+              No users found
             </div>
-
-            <div class="question2 flex">
-              <div class="question-id flex flex-1 justify-content-center align-items-center">
-                Anish
-              </div>
-              <div class="question-title flex flex-1 justify-content-center align-items-center">
-                RebelWithAPistol
-              </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                India
-              </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                16-Nov-2024 12:45:21
-              </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                Banned
-              </div>
-              <div class="action flex flex-1 justify-content-around">
-                <div class="ban-toggle flex flex-1 justify-content-center align-items-center ml-7">
-                  <mat-slide-toggle>
-                  </mat-slide-toggle>
-                </div>
-                <div class="delete-btn flex flex-1 justify-content-evenly mr-7">
-                  <img class="delete-icon" src="../../../assets/trash-icon.png" (click)="onQuestionDelete()">
-                </div>
-              </div>
-            </div>
-
-            <div class="question2 flex">
-              <div class="question-id flex flex-1 justify-content-center align-items-center">
-                Anish
-              </div>
-              <div class="question-title flex flex-1 justify-content-center align-items-center">
-                RebelWithAPistol
-              </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                India
-              </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                16-Nov-2024 12:45:21
-              </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                Banned
-              </div>
-              <div class="action flex flex-1 justify-content-around">
-                <div class="ban-toggle flex flex-1 justify-content-center align-items-center ml-7">
-                  <mat-slide-toggle>
-                  </mat-slide-toggle>
-                </div>
-                <div class="delete-btn flex flex-1 justify-content-evenly mr-7">
-                  <img class="delete-icon" src="../../../assets/trash-icon.png" (click)="onQuestionDelete()">
-                </div>
-              </div>
-            </div>
-
-            <div class="question2 flex">
-              <div class="question-id flex flex-1 justify-content-center align-items-center">
-                Anish
-              </div>
-              <div class="question-title flex flex-1 justify-content-center align-items-center">
-                RebelWithAPistol
-              </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                India
-              </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                16-Nov-2024 12:45:21
-              </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                Banned
-              </div>
-              <div class="action flex flex-1 justify-content-around">
-                <div class="ban-toggle flex flex-1 justify-content-center align-items-center ml-7">
-                  <mat-slide-toggle>
-                  </mat-slide-toggle>
-                </div>
-                <div class="delete-btn flex flex-1 justify-content-evenly mr-7">
-                  <img class="delete-icon" src="../../../assets/trash-icon.png" (click)="onQuestionDelete()">
-                </div>
-              </div>
-            </div>
-
-            <div class="question2 flex">
-              <div class="question-id flex flex-1 justify-content-center align-items-center">
-                Anish
-              </div>
-              <div class="question-title flex flex-1 justify-content-center align-items-center">
-                RebelWithAPistol
-              </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                India
-              </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                16-Nov-2024 12:45:21
-              </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                Banned
-              </div>
-              <div class="action flex flex-1 justify-content-around">
-                <div class="ban-toggle flex flex-1 justify-content-center align-items-center ml-7">
-                  <mat-slide-toggle>
-                  </mat-slide-toggle>
-                </div>
-                <div class="delete-btn flex flex-1 justify-content-evenly mr-7">
-                  <img class="delete-icon" src="../../../assets/trash-icon.png" (click)="onQuestionDelete()">
-                </div>
-              </div>
-            </div>
-
-            <div class="question2 flex">
-              <div class="question-id flex flex-1 justify-content-center align-items-center">
-                Anish
-              </div>
-              <div class="question-title flex flex-1 justify-content-center align-items-center">
-                RebelWithAPistol
-              </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                India
-              </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                16-Nov-2024 12:45:21
-              </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                Banned
-              </div>
-              <div class="action flex flex-1 justify-content-around">
-                <div class="ban-toggle flex flex-1 justify-content-center align-items-center ml-7">
-                  <mat-slide-toggle>
-                  </mat-slide-toggle>
-                </div>
-                <div class="delete-btn flex flex-1 justify-content-evenly mr-7">
-                  <img class="delete-icon" src="../../../assets/trash-icon.png" (click)="onQuestionDelete()">
-                </div>
-              </div>
-            </div>
-
-            <div class="question2 flex">
-              <div class="question-id flex flex-1 justify-content-center align-items-center">
-                Anish
-              </div>
-              <div class="question-title flex flex-1 justify-content-center align-items-center">
-                RebelWithAPistol
-              </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                India
-              </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                16-Nov-2024 12:45:21
-              </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                Banned
-              </div>
-              <div class="action flex flex-1 justify-content-around">
-                <div class="ban-toggle flex flex-1 justify-content-center align-items-center ml-7">
-                  <mat-slide-toggle>
-                  </mat-slide-toggle>
-                </div>
-                <div class="delete-btn flex flex-1 justify-content-evenly mr-7">
-                  <img class="delete-icon" src="../../../assets/trash-icon.png" (click)="onQuestionDelete()">
-                </div>
-              </div>
-            </div>
-
-            <div class="question2 flex">
-              <div class="question-id flex flex-1 justify-content-center align-items-center">
-                Anish
-              </div>
-              <div class="question-title flex flex-1 justify-content-center align-items-center">
-                RebelWithAPistol
-              </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                India
-              </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                16-Nov-2024 12:45:21
-              </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                Banned
-              </div>
-              <div class="action flex flex-1 justify-content-around">
-                <div class="ban-toggle flex flex-1 justify-content-center align-items-center ml-7">
-                  <mat-slide-toggle>
-                  </mat-slide-toggle>
-                </div>
-                <div class="delete-btn flex flex-1 justify-content-evenly mr-7">
-                  <img class="delete-icon" src="../../../assets/trash-icon.png" (click)="onQuestionDelete()">
-                </div>
-              </div>
-            </div>
-
-            <div class="question2 flex">
-              <div class="question-id flex flex-1 justify-content-center align-items-center">
-                Anish
-              </div>
-              <div class="question-title flex flex-1 justify-content-center align-items-center">
-                RebelWithAPistol
-              </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                India
-              </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                16-Nov-2024 12:45:21
-              </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                Banned
-              </div>
-              <div class="action flex flex-1 justify-content-around">
-                <div class="ban-toggle flex flex-1 justify-content-center align-items-center ml-7">
-                  <mat-slide-toggle>
-                  </mat-slide-toggle>
-                </div>
-                <div class="delete-btn flex flex-1 justify-content-evenly mr-7">
-                  <img class="delete-icon" src="../../../assets/trash-icon.png" (click)="onQuestionDelete()">
-                </div>
-              </div>
-            </div>
-
-            <div class="question2 flex">
-              <div class="question-id flex flex-1 justify-content-center align-items-center">
-                Anish
-              </div>
-              <div class="question-title flex flex-1 justify-content-center align-items-center">
-                RebelWithAPistol
-              </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                India
-              </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                16-Nov-2024 12:45:21
-              </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                Banned
-              </div>
-              <div class="action flex flex-1 justify-content-around">
-                <div class="ban-toggle flex flex-1 justify-content-center align-items-center ml-7">
-                  <mat-slide-toggle>
-                  </mat-slide-toggle>
-                </div>
-                <div class="delete-btn flex flex-1 justify-content-evenly mr-7">
-                  <img class="delete-icon" src="../../../assets/trash-icon.png" (click)="onQuestionDelete()">
-                </div>
-              </div>
-            </div>
-          </div>
-
+          }
         </div>
+      </div>
 
-        <div class="paginator w-full flex justify-content-center align-items-center">
-          <div class="w-21rem">
-            <app-paginator></app-paginator>
-          </div>
+      <div class="paginator w-full flex justify-content-center align-items-center">
+        <div class="w-21rem">
+          <app-paginator></app-paginator>
         </div>
-
       </div>
     </div>
   </div>
-</body>
+</div>

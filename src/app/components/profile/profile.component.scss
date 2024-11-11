@@ -53,10 +53,9 @@
   font-family: 'Raleway', sans-serif;
   font-weight: bold;
   border-radius: 50px;
-  //background-color: rgba(0, 0, 0, 0.7);
   color: whitesmoke;
   font-size: 3vw;
-  text-align: left;
+  text-align: center;
   margin: 4vh auto 0;
   padding: 10px;
 }
@@ -74,7 +73,7 @@ label {
 .user-name, .user-email {
   color: white;
   margin: 0;
-  font-size: 1.8vh;
+  font-size: 2vh;
   padding: 5px;
 }
 
@@ -104,8 +103,8 @@ label {
 
 input:focus {
   outline: none;
-  border-color: rgba(255, 255, 255, 0.2);
-  background-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.4);
   box-shadow: none;
 }
 
@@ -135,41 +134,13 @@ input:focus {
   margin-top: 6px;
 }
 
-//.profile-actions {
-//  display: flex;
-//  justify-content: flex-end;
-//  margin-top: 2rem;
-//  gap: 1rem;
-//}
+.profile-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+  gap: 1rem;
+}
 
-//.transparent-input {
-//  background: transparent !important;
-//  border: 1px solid #ccc !important;
-//
-//  &:disabled {
-//    border-color: transparent !important;
-//    color: rgba(0, 0, 0, 0.87) !important;
-//  }
-//}
-
-//:host ::ng-deep .p-error {
-//  display: block;
-//  margin-top: 0.25rem;
-//  font-size: 0.875rem;
-//}
-
-//.profile-container {
-//  max-width: 800px;
-//  margin: 2rem auto;
-//  padding: 2rem;
-//
-//  .p-grid {
-//    margin-bottom: 1.5rem;
-//  }
-//}
-
-//:host ::ng-deep {
-//  .p-float-label input:disabled + label {
-//    color: rgba(0, 0, 0, 0.6);
-//  }
-//}
+:host::ng-deep .p-inputtext:disabled {
+  color: white;
+}

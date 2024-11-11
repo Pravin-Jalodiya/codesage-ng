@@ -1,9 +1,12 @@
-<div class="header">
-    <div class="logo-text">Codesage</div>
-        <div class="right-header">
-          <div class="navbar-options">
-            @if(role==Role.ADMIN){
-            <div class="dropdown">
+<div class="header flex-column align-items-center">
+  <div class="upper-header flex justify-content-between align-items-center w-full">
+    <div class="left-header flex">
+      <div class="logo-text cursor-pointer" routerLink="/">Codesage</div>
+    </div>
+    <div class="right-header flex">
+      <div class="navbar-options">
+        @if(role()==Role.ADMIN){
+          <div class="dropdown">
             <div class="dropdown-button">Questions
               <i class="pi pi-angle-down"></i>
             </div>
@@ -13,29 +16,39 @@
                   Add Questions
                 </button>
               </div>
-              <div class="dropdown-item">
+              <div class="dropdown-item" routerLink="/delete-question">
                 <button pButton class="remove-question-btn no-box-shadow" type="button">
                   Delete Question
                 </button>
               </div>
             </div>
           </div>
-          }
-          @if(role=="user"){
-          <div class="option">Questions</div>
-          <div class="option">Progress</div>
-          }
-          @if(role==Role.ADMIN){
+        }
+        @if(role()==Role.USER){
+          <div class="option" routerLink="/questions">Questions</div>
+          <div class="option" routerLink="/progress">Progress</div>
+        }
+        @if(role()==Role.ADMIN){
           <div class="option" routerLink="/platform">Platform</div>
           <div class="option" routerLink="/manage-users">Users</div>
-          }
-          </div>
+        }
+      </div>
+      <div class="avatar-dropdown">
         <p-avatar
           image="assets/asiyajavayant.png"
-          styleClass="mr-2"
+          styleClass="mr-2 cursor-pointer"
           size="large"
-          shape="circle" routerLink="/profile"/>
+          shape="circle"/>
+        <div class="avatar-dropdown-content">
+          <div class="dropdown-item" routerLink="/profile">
+            <i class="pi pi-user mr-2"></i>Profile
+          </div>
+          <div class="dropdown-item" (click)="onLogout()">
+            <i class="pi pi-sign-out mr-2"></i>Logout
+          </div>
         </div>
+      </div>
     </div>
-<div class="separator"><hr></div>
-
+  </div>
+  <div class="separator w-screen"><hr></div>
+</div>

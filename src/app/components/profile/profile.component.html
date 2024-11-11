@@ -1,17 +1,11 @@
 <div class="background">
   <div class="background-overlay">
-    <p-toast />
     <app-header/>
     <div class="profile-heading">
       Profile
     </div>
     <div class="profile-header-container">
       <div class="profile-picture">
-        <p-avatar
-          image="assets/asiyajavayant.png"
-          styleClass="mr-2"
-          size="xlarge"
-          shape="circle" />
         <div>
           <p class="user-name">
             {{profileForm.get('fullname')?.value || 'User'}}
@@ -22,14 +16,15 @@
         </div>
       </div>
       <div class="profile-edit">
-        <button
-          pButton
-          class="edit-button no-box-shadow"
-          type="button"
-          *ngIf="!isEditing"
-          (click)="onEdit()"
-          label="Edit">
-        </button>
+        @if (!isEditing) {
+          <button
+            pButton
+            class="edit-button no-box-shadow"
+            type="button"
+            (click)="onEdit()"
+            label="Edit">
+          </button>
+        }
       </div>
     </div>
 
@@ -46,9 +41,11 @@
                 formControlName="username" />
               <label for="username">Username*</label>
             </p-floatLabel>
-            <small class="p-error" *ngIf="profileForm.get('username')?.touched && profileForm.get('username')?.invalid">
-              {{getFieldError('username')}}
-            </small>
+            @if (profileForm.get('username')?.touched && profileForm.get('username')?.invalid) {
+              <small class="p-error">
+                {{getFieldError('username')}}
+              </small>
+            }
           </div>
           <div class="p-col-6">
             <p-floatLabel>
@@ -59,9 +56,11 @@
                 formControlName="fullname" />
               <label for="fullname">Full Name*</label>
             </p-floatLabel>
-            <small class="p-error" *ngIf="profileForm.get('fullname')?.touched && profileForm.get('fullname')?.invalid">
-              {{getFieldError('fullname')}}
-            </small>
+            @if (profileForm.get('fullname')?.touched && profileForm.get('fullname')?.invalid) {
+              <small class="p-error">
+                {{getFieldError('fullname')}}
+              </small>
+            }
           </div>
         </div>
 
@@ -76,9 +75,11 @@
                 formControlName="leetcodeId" />
               <label for="leetcodeId">LeetCode ID*</label>
             </p-floatLabel>
-            <small class="p-error" *ngIf="profileForm.get('leetcodeId')?.touched && profileForm.get('leetcodeId')?.invalid">
-              {{getFieldError('leetcodeId')}}
-            </small>
+            @if (profileForm.get('leetcodeId')?.touched && profileForm.get('leetcodeId')?.invalid) {
+              <small class="p-error">
+                {{getFieldError('leetcodeId')}}
+              </small>
+            }
           </div>
           <div class="p-col-6">
             <p-floatLabel>
@@ -89,9 +90,11 @@
                 formControlName="email" />
               <label for="email">Email*</label>
             </p-floatLabel>
-            <small class="p-error" *ngIf="profileForm.get('email')?.touched && profileForm.get('email')?.invalid">
-              {{getFieldError('email')}}
-            </small>
+            @if (profileForm.get('email')?.touched && profileForm.get('email')?.invalid) {
+              <small class="p-error">
+                {{getFieldError('email')}}
+              </small>
+            }
           </div>
         </div>
 
@@ -106,9 +109,11 @@
                 formControlName="country" />
               <label for="country">Country*</label>
             </p-floatLabel>
-            <small class="p-error" *ngIf="profileForm.get('country')?.touched && profileForm.get('country')?.invalid">
-              {{getFieldError('country')}}
-            </small>
+            @if (profileForm.get('country')?.touched && profileForm.get('country')?.invalid) {
+              <small class="p-error">
+                {{getFieldError('country')}}
+              </small>
+            }
           </div>
           <div class="p-col-6">
             <p-floatLabel>
@@ -119,30 +124,33 @@
                 formControlName="organisation" />
               <label for="organisation">Organisation*</label>
             </p-floatLabel>
-            <small class="p-error" *ngIf="profileForm.get('organisation')?.touched && profileForm.get('organisation')?.invalid">
-              {{getFieldError('organisation')}}
-            </small>
+            @if (profileForm.get('organisation')?.touched && profileForm.get('organisation')?.invalid) {
+              <small class="p-error">
+                {{getFieldError('organisation')}}
+              </small>
+            }
           </div>
         </div>
 
-        <div class="profile-actions" *ngIf="isEditing">
-          <button
-            pButton
-            class="p-button-secondary mr-2"
-            type="button"
-            (click)="onCancel()"
-            label="Cancel">
-          </button>
-          <button
-            pButton
-            class="p-button-primary"
-            type="button"
-            (click)="onSave()"
-            [disabled]="profileForm.invalid || !hasFormChanged()"
-            label="Save">
-          </button>
-        </div>
-
+        @if (isEditing) {
+          <div class="profile-actions">
+            <button
+              pButton
+              class="p-button-secondary mr-2 no-box-shadow edit-button"
+              type="button"
+              (click)="onCancel()"
+              label="Cancel">
+            </button>
+            <button
+              pButton
+              class="p-button-primary no-box-shadow edit-button"
+              type="button"
+              (click)="onSave()"
+              [disabled]="profileForm.invalid || !hasFormChanged()"
+              label="Save">
+            </button>
+          </div>
+        }
       </div>
     </form>
   </div>

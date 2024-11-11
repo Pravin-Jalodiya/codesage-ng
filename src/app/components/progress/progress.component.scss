@@ -1,0 +1,134 @@
+.stats-container {
+  height: 90%;
+  width: 80%;
+  margin: auto;
+}
+
+.upper-half {
+  height: 40%;
+}
+
+.lower-half {
+  height: 60%;
+  width: 100%;
+}
+
+.codesage-stats-content, .leetcode-stats-content {
+  height: 100%;
+}
+
+.codesage-stats-bundle, .leetcode-stats-bundle, .recent-submissions-table, .topic-tags, .company-tags  {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  height: 90%;
+  width: 75%;
+  border-radius: 30px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+}
+
+.recent-submissions-table, .topic-tags, .company-tags {
+  color: black;
+  height: 90%;
+  width: 90%;
+}
+
+.topic-tags, .company-tags {
+  width: 49%;
+}
+
+.codesage-stats-heading, .leetcode-stats-heading, .submissions-table-heading, .topic-tags-heading, .company-tags-heading {
+  color: white;
+  font-size: 1.5vw;
+  text-align: center;
+  font-family: 'Raleway', sans-serif;
+}
+
+.submissions-list, .company-tag-cards, .topic-tag-cards {
+  height: 380px;
+  width: 90%;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  padding: 10px;
+}
+
+.submissions-list::-webkit-scrollbar {
+  display: none;
+}
+
+.question, .company-tag-card-text, .topic-tag-card-text  {
+  border-radius: 25px;
+  height: 3rem;
+  margin-bottom: 4px;
+  background-color: #ffffff;
+  font-family: sans-serif;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.question:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.8);
+}
+
+.company-tag-card-text:hover, .topic-tag-card-text:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.8);
+}
+
+.company-tag-card-text, .topic-tag-card-text {
+  padding: 4px 6px;
+  color: black;
+}
+
+.company-tag-card-number, .topic-tag-card-number {
+  padding: 0 2px;
+  color: white;
+}
+
+
+.question-title {
+  padding: 0 8px;
+}
+
+.question-title:hover {
+  cursor: pointer;
+}
+
+.striped-background {
+  background-color: #dfdfdf;
+}
+
+.difficulty-easy-stat, .difficulty-medium-stat, .difficulty-hard-stat {
+  border-radius: 25px;
+  width: 100px;
+  height: 25%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 4px;
+  padding: 5px 8px;
+  background-color: #ffffff;
+  font-family: sans-serif;
+  color:black;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.difficulty-easy-stat:hover, .difficulty-medium-stat:hover, .difficulty-hard-stat:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.8);
+}
+
+.difficulty-title-medium {
+  color: #ff8e00;
+}
+
+.difficulty-title-easy {
+  color: #4ba300;
+}
+
+.difficulty-title-hard {
+  color: #b80000;
+}

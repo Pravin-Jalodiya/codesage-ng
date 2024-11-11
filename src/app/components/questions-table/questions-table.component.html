@@ -3,14 +3,14 @@
     <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
       <app-header></app-header>
     <div class="flex-column justify-content-center align-content-center align-items-center h-fit w-full">
-      @if (role === Role.ADMIN) {
+      @if (role() === Role.ADMIN) {
         <div class="heading flex justify-content-center">
           Delete Question
         </div>
       }
       <div class="questions-table-container"
-           [ngClass]="{'questions-table-container-admin': role === Role.ADMIN,
-           'questions-table-container-user': role === Role.USER}">
+           [ngClass]="{'questions-table-container-admin': role() === Role.ADMIN,
+           'questions-table-container-user': role() === Role.USER}">
         <div class="upper-half flex-column">
           <div class="questions-table-top">
             <div class="search-bar">
@@ -69,7 +69,7 @@
                   (click)="difficultyDropdown.show()">
                 </p-dropdown>
               </div>
-              @if (role === Role.USER) {
+              @if (role() === Role.USER) {
                 <button pButton pRipple type="button" class="icon-button" (click)="pickRandomQuestion()">
                   Pick one
                   <img src="../../../assets/random.png" alt="icon" class="button-icon" />
@@ -82,13 +82,13 @@
             <div class="column-heading-2 flex justify-content-center">Title</div>
             <div class="column-heading-3 flex-1 flex justify-content-center">Difficulty</div>
 
-            @if (role === Role.ADMIN) {
+            @if (role() === Role.ADMIN) {
               <div class="column-heading-4 flex-1 flex justify-content-center">Action</div>
             }
           </div>
           <div class="questions-list flex-column justify-content-center align-items-center"
-               [ngClass]="{'questions-list-admin': role === Role.ADMIN,
-                'questions-list-user': role === Role.USER}">
+               [ngClass]="{'questions-list-admin': role() === Role.ADMIN,
+                'questions-list-user': role() === Role.USER}">
             @for (question of paginatedQuestions(); track question.question_id; let i = $index) {
               <div class="question flex" [ngClass]="{'striped-background': i % 2 === 1}">
                 <div class="question-id flex flex-1 justify-content-center align-items-center">
@@ -102,7 +102,7 @@
                   {{ question.difficulty }}
                 </div>
 
-                @if (role === Role.ADMIN) {
+                @if (role() === Role.ADMIN) {
                   <div class="action flex flex-1 justify-content-center">
                     <img class="delete-icon" src="../../../assets/trash-icon.png"
                          (click)="onQuestionDelete(question)">

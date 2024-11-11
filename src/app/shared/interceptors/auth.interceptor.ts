@@ -1,8 +1,11 @@
-import { HttpEvent, HttpHandlerFn, HttpInterceptorFn, HttpRequest } from "@angular/common/http";
-import { inject } from "@angular/core";
+import {HttpErrorResponse, HttpEvent, HttpHandlerFn, HttpInterceptorFn, HttpRequest} from "@angular/common/http";
+import {inject, Type} from "@angular/core";
 import { Router } from "@angular/router";
 
-import { EMPTY, Observable } from "rxjs";
+
+import {catchError, EMPTY, Observable, throwError} from "rxjs";
+import {MessageService} from "primeng/api";
+import {error} from "@angular/compiler-cli/src/transformers/util";
 
 
 export const AuthInterceptor: HttpInterceptorFn =
@@ -11,6 +14,8 @@ export const AuthInterceptor: HttpInterceptorFn =
     if(skipUrls.some(url => req.url.includes(url))) {
       return next(req);
     }
+
+    const messageService = inject(MessageService);
     const router = inject(Router)
     console.log("request arrived");
     const token = localStorage.getItem('authToken')
@@ -18,8 +23,21 @@ export const AuthInterceptor: HttpInterceptorFn =
       router.navigate(['/login'])
       return EMPTY
     }
+
     const newRequest = req.clone({
-      setHeaders: {Authorization: `Bearer ${localStorage.getItem('authToken')}`}
+      setHeaders: {Authorization: `Bearer ${token}`, Accept: "application/json"}
     })
-    return next(newRequest);
-  }
+    return next(newRequest).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 401 && error.error?.error_code === "2200") {
+          // Redirect the user to the login page
+          router.navigate(['login']);
+        }
+        else if (error.status === 403 && error.error?.error_code === "9997") {
+          router.navigate(['/']);
+        }
+        // Re-throw the error so other error handling can still occur
+        return throwError(() => error);
+      })
+    );
+}

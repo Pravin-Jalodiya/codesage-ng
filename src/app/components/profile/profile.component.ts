@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControlOptions, FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { AuthService } from "../../shared/services/auth/auth.service";
+import { AuthService } from "../../services/auth/auth.service";
 import { MessageService } from "primeng/api";
 import { HttpClient } from '@angular/common/http';
+import {Router} from "@angular/router";
 // import { environment } from '../../../environments/environment';
 
 interface UserProfile {
@@ -25,13 +26,21 @@ export class ProfileComponent implements OnInit {
   initialFormValues: any;
   baseUrl: string = "http://localhost:8080";
 
+
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private messageService: MessageService,
-    private http: HttpClient
-
+    private http: HttpClient,
+    private router: Router
   ) {
+    const username = this.authService.getUsernameFromToken();
+    if (username) {
+      this.fetchUserProfile(username);
+    } else {
+      this.router.navigate(['/login']);
+    }
+
     this.profileForm = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(3)]],
       fullname: ['', [Validators.required, Validators.minLength(2)]],
@@ -44,11 +53,10 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.fetchUserProfile();
+
   }
 
-  fetchUserProfile() {
-    const username = this.authService.username;
+  fetchUserProfile(username: string) {
     this.http.get<any>(`${this.baseUrl}/users/profile/${username}`)
       .subscribe({
         next: (response) => {
@@ -64,13 +72,6 @@ export class ProfileComponent implements OnInit {
             });
             this.initialFormValues = this.profileForm.value;
           }
-        },
-        error: (error) => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: error.error.message || 'Failed to fetch profile'
-          });
         }
       });
   }
@@ -132,7 +133,7 @@ export class ProfileComponent implements OnInit {
         next: (response: any) => {
           if (response.code === 200) {
             this.messageService.add({
-              severity: 'success',
+              severity: 'info',
               summary: 'Success',
               detail: 'Profile updated successfully'
             });

@@ -5,7 +5,7 @@ import {Router} from "@angular/router";
 
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
-import {AuthService} from "../../shared/services/auth/auth.service";
+import {AuthService} from "../../services/auth/auth.service";
 
 @Component({
   selector: 'app-login-form',
@@ -15,8 +15,6 @@ import {AuthService} from "../../shared/services/auth/auth.service";
 
 export class LoginFormComponent {
   loginForm: FormGroup;
-
-  err: string | undefined;
 
   loading: boolean = false;
 
@@ -28,24 +26,30 @@ export class LoginFormComponent {
   }
 
   onSubmit(): void {
-    console.log(this.loginForm.value);
     if (this.loginForm.valid) {
       this.loading = true;
       const { username, password } = this.loginForm.value;
+      this.authService.username.set(username);
       this.authService.login(username, password).subscribe({
         next: (response: any) => {
-          console.log('Login successful:', response);
           if (response.code === 200) {
             localStorage.setItem('authToken', response.token);
             localStorage.setItem('userRole', response.role);
-            this.authService.userRole = response.role;
-            this.router.navigate(['/questions']);
-        }},
+            this.authService.userRole.set(response.role);
+            this.authService.loggedIn.set(true);
+            if(response.role === 'admin') {
+              this.router.navigate(['/platform']);
+            } else {
+              this.router.navigate(['/questions']);
+            }
+        }
+          if(response.code === 403) {
+            this.showError(response.message);
+          }
+          },
         error: (error: any) => {
           this.loading = false;
-          console.error('Login failed', error);
           this.showError(error.error.message);
-
         },
         complete: () => {
           this.loading = false;

@@ -134,8 +134,6 @@
   padding-bottom: 6px;
 }
 
-
-
 .delete-icon {
   cursor: pointer;
   background-color: transparent;
@@ -160,5 +158,5 @@
 
 .questions-list {
   height: 27em;
-  overflow-y: scroll;
+  overflow-y: hidden;
 }

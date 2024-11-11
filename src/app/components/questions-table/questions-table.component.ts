@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { AuthService } from '../../shared/services/auth/auth.service';
+import { AuthService } from '../../services/auth/auth.service';
 import { Role } from "../../shared/config/roles.config";
 import { PaginatorState } from 'primeng/paginator';
 import {ConfirmationService, MessageService} from "primeng/api";
@@ -23,13 +23,14 @@ interface FilterOption {
   templateUrl: './questions-table.component.html',
   styleUrls: ['./questions-table.component.scss']
 })
+
 export class QuestionsTableComponent implements OnInit {
   public authService: AuthService = inject(AuthService);
   private http: HttpClient = inject(HttpClient);
   private confirmationService = inject(ConfirmationService);
   private messageService = inject(MessageService);
 
-  role = this.authService.userRole;
+  role = computed(() => this.authService.userRole());
 
   currentPage = signal<number>(0);
   pageSize = signal<number>(15);
@@ -59,8 +60,8 @@ export class QuestionsTableComponent implements OnInit {
 
     if (search) {
       filtered = filtered.filter(q =>
-        q.question_title.toLowerCase().includes(search) ||
-        q.question_id.toLowerCase().includes(search)
+        q.question_title.toLowerCase().includes(search.toLowerCase()) ||
+        q.question_id.toLowerCase().includes(search.toLowerCase())
       );
     }
 
@@ -130,12 +131,6 @@ export class QuestionsTableComponent implements OnInit {
     }
   }
 
-  onSearch(event: Event) {
-    const input = event.target as HTMLInputElement;
-    this.searchQuery.set(input.value);
-    this.first.set(0);
-  }
-
   onCompanySelect(company: FilterOption | null) {
     this.selectedCompany.set(company);
     this.first.set(0);
@@ -164,7 +159,7 @@ export class QuestionsTableComponent implements OnInit {
         this.http.delete(`http://localhost:8080/question?id=${question.question_id}`).subscribe({
           next: () => {
             this.messageService.add({
-              severity: 'success',
+              severity: 'info',
               summary: 'Success',
               detail: 'Question deleted successfully'
             });
