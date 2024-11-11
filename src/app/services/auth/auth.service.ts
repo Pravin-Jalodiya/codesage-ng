@@ -85,12 +85,14 @@ export class AuthService {
 
       return !decodedToken.banState && !isExpired;
     } catch {
+      localStorage.clear();
       return false;
     }
   }
 
 
   constructor(private http: HttpClient, private messageService: MessageService, private router: Router ) {
+    console.log("auth service construtor");
       if(this.loggedIn()){
       this.getRole().subscribe(({
         next: (response: any) => {
@@ -112,7 +114,7 @@ export class AuthService {
   }}
 
   hasToken(): boolean {
-    return !!localStorage.getItem('authToken');
+    return this.isTokenValid();
   }
 
   getRole(): Observable<any> {
@@ -154,6 +156,7 @@ export class AuthService {
   logout(){
     localStorage.removeItem(this.tokenKey);
     localStorage.removeItem('userRole');
+    this.loggedIn.set(false);
     this.router.navigate(['/login']);
   }
 

@@ -240,10 +240,10 @@ two-sum,1,Two Sum,Easy,https://leetcode.com/problems/two-sum,"Array,Hash Table",
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
   }
 
-  downloadSampleFile() {
+downloadSampleFile() {
     const link = document.createElement('a');
-    link.href = 'assets/questions_with_slug.csv';
-    link.download = 'sample-template.pdf';
+    link.href = 'assets/sample-template.csv';
+    link.download = 'sample-template.csv';
     link.click();
     link.remove();
   }

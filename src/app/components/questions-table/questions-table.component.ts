@@ -150,7 +150,9 @@ export class QuestionsTableComponent implements OnInit {
     this.confirmationService.confirm({
       message: `Are you sure you want to delete the question "${question.question_title}"?`,
       header: 'Delete Confirmation',
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'pi pi-info-circle',
+      acceptIcon: 'none',
+     rejectIcon: 'none',
       accept: () => {
         const currentQuestions = this.questions();
         const updatedQuestions = currentQuestions.filter(q => q.question_id !== question.question_id);

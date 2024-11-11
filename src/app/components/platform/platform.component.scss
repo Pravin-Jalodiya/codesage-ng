@@ -5,7 +5,8 @@
 }
 
 .lower-half {
-  height: 65%;
+  padding-top: 20px;
+  height: 75%;
   width: 100%;
 }
 
@@ -121,14 +122,18 @@
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.8);
 }
 
-.difficulty-title-medium {
-  color: #ff8e00;
+.custom-orange {
+  color: #c76d00;
 }
 
-.difficulty-title-easy {
+.custom-green {
   color: #4ba300;
 }
 
-.difficulty-title-hard {
+.custom-red {
   color: #b80000;
+}
+
+.custom-active-color {
+  color: rgb(44, 118, 255);
 }

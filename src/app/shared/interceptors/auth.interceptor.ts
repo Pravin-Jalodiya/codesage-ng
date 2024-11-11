@@ -4,8 +4,8 @@ import { Router } from "@angular/router";
 
 
 import {catchError, EMPTY, Observable, throwError} from "rxjs";
-import {MessageService} from "primeng/api";
-import {error} from "@angular/compiler-cli/src/transformers/util";
+import { AuthService } from "../../services/auth/auth.service";
+
 
 
 export const AuthInterceptor: HttpInterceptorFn =
@@ -15,11 +15,12 @@ export const AuthInterceptor: HttpInterceptorFn =
       return next(req);
     }
 
-    const messageService = inject(MessageService);
+    const authService = inject(AuthService);
     const router = inject(Router)
     console.log("request arrived");
     const token = localStorage.getItem('authToken')
     if (!token) {
+      authService.loggedIn.set(false);
       router.navigate(['/login'])
       return EMPTY
     }

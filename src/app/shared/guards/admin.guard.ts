@@ -12,19 +12,16 @@ export const adminGuard: CanActivateFn = (): Observable<boolean> => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  // Check if user is logged in
   if (!authService.loggedIn()) {
     router.navigate(['/login']);
     return of(false);
   }
 
-  // Check if token is valid
   if (!authService.isTokenValid()) {
     router.navigate(['/login']);
     return of(false);
   }
 
-  // Check role
   return authService.getRole().pipe(
     map(response => {
       if (!response) {

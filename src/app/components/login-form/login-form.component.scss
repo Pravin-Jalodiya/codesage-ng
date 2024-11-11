@@ -94,3 +94,9 @@ label{
   display: none;
 }
 
+:host::ng-deep p-inputtext p-component p-element transparent-input ng-pristine p-filled ng-touched {
+  background: white;
+  color: black;
+  font-weight: 900;
+  font-family: monospace;
+}

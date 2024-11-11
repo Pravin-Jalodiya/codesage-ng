@@ -15,7 +15,7 @@
             <div class="submissions-table-heading p-2 m-2 font-bold flex justify-content-center align-items-center">Platform Stats</div>
             <div class="submissions-list flex-column justify-content-center align-items-center">
                 <div class="question flex justify-content-between font-bold white-space-nowrap text-overflow-ellipsis min-w-full">
-                    <div class="stat-name flex justify-content-center align-items-center">Active User (Last24Hours)</div>
+                    <div class="stat-name flex custom-active-color justify-content-center align-items-center">Active User (Last24Hours)</div>
                     <div class="stat-value flex justify-content-center align-items-center">{{ activeUsers() }}</div>
                 </div>
                   <div class="question striped-background flex justify-content-between font-bold white-space-nowrap text-overflow-ellipsis min-w-full">
@@ -23,15 +23,15 @@
                     <div class="stat-value flex justify-content-center align-items-center">{{ totalQuestions() }}</div>
                   </div>
                   <div class="question flex justify-content-between font-bold white-space-nowrap text-overflow-ellipsis min-w-full">
-                    <div class="stat-name flex justify-content-center align-items-center">Easy Questions</div>
+                    <div class="stat-name custom-green flex justify-content-center align-items-center">Easy Questions</div>
                     <div class="stat-value flex justify-content-center align-items-center">{{ easyQuestions() }}</div>
                   </div>
                   <div class="question flex striped-background justify-content-between font-bold white-space-nowrap text-overflow-ellipsis min-w-full">
-                    <div class="stat-name flex justify-content-center align-items-center">Medium Questions</div>
+                    <div class="stat-name flex custom-orange justify-content-center align-items-center">Medium Questions</div>
                     <div class="stat-value flex justify-content-center align-items-center">{{ mediumQuestions() }}</div>
                   </div>
                   <div class="question flex justify-content-between font-bold white-space-nowrap text-overflow-ellipsis min-w-full">
-                    <div class="stat-name flex justify-content-center align-items-center">Hard Questions</div>
+                    <div class="stat-name flex custom-red justify-content-center align-items-center">Hard Questions</div>
                     <div class="stat-value flex justify-content-center align-items-center">{{ hardQuestions() }}</div>
                   </div>
             </div>

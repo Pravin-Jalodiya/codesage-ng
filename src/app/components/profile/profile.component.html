@@ -6,6 +6,11 @@
     </div>
     <div class="profile-header-container">
       <div class="profile-picture">
+        <p-avatar
+          icon="pi pi-user"
+          styleClass="mr-2"
+          size="xlarge"
+          shape="circle" />
         <div>
           <p class="user-name">
             {{profileForm.get('fullname')?.value || 'User'}}
@@ -27,7 +32,6 @@
         }
       </div>
     </div>
-
     <form [formGroup]="profileForm" class="edit-profile-form">
       <div class="profile-container">
         <div class="p-grid">

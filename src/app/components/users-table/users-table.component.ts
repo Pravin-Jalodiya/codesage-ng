@@ -4,6 +4,7 @@ import {AuthService} from "../../services/auth/auth.service";
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {ConfirmationService, MessageService} from "primeng/api";
 import {FormsModule} from "@angular/forms";
+import {PaginatorState} from 'primeng/paginator';
 
 interface FilterOption {
   name: string;
@@ -53,6 +54,11 @@ export class UsersTableComponent {
   users = signal<User[]>([]);
   selectedState = signal<FilterOption | undefined>(undefined);
 
+  // Pagination signals
+  currentPage = signal<number>(0);
+  pageSize = signal<number>(15);
+  first = signal<number>(0);
+
   ngOnInit() {
     this.fetchUsers();
   }
@@ -76,6 +82,23 @@ export class UsersTableComponent {
     return filtered;
   });
 
+  // Add paginated users computed property
+  paginatedUsers = computed(() => {
+    const filtered = this.filteredUsers();
+    const startIndex = this.first();
+    const endIndex = startIndex + this.pageSize();
+    return filtered.slice(startIndex, endIndex);
+  });
+
+  // Add total records computed property
+  totalRecords = computed(() => this.filteredUsers().length);
+
+  onPageChange(event: PaginatorState) {
+    if (event.first !== undefined) this.first.set(event.first);
+    if (event.rows !== undefined) this.pageSize.set(event.rows);
+    if (event.page !== undefined) this.currentPage.set(event.page);
+  }
+
   fetchUsers() {
     this.http.get<UsersListResponse>('http://localhost:8080/users').subscribe({
       next: (response) => {
@@ -92,15 +115,16 @@ export class UsersTableComponent {
   }
 
   onUserDelete(user: User) {
-    console.log("clicked registered!")
     this.confirmationService.confirm({
       message: `Are you sure you want to delete user "${user.username}"?`,
       header: 'Delete Confirmation',
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'pi pi-info-circle',
+     acceptButtonStyleClass: 'p-button-danger p-button-text',
+     rejectButtonStyleClass: 'p-button-text p-button-text',
+     acceptIcon: 'none',
+     rejectIcon: 'none',
       accept: () => {
         const currentUsers = this.users();
-        // const updatedUsers = currentUsers.filter(u => u.username !== user.username);
-        // this.users.set(updatedUsers);
         this.users.update((currentUsers) => currentUsers.filter(u => u.username !== user.username));
 
         this.http.delete(`http://localhost:8080/users/delete?username=${user.username}`).subscribe({
@@ -125,12 +149,9 @@ export class UsersTableComponent {
   }
 
   onToggleBanStatus(event: any, user: User) {
-    // Store the previous state
     const previousState = user.is_banned;
-    // Update the UI immediately
     user.is_banned = event.checked;
 
-    // Force update of the signal to trigger change detection
     const currentUsers = this.users();
     this.users.set([...currentUsers]);
 
@@ -146,12 +167,8 @@ export class UsersTableComponent {
         });
       },
       error: (error) => {
-        // Revert the toggle state
         user.is_banned = previousState;
-        // Force update of the signal to trigger change detection
         this.users.set([...currentUsers]);
-
-        // Reset the slider programmatically
         event.source.writeValue(previousState);
 
         this.messageService.add({

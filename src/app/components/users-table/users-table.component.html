@@ -1,4 +1,3 @@
-<!-- users-table.component.html -->
 <div class="background">
   <div class="background-overlay">
     <app-header></app-header>
@@ -47,8 +46,8 @@
         </div>
 
         <div class="questions-list">
-          @for(user of filteredUsers(); track user.username; let i = $index){
-            <div class="question flex">
+          @for(user of paginatedUsers(); track user.username; let i = $index){
+            <div class="question flex"[ngClass]="{'striped-background': i % 2 === 1}">
               <div class="question-id flex flex-1 justify-content-center align-items-center">
                 {{user.username}}
               </div>
@@ -62,7 +61,7 @@
                 {{ user.last_seen | customDateAndTime }}
               </div>
               <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                <span [class.text-red-500]="user.is_banned" [class.text-green-500]="!user.is_banned">
+                <span class="status" [class.text-red-500]="user.is_banned" [class.text-green-500]="!user.is_banned">
                   {{ user.is_banned ? 'Banned' : 'Active' }}
                 </span>
               </div>
@@ -89,10 +88,15 @@
           }
         </div>
       </div>
-
-      <div class="paginator w-full flex justify-content-center align-items-center">
+      <div class="paginator flex justify-content-center align-items-center">
         <div class="w-21rem">
-          <app-paginator></app-paginator>
+          <p-paginator
+            [first]="first()"
+            [rows]="pageSize()"
+            [totalRecords]="totalRecords()"
+            (onPageChange)="onPageChange($event)"
+          >
+          </p-paginator>
         </div>
       </div>
     </div>

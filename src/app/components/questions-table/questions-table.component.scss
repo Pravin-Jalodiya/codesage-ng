@@ -7,18 +7,18 @@
   color: whitesmoke;
   font-size: 2.5em;
   text-align: center;
-  margin: 3vh auto 1vh;
+  margin: 5vh auto 1vh;
   padding: 10px;
 }
 
 .questions-table-container-admin {
   background-color: rgba(255, 255, 255, 0.6);
   width: fit-content;
-  height: 45em;
+  height: 36em;
   max-width: 80%;
   min-width: 60%;
   margin: 2vh auto 2vh;
-  padding: 2rem;
+  padding: 1.5rem;
   border-radius: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.9);
 }
@@ -26,10 +26,10 @@
 .questions-table-container-user {
   background-color: rgba(255, 255, 255, 0.6);
   width: fit-content;
-  height: 50em;
+  height: 40em;
   max-width: 80%;
   min-width: 60%;
-  margin: 3vh auto 2vh;
+  margin: 5vh auto 2vh;
   padding: 2rem;
   border-radius: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.9);
@@ -44,7 +44,7 @@
 }
 
 .questions-list-admin {
-  height: 31em;
+  height: 24em;
   overflow-y: scroll;
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -52,7 +52,7 @@
 }
 
 .questions-list-user {
-  height: 36em;
+  height: 28em;
   overflow-y: scroll;
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -201,7 +201,7 @@
   height: 3rem;
   margin-bottom: 4px;
   background-color: #ffffff;
-  font-family: sans-serif;
+  font-family: monospace, sans-serif;
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.4);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -278,4 +278,14 @@
 
 .striped-background {
   background-color: #dfdfdf;
+}
+
+.question-difficulty {
+  border-radius: 25px;
+}
+
+:host::ng-deep .p-button-label {
+  padding: 5px;
+  box-shadow: none;
+  margin: 1px;
 }

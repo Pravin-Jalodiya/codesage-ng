@@ -117,15 +117,9 @@
   border-radius: 25px;
   height: 3rem;
   background-color: #ffffff;
-  font-family: sans-serif;
+  font-family: monospace, sans-serif;
 }
 
-.question2 {
-  border-radius: 25px;
-  height: 3rem;
-  background-color: #d7d7d7;
-  font-family: sans-serif;
-}
 
 .action {
   display: inline-block;
@@ -149,14 +143,68 @@
 
 .paginator {
   width: 35%;
-  margin: 2vh auto 2vh;
+  margin: 1vh auto 1vh;
+
 }
 
 .upper-half {
-  height: 33em;
+  height: 25em;
 }
 
 .questions-list {
-  height: 27em;
-  overflow-y: hidden;
+  height: 20em;
+  overflow-y: scroll;
+}
+
+.questions-list::-webkit-scrollbar {
+  scrollbar-width: 0;
+  display: none;
+}
+
+.striped-background {
+  background-color: #dfdfdf;
+}
+
+.custom-orange {
+  color: #ff8e00;
+}
+
+.custom-green {
+  color: #4ba300;
+}
+
+.cusotm-red {
+  color: #b80000;
+}
+
+.status {
+  font-weight: bold;
+}
+
+.paginator {
+  width: 45%;
+  margin: 2vh auto 2vh;
+  height: fit-content;
+}
+
+:host::ng-deep .p-paginator {
+  background-color: rgba(255, 255, 255, 1);
+  border-radius: 30px;
+  padding: 0;
+  margin-bottom: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+}
+
+:host::ng-deep .p-element.p-paginator-last.p-paginator-element.p-link.ng-star-inserted {
+  display: none;
+}
+
+:host::ng-deep .p-element.p-paginator-first.p-paginator-element.p-link.ng-star-inserted {
+  display: none;
+}
+
+:host::ng-deep .p-button-label {
+  padding: 10px;
+  margin: 1px;
+  box-shadow: none;
 }

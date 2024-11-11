@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -15,7 +15,7 @@ import {Role} from "../../shared/config/roles.config";
   templateUrl: './login-form.component.html',
   styleUrls: ['./login-form.component.scss']
 })
-export class LoginFormComponent {
+export class LoginFormComponent implements OnInit {
   loginForm: FormGroup;
   loading: boolean = false;
 
@@ -31,6 +31,18 @@ export class LoginFormComponent {
       username: ['', [Validators.required]],
       password: ['', [Validators.required]],
     });
+  }
+
+  ngOnInit(){
+    console.log('choco')
+    console.log(this.authService.loggedIn(), this.authService.userRole(),this.authService.hasToken());
+    if(this.authService.loggedIn()){
+      if(this.authService.userRole() === Role.USER){
+        this.router.navigate(['/questions']);
+      } else {
+        this.router.navigate(['/platform']);
+      }
+    }
   }
 
   onSubmit(): void {

@@ -13,6 +13,13 @@
   width: 100%;
 }
 
+.stats-container {
+ margin-top: 20px;
+ margin-bottom: 4;
+ margin-left: auto;
+ margin-right: auto;
+}
+
 .codesage-stats-content, .leetcode-stats-content {
   height: 100%;
 }
@@ -30,7 +37,7 @@
 
 .recent-submissions-table, .topic-tags, .company-tags {
   color: black;
-  height: 90%;
+  height: 85%;
   width: 90%;
 }
 
@@ -46,7 +53,7 @@
 }
 
 .submissions-list, .company-tag-cards, .topic-tag-cards {
-  height: 380px;
+  height: 270px;
   width: 90%;
   overflow-y: scroll;
   -ms-overflow-style: none;
