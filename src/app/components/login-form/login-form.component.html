@@ -1,51 +1,68 @@
 <body>
-  <div class="background">
-    <div class="background-overlay">
-      <div class="header">
-        <div class="logo-text">Codesage</div>
+<div class="background">
+  <div class="background-overlay">
+    <div class="header">
+      <div class="logo-text">{{ LoginConstants.LOGO_TEXT }}</div>
+    </div>
+    @if (loading) {
+      <div class="blur-bg"></div>
+      <div class="card flex justify-content-center align-items-center h-screen w-screen spinner">
+        <p-progressSpinner ariaLabel="loading"></p-progressSpinner>
       </div>
-      @if (loading) {
-        <div class="blur-bg"></div>
-          <div class="card flex justify-content-center align-items-center h-screen w-screen spinner">
-            <p-progressSpinner ariaLabel="loading" />
-          </div>
-      }
-      <div class="form-container">
-        <h1 class="form-heading">Login to your account</h1>
-        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-          <div class="input-field">
-            <p-floatLabel>
-              <input pInputText id="username" class="transparent-input no-box-shadow" formControlName="username" type="text" required />
-              <label for="username">Username*</label>
-            </p-floatLabel>
-            @if (loginForm.get('username')?.touched && loginForm.get('username')?.invalid) {
-              <div class="error-message">Please enter your username</div>
-            }
-          </div>
-          <div class="input-field">
-            <p-floatLabel>
-              <input pInputText id="password" type="password" formControlName="password" class="transparent-input no-box-shadow" required />
-              <label>Password*</label>
-            </p-floatLabel>
-            @if (loginForm.get('password')?.touched && loginForm.get('password')?.invalid) {
-              <div class="error-message">Please enter your password</div>
-            }
-          </div>
-          <div class="button-container">
-            <button pButton pRipple label="Login" class="login-button no-box-shadow"
-            [disabled]="loginForm.invalid"></button>
-          </div>
-        </form>
-        <div class="signup-link-container">
-          Don't have an account yet?
-          <a routerLink="/signup" class="signup-link">
-            <b>Signup</b>
-          </a>
+    }
+    <div class="form-container">
+      <h1 class="form-heading">{{ LoginConstants.FORM_HEADING }}</h1>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="input-field">
+          <p-floatLabel>
+            <input
+              pInputText
+              id="username"
+              class="transparent-input no-box-shadow"
+              formControlName="username"
+              type="text"
+              required
+            />
+            <label for="username">{{ LoginConstants.USERNAME_LABEL }}</label>
+          </p-floatLabel>
+          @if (loginForm.get('username')?.touched && loginForm.get('username')?.invalid) {
+            <div class="error-message">{{ LoginConstants.USERNAME_ERROR }}</div>
+          }
         </div>
-        <div class="forgot-password-container">
-          <a routerLink="/forgot-password" class="forgot-password-link">Forgot password?</a>
+        <div class="input-field">
+          <p-floatLabel>
+            <input
+              pInputText
+              id="password"
+              type="password"
+              formControlName="password"
+              class="transparent-input no-box-shadow"
+              required
+            />
+            <label>{{ LoginConstants.PASSWORD_LABEL }}</label>
+          </p-floatLabel>
+          @if (loginForm.get('password')?.touched && loginForm.get('password')?.invalid) {
+            <div class="error-message">{{ LoginConstants.PASSWORD_ERROR }}</div>
+          }
         </div>
+        <div class="button-container">
+          <button
+            pButton
+            pRipple
+            label="{{ LoginConstants.LOGIN_BUTTON }}"
+            class="login-button no-box-shadow"
+            [disabled]="loginForm.invalid"
+          ></button>
+        </div>
+      </form>
+      <div class="signup-link-container">
+        {{ LoginConstants.SIGNUP_PROMPT }}
+        <a routerLink="/signup" class="signup-link"><b>{{ LoginConstants.SIGNUP_TEXT }}</b></a>
+      </div>
+      <div class="forgot-password-container">
+        <a routerLink="/forgot-password" class="forgot-password-link">{{ LoginConstants.FORGOT_PASSWORD }}</a>
       </div>
     </div>
   </div>
-  </body>
+</div>
+</body>

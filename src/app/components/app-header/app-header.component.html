@@ -1,38 +1,45 @@
 <div class="header flex-column align-items-center">
   <div class="upper-header flex justify-content-between align-items-center w-full">
     <div class="left-header flex">
-      <div class="logo-text cursor-pointer" routerLink="/">Codesage</div>
+      <div class="logo-text cursor-pointer" routerLink="/">{{ HeaderConstants.LOGO_TEXT }}</div>
     </div>
     <div class="right-header flex">
       <div class="navbar-options">
-        @if(role()==Role.ADMIN){
+        <!-- Admin-specific options -->
+        @if(role() === Role.ADMIN) {
           <div class="dropdown">
-            <div class="dropdown-button">Questions
+            <div class="dropdown-button">{{ HeaderConstants.QUESTIONS }}
               <i class="pi pi-angle-down"></i>
             </div>
             <div pRipple class="dropdown-content">
-              <div class="dropdown-item" routerLink="/add-questions">
-                <button pButton class="add-questions-btn no-box-shadow" type="button">
-                  Add Questions
+              <div class="dropdown-item">
+                <button pButton class="add-questions-btn no-box-shadow" type="button" routerLink="/add-questions">
+                  {{ HeaderConstants.ADD_QUESTIONS }}
                 </button>
               </div>
-              <div class="dropdown-item" routerLink="/delete-question">
-                <button pButton class="remove-question-btn no-box-shadow" type="button">
-                  Delete Question
+              <div class="dropdown-item">
+                <button pButton class="remove-question-btn no-box-shadow" type="button" routerLink="/delete-question">
+                  {{ HeaderConstants.DELETE_QUESTION }}
                 </button>
               </div>
             </div>
           </div>
         }
-        @if(role()==Role.USER){
-          <div class="option" routerLink="/questions">Questions</div>
-          <div class="option" routerLink="/progress">Progress</div>
+
+        <!-- User-specific options -->
+        @if(role() === Role.USER) {
+          <div class="option" routerLink="/questions">{{ HeaderConstants.QUESTIONS }}</div>
+          <div class="option" routerLink="/progress">{{ HeaderConstants.PROGRESS }}</div>
         }
-        @if(role()==Role.ADMIN){
-          <div class="option" routerLink="/platform">Platform</div>
-          <div class="option" routerLink="/manage-users">Users</div>
+
+        <!-- Additional admin options -->
+        @if(role() === Role.ADMIN) {
+          <div class="option" routerLink="/platform">{{ HeaderConstants.PLATFORM }}</div>
+          <div class="option" routerLink="/manage-users">{{ HeaderConstants.USERS }}</div>
         }
       </div>
+
+      <!-- Avatar Dropdown -->
       <div class="avatar-dropdown">
         <p-avatar
           image="assets/asiyajavayant.png"
@@ -41,10 +48,10 @@
           shape="circle"/>
         <div class="avatar-dropdown-content">
           <div class="dropdown-item" routerLink="/profile">
-            <i class="pi pi-user mr-2"></i>Profile
+            <i class="pi pi-user mr-2"></i>{{ HeaderConstants.PROFILE }}
           </div>
           <div class="dropdown-item" (click)="onLogout()">
-            <i class="pi pi-sign-out mr-2"></i>Logout
+            <i class="pi pi-sign-out mr-2"></i>{{ HeaderConstants.LOGOUT }}
           </div>
         </div>
       </div>

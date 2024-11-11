@@ -13,10 +13,7 @@ interface PageEvent {
   styleUrl: './paginator.component.scss'
 })
 export class PaginatorComponent {
-
   first: number = 0;
-
   rows: number = 10;
-
   onPageChange() {}
 }

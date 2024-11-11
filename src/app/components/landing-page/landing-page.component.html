@@ -1,20 +1,33 @@
 <body>
-  <div class="background">
-    <div class="home-background-overlay">
-      <div class="header">
-        <div class="title">Codesage</div>
-        <div class="buttons">
-          <button pButton pRipple type="button" label="Login" class="p-button-rounded" routerLink="/login"></button>
-          <button pButton pRipple type="button" label="Signup" class="p-button-rounded" routerLink="/signup"></button>
-        </div>
+<div class="background">
+  <div class="home-background-overlay">
+    <div class="header">
+      <div class="title">{{ LandingPageConstants.TITLE }}</div>
+      <div class="buttons">
+        <button
+          pButton
+          pRipple
+          type="button"
+          label="{{ LandingPageConstants.LOGIN }}"
+          class="p-button-rounded"
+          routerLink="/login">
+        </button>
+        <button
+          pButton
+          pRipple
+          type="button"
+          label="{{ LandingPageConstants.SIGNUP }}"
+          class="p-button-rounded"
+          routerLink="/signup">
+        </button>
       </div>
-      <div class="container">
-        <div class="intro-text">
-          <p class="intro-text-heading">Gearing up for technical interviews?</p>
-          <p class="intro-text-body">Dive into our extensive collection of more than <strong>1500+ free company-specific</strong>
-            DSA questions with detailed progress analytics, tailored to prepare you for your desired roles.</p>
-        </div>
+    </div>
+    <div class="container">
+      <div class="intro-text">
+        <p class="intro-text-heading">{{ LandingPageConstants.INTRO_HEADING }}</p>
+        <p class="intro-text-body">{{ LandingPageConstants.INTRO_BODY }}</p>
       </div>
     </div>
   </div>
+</div>
 </body>

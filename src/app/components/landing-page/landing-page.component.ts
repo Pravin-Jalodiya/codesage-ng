@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {LandingPageConstants} from "../../shared/constants";
 
 @Component({
   selector: 'app-landing-page',
@@ -7,5 +8,5 @@ import { Component } from '@angular/core';
 })
 
 export class LandingPageComponent {
-
+  protected readonly LandingPageConstants = LandingPageConstants;
 }

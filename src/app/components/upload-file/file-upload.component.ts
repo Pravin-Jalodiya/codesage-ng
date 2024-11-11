@@ -1,7 +1,7 @@
 import {Component, OnInit, signal, WritableSignal} from '@angular/core';
-import { MessageService, PrimeNGConfig} from 'primeng/api';
 import {HttpClient, HttpEventType, HttpResponse} from "@angular/common/http";
-import {FileDownloadService} from "../../services/file-download.service";
+
+import { MessageService, PrimeNGConfig} from 'primeng/api';
 
 @Component({
   selector: 'file-upload',
@@ -23,7 +23,6 @@ export class FileUploadComponent implements OnInit {
     private config: PrimeNGConfig,
     private messageService: MessageService,
     private http: HttpClient,
-    private fileDownloadService: FileDownloadService,
   ) {}
 
   ngOnInit() {
