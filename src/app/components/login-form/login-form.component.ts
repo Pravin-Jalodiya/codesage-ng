@@ -56,6 +56,7 @@ export class LoginFormComponent implements OnInit {
             localStorage.setItem('authToken', response.token);
             localStorage.setItem('userRole', response.role);
             this.authService.userRole.set(response.role as Role);
+            console.log("admin role set",response.role);
             this.authService.loggedIn.set(true);
             this.router.navigate([response.role === Role.ADMIN ? '/platform' : '/questions']);
           } else if (response.code === 403) {

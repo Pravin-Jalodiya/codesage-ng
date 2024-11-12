@@ -4,7 +4,7 @@ import { Router } from "@angular/router";
 
 
 import {catchError, EMPTY, Observable, throwError} from "rxjs";
-import { AuthService } from "../../services/auth/auth.service";
+// import { AuthService } from "../../services/auth/auth.service";
 
 
 
@@ -15,13 +15,12 @@ export const AuthInterceptor: HttpInterceptorFn =
       return next(req);
     }
 
-    const authService = inject(AuthService);
     const router = inject(Router)
     console.log("request arrived");
     const token = localStorage.getItem('authToken')
-    if (!token) {
-      authService.loggedIn.set(false);
-      router.navigate(['/login'])
+    console.log(token)
+    if(!token){
+      router.navigate(['/login']);
       return EMPTY
     }
 
@@ -30,11 +29,11 @@ export const AuthInterceptor: HttpInterceptorFn =
     })
     return next(newRequest).pipe(
       catchError((error: HttpErrorResponse) => {
-        if (error.status === 401 && error.error?.error_code === "2200") {
+        if (error.status === 401 && error.error?.error_code === 2200) {
           // Redirect the user to the login page
-          router.navigate(['login']);
+          router.navigate(['/login']);
         }
-        else if (error.status === 403 && error.error?.error_code === "9997") {
+        else if (error.status === 403 && error.error?.error_code === 9997) {
           router.navigate(['/']);
         }
         // Re-throw the error so other error handling can still occur

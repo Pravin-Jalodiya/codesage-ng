@@ -73,15 +73,18 @@ export class AuthService {
 
   isTokenValid(): boolean {
     try {
-      const token = localStorage.getItem(this.tokenKey);
+      console.log("is token valid funtion here i should be called");
+      const token = localStorage.getItem('authToken');
       if (!token) {
         return false;
       }
+      console.log(token)
 
       const decodedToken = jwtDecode<CustomJwtPayload>(token);
 
       // Check if exp exists before using it
       const isExpired = !decodedToken.exp || decodedToken.exp * 1000 < Date.now();
+      console.log(isExpired)
 
       return !decodedToken.banState && !isExpired;
     } catch {
@@ -93,6 +96,7 @@ export class AuthService {
 
   constructor(private http: HttpClient, private messageService: MessageService, private router: Router ) {
     console.log("auth service construtor");
+    console.log(this.loggedIn());
       if(this.loggedIn()){
       this.getRole().subscribe(({
         next: (response: any) => {
@@ -101,6 +105,7 @@ export class AuthService {
             console.log(response.role)
             localStorage.setItem('userRole', response.role);
             this.userRole.set(response.role);
+            console.log("role admin has beeen set",response.role);
           }},
         error: (error: any) => {
           console.error('Login failed', error);
@@ -154,10 +159,7 @@ export class AuthService {
   }
 
   logout(){
-    localStorage.removeItem(this.tokenKey);
-    localStorage.removeItem('userRole');
-    this.loggedIn.set(false);
-    this.router.navigate(['/login']);
+    return this.http.post(`${this.baseUrl}/member/logout`, {});
   }
 
 }

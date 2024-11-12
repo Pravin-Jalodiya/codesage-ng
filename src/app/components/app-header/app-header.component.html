@@ -5,7 +5,7 @@
     </div>
     <div class="right-header flex">
       <div class="navbar-options">
-        @if(role() === Role.ADMIN) {
+        @if(isAdmin()) {
           <div class="dropdown">
             <div class="dropdown-button">{{ HeaderConstants.QUESTIONS }}
               <i class="pi pi-angle-down"></i>

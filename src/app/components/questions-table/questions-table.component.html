@@ -99,7 +99,10 @@
                   {{ question.question_title }}
                 </div>
                 <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
+                  <div class="q-difficulty-container" [ngClass]="{'color-easy': question.difficulty === 'easy',
+                'color-medium': question.difficulty === 'medium', 'color-hard': question.difficulty === 'hard'}">
                   {{ question.difficulty }}
+                  </div>
                 </div>
 
                 @if (role() === Role.ADMIN) {
