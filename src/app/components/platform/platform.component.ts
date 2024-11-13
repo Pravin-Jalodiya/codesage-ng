@@ -53,6 +53,7 @@ export class PlatformComponent implements OnInit {
   }
 
   private fetchPlatformStats(): void {
+    this.loading.set(true);
     const url = `${this.baseUrl}/platform-stats`;
 
     this.http.get<PlatformStatsResponse>(url).subscribe({
@@ -86,6 +87,10 @@ export class PlatformComponent implements OnInit {
   protected readonly Object = Object;
 
   ngOnInit(): void {
-    this.loading.set(true);
   }
+
+  onRefresh(){
+    this.fetchPlatformStats();
+  }
+
 }

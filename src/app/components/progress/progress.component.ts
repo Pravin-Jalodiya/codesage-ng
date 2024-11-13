@@ -88,6 +88,7 @@ export class ProgressComponent implements OnInit{
   }
 
   private fetchUserProgress(username: string): void {
+    this.loading.set(true)
     const url = `http://localhost:8080/users/progress/${username}`;
 
     this.http.get<UserProgressResponse>(url).subscribe({
@@ -149,6 +150,14 @@ export class ProgressComponent implements OnInit{
   protected readonly Object = Object;
 
   ngOnInit(): void {
-    this.loading.set(true);
+  }
+
+  onRefresh(){
+    const username = this.authService.getUsernameFromToken();
+    if (username) {
+      this.fetchUserProgress(username);
+    } else {
+      this.router.navigate(['/login']);
+    }
   }
 }

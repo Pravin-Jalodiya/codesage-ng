@@ -8,16 +8,18 @@
   height: 40%;
 }
 
+.upper-half-top {
+  padding-top: 1%;
+  width: 100%;
+}
+
 .lower-half {
   height: 60%;
   width: 100%;
 }
 
 .stats-container {
- margin-top: 20px;
- margin-bottom: 4;
- margin-left: auto;
- margin-right: auto;
+  margin: 20px auto 4px;
 }
 
 .codesage-stats-content, .leetcode-stats-content {
@@ -37,7 +39,7 @@
 
 .recent-submissions-table, .topic-tags, .company-tags {
   color: black;
-  height: 85%;
+  height: 95%;
   width: 90%;
 }
 
@@ -52,8 +54,12 @@
   font-family: 'Raleway', sans-serif;
 }
 
+.codesage-stats-heading, .leetcode-stats-heading, {
+  padding-top: 10px;
+}
+
 .submissions-list, .company-tag-cards, .topic-tag-cards {
-  height: 270px;
+  height: 320px;
   width: 90%;
   overflow-y: scroll;
   -ms-overflow-style: none;

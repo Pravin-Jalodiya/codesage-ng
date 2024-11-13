@@ -41,6 +41,7 @@ import {AuthInterceptor} from "./shared/interceptors/auth.interceptor";
 import {ConfirmDialogModule} from "primeng/confirmdialog";
 import {DateAndTimePipe} from "./shared/pipes/dateAndTime.pipe";
 import {PlatformComponent} from "./components/platform/platform.component";
+import {MatIcon} from "@angular/material/icon";
 
 
 @NgModule({
@@ -60,35 +61,36 @@ import {PlatformComponent} from "./components/platform/platform.component";
         PlatformComponent,
         DateAndTimePipe
     ],
-    imports: [
-        CommonModule,
-        RouterOutlet,
-        ReactiveFormsModule,
-        HttpClientModule,
-        CommonModule,
-        RouterLink,
-        BrowserModule,
-        ButtonDirective,
-        FloatLabelModule,
-        InputTextModule,
-        PasswordModule,
-        FileUploadModule,
-        ButtonModule,
-        PaginatorModule,
-        BadgeModule,
-        ProgressBarModule,
-        Ripple,
-        ProgressSpinnerModule,
-        BrowserAnimationsModule,
-        ToastModule,
-        AvatarModule,
-        DropdownModule,
-        FormsModule,
-        MatSlideToggleModule,
-        NgCircleProgressModule,
-        ConfirmDialogModule,
-        NgOptimizedImage,
-    ],
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    ReactiveFormsModule,
+    HttpClientModule,
+    CommonModule,
+    RouterLink,
+    BrowserModule,
+    ButtonDirective,
+    FloatLabelModule,
+    InputTextModule,
+    PasswordModule,
+    FileUploadModule,
+    ButtonModule,
+    PaginatorModule,
+    BadgeModule,
+    ProgressBarModule,
+    Ripple,
+    ProgressSpinnerModule,
+    BrowserAnimationsModule,
+    ToastModule,
+    AvatarModule,
+    DropdownModule,
+    FormsModule,
+    MatSlideToggleModule,
+    NgCircleProgressModule,
+    ConfirmDialogModule,
+    NgOptimizedImage,
+    MatIcon,
+  ],
     bootstrap: [AppComponent, ],
     providers: [AuthService, provideHttpClient(withInterceptors([AuthInterceptor])), provideRouter(routes), MessageService, CircleProgressOptions, ConfirmationService]
 })

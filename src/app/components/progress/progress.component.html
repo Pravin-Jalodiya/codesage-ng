@@ -9,6 +9,15 @@
       </div>
     }
     <div class="stats-container">
+      <div class="upper-half-top flex justify-content-end align-items-center">
+        <button
+          (click)="onRefresh()"
+          class="flex-column justify-content-center align-items-center p-2"
+          aria-label="Refresh"
+        >
+          <i class="pi pi-refresh text-white font-semibold text-4xl"></i>
+        </button>
+      </div>
       <div class="upper-half flex">
         <div class="codesage-stats flex flex-1 justify-content-center align-items-center">
           <div class="codesage-stats-bundle">
@@ -120,7 +129,7 @@
       </div>
       <div class="lower-half flex">
         <div class="recent-submissions flex flex-1 justify-content-center align-items-center">
-          <div class="recent-submissions-table flex-column justify-content-evenly align-items-center">
+          <div class="recent-submissions-table flex-column justify-content-start align-items-center">
             <div class="submissions-table-heading p-2 m-2 font-bold flex justify-content-center align-items-center">Recent AC Submissions</div>
             <div class="submissions-list flex-column justify-content-center align-items-center">
               @for(question of recentSubmissions(); track question.title; let i = $index){
@@ -139,7 +148,7 @@
           </div>
         </div>
         <div class="tags flex flex-1 justify-content-between align-items-center">
-          <div class="topic-tags flex-column justify-content-evenly align-items-center">
+          <div class="topic-tags flex-column justify-content-start align-items-center">
             <div class="topic-tags-heading p-2 m-2 font-bold">Topic Tags</div>
             <div class="topic-tags-content">
               <div class="company-tag-cards flex-wrap overflow-y-scroll">
@@ -156,7 +165,7 @@
               </div>
             </div>
           </div>
-          <div class="company-tags flex-column justify-content-evenly align-items-center">
+          <div class="company-tags flex-column justify-content-start align-items-center">
             <div class="company-tags-heading p-2 m-2 font-bold">Company Tags</div>
             <div class="company-tags-content">
               <div class="company-tag-cards flex-wrap overflow-y-scroll">

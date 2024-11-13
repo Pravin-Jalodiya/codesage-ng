@@ -9,6 +9,15 @@
       </div>
     }
     <div class="stats-container">
+      <div class="upper-half flex justify-content-end align-items-center">
+        <button
+          (click)="onRefresh()"
+          class="flex-column justify-content-center align-items-center p-2"
+          aria-label="Refresh"
+        >
+          <i class="pi pi-refresh text-white font-semibold text-4xl"></i>
+        </button>
+      </div>
       <div class="lower-half flex">
         <div class="recent-submissions flex flex-1 justify-content-center align-items-center">
           <div class="recent-submissions-table flex-column justify-content-evenly align-items-center">
