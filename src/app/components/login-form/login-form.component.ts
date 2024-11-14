@@ -5,10 +5,9 @@ import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 
 import { AuthService } from '../../services/auth/auth.service';
-import {LoginConstants} from "../../shared/constants";
-import {LoginResponse} from "../../shared/types/response.types";
-import {Role} from "../../shared/config/roles.config";
-
+import { LoginConstants } from "../../shared/constants";
+import { LoginResponse } from "../../shared/types/auth.types";
+import { Role } from "../../shared/config/roles.config";
 
 @Component({
   selector: 'app-login-form',
@@ -33,15 +32,9 @@ export class LoginFormComponent implements OnInit {
     });
   }
 
-  ngOnInit(){
-    console.log('choco')
-    console.log(this.authService.loggedIn(), this.authService.userRole(),this.authService.hasToken());
-    if(this.authService.loggedIn()){
-      if(this.authService.userRole() === Role.USER){
-        this.router.navigate(['/questions']);
-      } else {
-        this.router.navigate(['/platform']);
-      }
+  ngOnInit() {
+    if (this.authService.loggedIn()) {
+      this.navigateBasedOnRole(this.authService.userRole());
     }
   }
 
@@ -49,32 +42,30 @@ export class LoginFormComponent implements OnInit {
     if (this.loginForm.valid) {
       this.loading = true;
       const { username, password } = this.loginForm.value;
-      this.authService.username.set(username);
+
       this.authService.login(username, password).subscribe({
         next: (response: LoginResponse) => {
+          this.loading = false;
           if (response.code === 200) {
-            localStorage.setItem('authToken', response.token);
-            localStorage.setItem('userRole', response.role);
-            this.authService.userRole.set(response.role as Role);
-            console.log("admin role set",response.role);
-            this.authService.loggedIn.set(true);
-            this.router.navigate([response.role === Role.ADMIN ? '/platform' : '/questions']);
+            this.authService.handleSuccessfulLogin(response);
+            this.navigateBasedOnRole(response.role as Role);
           } else if (response.code === 403) {
             this.showError(response.message);
           }
         },
-        error: (error: any) => {
+        error: (error: { error: { message: string } }) => {
           this.loading = false;
           this.showError(error.error.message);
-        },
-        complete: () => {
-          this.loading = false;
         }
       });
     }
   }
 
-  showError(message: string): void {
-    this.messageService.add({ severity: 'contrast', summary: 'Error', detail: message });
+  private navigateBasedOnRole(role: Role) {
+    this.router.navigate([role === Role.ADMIN ? '/platform' : '/progress']);
+  }
+
+  private showError(message: string): void {
+    this.messageService.add({ severity: 'error', summary: 'Error', detail: message });
   }
 }

@@ -1,14 +1,20 @@
-import {Injectable, signal, WritableSignal} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {Router} from "@angular/router";
+import { Injectable, signal, WritableSignal } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Router } from "@angular/router";
+import { MessageService } from "primeng/api";
+import { Observable } from 'rxjs';
+import { Role } from "../../shared/config/roles.config";
+import {
+  SignupRequest,
+  SignupResponse,
+  LoginRequest,
+  LoginResponse,
+  GetRoleResponse,
+  LogoutResponse
+} from "../../shared/types/auth.types";
+import { AUTH_PATHS } from '../../shared/constants';
+import { jwtDecode, JwtPayload as BaseJwtPayload } from "jwt-decode";
 
-import {MessageService} from "primeng/api";
-import {Observable } from 'rxjs';
-
-import {Role} from "../../shared/config/roles.config";
-import {jwtDecode, JwtPayload as BaseJwtPayload} from "jwt-decode";
-
-// Extend the base JWT payload with our custom fields
 interface CustomJwtPayload extends BaseJwtPayload {
   username: string;
   userId: string;
@@ -24,67 +30,42 @@ export class AuthService {
   username: WritableSignal<string> = signal<string>("");
   loggedIn = signal<boolean>(this.hasToken());
 
-  private baseUrl = 'http://localhost:8080/auth';
+  private readonly tokenKey = 'authToken';
 
-  private tokenKey = 'authToken';
-
-  getUsernameFromToken(): string | null {
-    try {
-      const token = localStorage.getItem(this.tokenKey);
-      if (!token) {
-        return null;
-      }
-
-      const decodedToken = jwtDecode<CustomJwtPayload>(token);
-
-      // Check if token is expired
-      if (!decodedToken.exp || decodedToken.exp * 1000 < Date.now()) {
-        localStorage.removeItem(this.tokenKey);
-        return null;
-      }
-
-      // Check if user is banned
-      if (decodedToken.banState) {
-        localStorage.removeItem(this.tokenKey);
-        return null;
-      }
-
-      return decodedToken.username;
-    } catch (error) {
-      console.error('Error decoding token:', error);
-      return null;
+  constructor(
+    private http: HttpClient,
+    private messageService: MessageService,
+    private router: Router
+  ) {
+    if (this.loggedIn()) {
+      this.getRole().subscribe({
+        next: (response: GetRoleResponse) => this.handleRoleResponse(response),
+        error: (error: any) => this.handleError(error),
+        complete: () => console.log('Role request complete')
+      });
     }
   }
 
-  getUserIdFromToken(): string | null {
-    try {
-      const token = localStorage.getItem(this.tokenKey);
-      if (!token) {
-        return null;
-      }
-
-      const decodedToken = jwtDecode<CustomJwtPayload>(token);
-      return decodedToken.userId;
-    } catch (error) {
-      console.error('Error decoding token:', error);
-      return null;
+  private handleRoleResponse(response: GetRoleResponse): void {
+    if (response.code === 200) {
+      localStorage.setItem('userRole', response.role);
+      this.userRole.set(response.role as Role);
     }
+  }
+
+  private handleError(error: any): void {
+    console.error('Request failed', error);
+    this.showError(error.error.message);
+    this.router.navigate(['/login']);
   }
 
   isTokenValid(): boolean {
     try {
-      console.log("is token valid funtion here i should be called");
-      const token = localStorage.getItem('authToken');
-      if (!token) {
-        return false;
-      }
-      console.log(token)
+      const token = localStorage.getItem(this.tokenKey);
+      if (!token) return false;
 
       const decodedToken = jwtDecode<CustomJwtPayload>(token);
-
-      // Check if exp exists before using it
       const isExpired = !decodedToken.exp || decodedToken.exp * 1000 < Date.now();
-      console.log(isExpired)
 
       return !decodedToken.banState && !isExpired;
     } catch {
@@ -93,73 +74,72 @@ export class AuthService {
     }
   }
 
-
-  constructor(private http: HttpClient, private messageService: MessageService, private router: Router ) {
-    console.log("auth service construtor");
-    console.log(this.loggedIn());
-      if(this.loggedIn()){
-      this.getRole().subscribe(({
-        next: (response: any) => {
-          console.log('Request successful:', response);
-          if (response.code === 200) {
-            console.log(response.role)
-            localStorage.setItem('userRole', response.role);
-            this.userRole.set(response.role);
-            console.log("role admin has beeen set",response.role);
-          }},
-        error: (error: any) => {
-          console.error('Login failed', error);
-          this.showError(error.error.message);
-          router.navigate(['/login']);
-        },
-        complete: () => {
-          console.log('request complete');
-        }
-      }));
-  }}
-
   hasToken(): boolean {
     return this.isTokenValid();
   }
 
-  getRole(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/member/role`)
+  getUsernameFromToken(): string | undefined {
+    return this.extractFromToken(token => token?.username);
   }
 
-  login(username: string, password: string): Observable<any> {
-    this.username.set(username);
-    const loginPayload = { username, password };
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-
-    return this.http.post(`${this.baseUrl}/login`, loginPayload, { headers })
+  getUserIdFromToken(): string | undefined {
+    return this.extractFromToken(token => token?.userId);
   }
 
-  signup(username: string, password: string, name: string, email: string, organisation: string, country: string, leetcodeId: string): Observable<any> {
-    const signupPayload = {
-      username,
-      password,
-      name,
-      email,
-      organisation,
-      country,
-      leetcode_id: leetcodeId
-    };
+  private extractFromToken<T>(extractor: (token: CustomJwtPayload | null) => T): T {
+    try {
+      const token = localStorage.getItem(this.tokenKey);
+      if (!token) return null as any;
 
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
+      const decodedToken = jwtDecode<CustomJwtPayload>(token);
+      if (!decodedToken.exp || decodedToken.exp * 1000 < Date.now() || decodedToken.banState) {
+        localStorage.removeItem(this.tokenKey);
+        return null as any;
+      }
 
-    return this.http.post(`${this.baseUrl}/signup`, signupPayload, { headers });
+      return extractor(decodedToken);
+    } catch (error) {
+      console.error('Error decoding token:', error);
+      return null as any;
+    }
+  }
+
+  getRole(): Observable<GetRoleResponse> {
+    return this.http.get<GetRoleResponse>(AUTH_PATHS.ROLE);
+  }
+
+  login(username: string, password: string): Observable<LoginResponse> {
+    const loginPayload: LoginRequest = { username, password };
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+    return this.http.post<LoginResponse>(AUTH_PATHS.LOGIN, loginPayload, { headers });
+  }
+
+  signup(data: SignupRequest): Observable<SignupResponse> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+    return this.http.post<SignupResponse>(AUTH_PATHS.SIGNUP, data, { headers });
   }
 
   showError(message: string): void {
-    this.messageService.add({ severity: 'contrast', summary: 'Error', detail: message });
+    this.messageService.add({ severity: 'error', summary: 'Error', detail: message });
   }
 
-  logout(){
-    return this.http.post(`${this.baseUrl}/member/logout`, {});
+  handleSuccessfulLogin(response: LoginResponse): void {
+    if (response && response.token) {
+      // Store the JWT token
+      localStorage.setItem('authToken', response.token);
+
+      // Store user role and set signals
+      this.userRole.set(response.role as Role);
+      this.loggedIn.set(true);
+
+    } else {
+      console.error('Invalid response without token');
+    }
   }
 
+  logout(): Observable<LogoutResponse> {
+    return this.http.post<LogoutResponse>(AUTH_PATHS.LOGOUT, {});
+  }
 }

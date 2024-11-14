@@ -81,3 +81,16 @@ export const MESSAGES = {
     QUESTION_DELETE_FAILED: 'Failed to delete question'
   }
 } as const;
+
+export const AddQuestionConstants = {
+  ADD_QUESTION_TITLE: 'Add Questions',
+};
+
+export const API_BASE_URL = 'http://localhost:8080';
+
+export const AUTH_PATHS = {
+  LOGIN: `${API_BASE_URL}/auth/login`,
+  SIGNUP: `${API_BASE_URL}/auth/signup`,
+  ROLE: `${API_BASE_URL}/auth/member/role`,
+  LOGOUT: `${API_BASE_URL}/auth/member/logout`
+};

@@ -1,30 +1,33 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-  AbstractControl,
-  ValidationErrors,
-  ValidatorFn,
-  AbstractControlOptions
-} from '@angular/forms';
+import { FormBuilder,
+         FormGroup,
+         Validators,
+         AbstractControl,
+         ValidationErrors,
+         ValidatorFn,
+         AbstractControlOptions } from '@angular/forms';
+import { Router } from '@angular/router';
 
-import {AuthService} from "../../services/auth/auth.service";
-import {MessageService} from "primeng/api";
-import {Router} from "@angular/router";
+import { MessageService } from 'primeng/api';
+
+import { AuthService } from '../../services/auth/auth.service';
+import { SignupRequest, SignupResponse } from "../../shared/types/auth.types";
 
 @Component({
   selector: 'app-signup-form',
   templateUrl: './signup-form.component.html',
   styleUrls: ['./signup-form.component.scss']
 })
-
 export class SignupFormComponent implements OnInit {
   signupForm: FormGroup;
-
   loading: boolean = false;
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private messageService: MessageService, private router: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private messageService: MessageService,
+    private router: Router
+  ) {
     this.signupForm = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(3)]],
       fullName: ['', [Validators.required]],
@@ -45,8 +48,19 @@ export class SignupFormComponent implements OnInit {
     if (this.signupForm.valid) {
       this.loading = true;
       const { username, password, fullName, email, organization, country, leetcodeId } = this.signupForm.value;
-      this.authService.signup(username, password, fullName, email, organization, country, leetcodeId).subscribe({
-        next: (response: any) => {
+      const signupData: SignupRequest = {
+        username,
+        password,
+        name: fullName,
+        email,
+        organisation: organization,
+        country,
+        leetcode_id: leetcodeId
+      };
+
+      this.authService.signup(signupData).subscribe({
+        next: (response: SignupResponse) => {
+          this.loading = false;
           if (response.code === 200) {
             this.router.navigate(['/login']);
             this.messageService.add({
@@ -56,21 +70,16 @@ export class SignupFormComponent implements OnInit {
             });
           }
         },
-        error: (error: any) => {
+        error: (error: { error: { message: string } }) => {
           this.loading = false;
-          console.error('Signup failed', error);
           this.showError(error.error.message ?? 'Signup failed. Please try again.');
-        },
-        complete: () => {
-          this.loading = false;
-          console.log('Signup request complete');
         }
       });
     }
   }
 
   showError(message: string): void {
-    this.messageService.add({ severity: 'contrast', summary: 'Error', detail: message });
+    this.messageService.add({ severity: 'error', summary: 'Error', detail: message });
   }
 
   passwordMatchValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {

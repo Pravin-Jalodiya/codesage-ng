@@ -11,7 +11,7 @@
   text-align: center;
 }
 
-label{
+label {
   color: white;
   font-weight: bold;
 }
@@ -29,7 +29,7 @@ label{
   width: 100%;
   padding: 12px;
   background-color: rgba(255, 255, 255, 0.1);
-  border: .3px solid rgba(255, 255, 255, 0.4);
+  border: 0.3px solid rgba(255, 255, 255, 0.4);
   border-radius: 20px;
   color: white;
 }
@@ -64,7 +64,8 @@ label{
   cursor: not-allowed;
 }
 
-.signup-link-container, .forgot-password-container {
+.signup-link-container,
+.forgot-password-container {
   margin-top: 20px;
   color: white;
 }
@@ -80,17 +81,18 @@ label{
   text-decoration: none;
 }
 
-.signup-link:hover, .forgot-password-link:hover {
+.signup-link:hover,
+.forgot-password-link:hover {
   text-decoration: underline;
 }
 
 .error-message {
   color: lightcoral;
-  font-size: 0.875em;
+  font-size: 14px;
   margin-top: 6px;
 }
 
-.forgot-password-container{
+.forgot-password-container {
   display: none;
 }
 
