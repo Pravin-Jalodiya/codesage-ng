@@ -16,12 +16,12 @@
             <div class="search-bar">
               <i class="pi pi-search"></i>
               <input
-                type="text"
-                pInputText
-                class="no-box-shadow"
-                [ngModel]="searchQuery()"
-                (ngModelChange)="searchQuery.set($event)"
-                placeholder="Search question by title or ID" />
+              type="text"
+              pInputText
+              class="no-box-shadow"
+              [ngModel]="searchQuery()"
+              (ngModelChange)="onSearchChange($event)"
+              placeholder="Search question by title or ID" />
             </div>
 
             <div class="filters">
@@ -89,7 +89,7 @@
           <div class="questions-list flex-column justify-content-center align-items-center"
                [ngClass]="{'questions-list-admin': role() === Role.ADMIN,
                 'questions-list-user': role() === Role.USER}">
-            @for (question of paginatedQuestions(); track question.question_id; let i = $index) {
+            @for (question of questions(); track question.question_id; let i = $index) {
               <div class="question flex" [ngClass]="{'striped-background': i % 2 === 1}">
                 <div class="question-id flex flex-1 justify-content-center align-items-center">
                   {{ question.question_id }}
@@ -122,12 +122,11 @@
         <div class="paginator flex justify-content-center align-items-center">
           <div class="w-21rem">
             <p-paginator
-              [first]="first()"
-              [rows]="pageSize()"
-              [totalRecords]="totalRecords()"
-              (onPageChange)="onPageChange($event)"
-            >
-            </p-paginator>
+            [first]="first()"
+            [rows]="pageSize()"
+            [totalRecords]="totalRecords()"
+            (onPageChange)="onPageChange($event)">
+          </p-paginator>
           </div>
         </div>
       </div>

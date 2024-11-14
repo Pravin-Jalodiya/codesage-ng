@@ -1,9 +1,10 @@
 import { Component, OnInit, inject, signal, computed } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { AuthService } from '../../services/auth/auth.service';
 import { Role } from "../../shared/config/roles.config";
 import { PaginatorState } from 'primeng/paginator';
-import {ConfirmationService, MessageService} from "primeng/api";
+import { ConfirmationService, MessageService } from "primeng/api";
+import { debounceTime, Subject } from 'rxjs';
 
 interface Question {
   question_id: string;
@@ -18,12 +19,18 @@ interface FilterOption {
   name: string;
 }
 
+interface QuestionsResponse {
+  code: number;
+  message: string;
+  questions: Question[];
+  total: number;
+}
+
 @Component({
   selector: 'app-questions-table',
   templateUrl: './questions-table.component.html',
   styleUrls: ['./questions-table.component.scss']
 })
-
 export class QuestionsTableComponent implements OnInit {
   public authService: AuthService = inject(AuthService);
   private http: HttpClient = inject(HttpClient);
@@ -32,17 +39,20 @@ export class QuestionsTableComponent implements OnInit {
 
   role = computed(() => this.authService.userRole());
 
+  // Pagination signals
   currentPage = signal<number>(0);
   pageSize = signal<number>(15);
   first = signal<number>(0);
+  totalRecords = signal<number>(0);
 
+  // Data and filter signals
   questions = signal<Question[]>([]);
   searchQuery = signal<string>('');
-
   selectedCompany = signal<FilterOption | null>(null);
   selectedTopic = signal<FilterOption | null>(null);
   selectedDifficulty = signal<FilterOption | null>(null);
 
+  // Filter options
   companies = signal<FilterOption[]>([]);
   topics = signal<FilterOption[]>([]);
   difficulties: FilterOption[] = [
@@ -51,68 +61,85 @@ export class QuestionsTableComponent implements OnInit {
     { name: 'Hard' }
   ];
 
-  filteredQuestions = computed(() => {
-    let filtered = this.questions();
-    const search = this.searchQuery().toLowerCase();
-    const company = this.selectedCompany()?.name.toLowerCase();
-    const topic = this.selectedTopic()?.name.toLowerCase();
-    const difficulty = this.selectedDifficulty()?.name;
-
-    if (search) {
-      filtered = filtered.filter(q =>
-        q.question_title.toLowerCase().includes(search.toLowerCase()) ||
-        q.question_id.toLowerCase().includes(search.toLowerCase())
-      );
-    }
-
-    if (company) {
-      filtered = filtered.filter(q =>
-        q.company_tags.some(tag => tag.toLowerCase() === company)
-      );
-    }
-
-    if (topic) {
-      filtered = filtered.filter(q =>
-        q.topic_tags.some(tag => tag.toLowerCase() === topic)
-      );
-    }
-
-    if (difficulty) {
-      filtered = filtered.filter(q =>
-        q.difficulty === difficulty.toLowerCase()
-      );
-    }
-
-    return filtered;
-  });
-
-  paginatedQuestions = computed(() => {
-    const filtered = this.filteredQuestions();
-    const startIndex = this.first();
-    const endIndex = startIndex + this.pageSize();
-    return filtered.slice(startIndex, endIndex);
-  });
-
-  totalRecords = computed(() => this.filteredQuestions().length);
+  // Search debounce
+  private searchSubject = new Subject<string>();
 
   ngOnInit() {
-    this.fetchQuestions();
+    // Set up search debounce
+    this.searchSubject.pipe(
+      debounceTime(300)
+    ).subscribe(() => {
+      this.first.set(0);
+      this.loadQuestions();
+    });
+
+    // Initial data load
+    this.loadQuestions();
+    this.loadFilterOptions();
   }
 
-  fetchQuestions() {
-    this.http.get<any>('http://localhost:8080/questions').subscribe((response: { questions: Question[]; }) => {
-      this.questions.set(response.questions);
+  private buildParams(): HttpParams {
+    let params = new HttpParams()
+      .set('offset', this.first().toString())
+      .set('limit', this.pageSize().toString());
 
-      const uniqueCompanies = new Set<string>();
-      const uniqueTopics = new Set<string>();
+    if (this.searchQuery()) {
+      params = params.set('search', this.searchQuery());
+    }
 
-      this.questions().forEach(q => {
-        q.company_tags.forEach(tag => uniqueCompanies.add(this.capitalize(tag)));
-        q.topic_tags.forEach(tag => uniqueTopics.add(this.capitalize(tag)));
+    if (this.selectedCompany()) {
+      params = params.set('company', this.selectedCompany()!.name.toLowerCase());
+    }
+
+    if (this.selectedTopic()) {
+      params = params.set('topic', this.selectedTopic()!.name.toLowerCase());
+    }
+
+    if (this.selectedDifficulty()) {
+      params = params.set('difficulty', this.selectedDifficulty()!.name.toLowerCase());
+    }
+
+    return params;
+  }
+
+  loadQuestions() {
+    const params = this.buildParams();
+
+    this.http.get<QuestionsResponse>('http://localhost:8080/questions', { params })
+      .subscribe({
+        next: (response) => {
+          // Sort questions by ID before setting them
+          const sortedQuestions = [...response.questions].sort((a, b) =>
+            parseInt(a.question_id) - parseInt(b.question_id)
+          );
+          this.questions.set(sortedQuestions);
+          this.totalRecords.set(response.total);
+        },
+        error: () => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to fetch questions'
+          });
+        }
       });
+  }
 
-      this.companies.set(Array.from(uniqueCompanies).map(name => ({ name })));
-      this.topics.set(Array.from(uniqueTopics).map(name => ({ name })));
+  loadFilterOptions() {
+    // Get all questions without pagination to build filter options
+    this.http.get<QuestionsResponse>('http://localhost:8080/questions').subscribe({
+      next: (response) => {
+        const uniqueCompanies = new Set<string>();
+        const uniqueTopics = new Set<string>();
+
+        response.questions.forEach(q => {
+          q.company_tags.forEach(tag => uniqueCompanies.add(this.capitalize(tag)));
+          q.topic_tags.forEach(tag => uniqueTopics.add(this.capitalize(tag)));
+        });
+
+        this.companies.set(Array.from(uniqueCompanies).map(name => ({ name })));
+        this.topics.set(Array.from(uniqueTopics).map(name => ({ name })));
+      }
     });
   }
 
@@ -120,30 +147,45 @@ export class QuestionsTableComponent implements OnInit {
     if (event.first !== undefined) this.first.set(event.first);
     if (event.rows !== undefined) this.pageSize.set(event.rows);
     if (event.page !== undefined) this.currentPage.set(event.page);
+    this.loadQuestions();
   }
 
-  pickRandomQuestion() {
-    const questions = this.filteredQuestions();
-    if (questions.length > 0) {
-      const randomIndex = Math.floor(Math.random() * questions.length);
-      const randomQuestion = questions[randomIndex];
-      this.redirectToQuestion(randomQuestion.question_link);
-    }
+  onSearchChange(query: string) {
+    this.searchQuery.set(query);
+    this.searchSubject.next(query);
   }
 
   onCompanySelect(company: FilterOption | null) {
     this.selectedCompany.set(company);
     this.first.set(0);
+    this.loadQuestions();
   }
 
   onTopicSelect(topic: FilterOption | null) {
     this.selectedTopic.set(topic);
     this.first.set(0);
+    this.loadQuestions();
   }
 
   onDifficultySelect(difficulty: FilterOption | null) {
     this.selectedDifficulty.set(difficulty);
     this.first.set(0);
+    this.loadQuestions();
+  }
+
+  pickRandomQuestion() {
+    // Get a random offset within the total number of filtered results
+    const randomOffset = Math.floor(Math.random() * this.totalRecords());
+    const params = this.buildParams().set('offset', randomOffset.toString()).set('limit', '1');
+
+    this.http.get<QuestionsResponse>('http://localhost:8080/questions', { params })
+      .subscribe({
+        next: (response) => {
+          if (response.questions.length > 0) {
+            this.redirectToQuestion(response.questions[0].question_link);
+          }
+        }
+      });
   }
 
   onQuestionDelete(question: Question) {
@@ -152,12 +194,8 @@ export class QuestionsTableComponent implements OnInit {
       header: 'Delete Confirmation',
       icon: 'pi pi-info-circle',
       acceptIcon: 'none',
-     rejectIcon: 'none',
+      rejectIcon: 'none',
       accept: () => {
-        const currentQuestions = this.questions();
-        const updatedQuestions = currentQuestions.filter(q => q.question_id !== question.question_id);
-        this.questions.set(updatedQuestions);
-
         this.http.delete(`http://localhost:8080/question?id=${question.question_id}`).subscribe({
           next: () => {
             this.messageService.add({
@@ -165,9 +203,9 @@ export class QuestionsTableComponent implements OnInit {
               summary: 'Success',
               detail: 'Question deleted successfully'
             });
+            this.loadQuestions(); // Reload current page
           },
           error: (error) => {
-            this.questions.set(currentQuestions);
             this.messageService.add({
               severity: 'error',
               summary: 'Error',

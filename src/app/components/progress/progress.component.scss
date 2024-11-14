@@ -54,8 +54,16 @@
   font-family: 'Raleway', sans-serif;
 }
 
-.codesage-stats-heading, .leetcode-stats-heading, {
+.codesage-stats-heading, .leetcode-stats-heading {
   padding-top: 10px;
+}
+
+.upper-half-top button {
+  transition: transform 0.2s ease;
+}
+
+.upper-half-top button:hover {
+  transform: scale(1.03);
 }
 
 .submissions-list, .company-tag-cards, .topic-tag-cards {

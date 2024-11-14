@@ -10,6 +10,14 @@
   width: 100%;
 }
 
+.upper-half button {
+  transition: transform 0.2s ease;
+}
+
+.upper-half button:hover {
+  transform: scale(1.03);
+}
+
 .lower-half {
   height: 75%;
   width: 100%;

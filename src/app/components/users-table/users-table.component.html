@@ -61,7 +61,8 @@
                 {{ user.last_seen | customDateAndTime }}
               </div>
               <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                <span class="status" [class.text-red-500]="user.is_banned" [class.text-green-500]="!user.is_banned">
+                <span class="status" [class.text-red-500]="user.is_banned" [class.text-green-500]="!user.is_banned"
+                [ngClass]="{'green': !user.is_banned, 'red': user.is_banned}">
                   {{ user.is_banned ? 'Banned' : 'Active' }}
                 </span>
               </div>
