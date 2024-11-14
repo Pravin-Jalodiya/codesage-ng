@@ -1,31 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControlOptions, FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { AuthService } from "../../services/auth/auth.service";
 import { MessageService } from "primeng/api";
 import { HttpClient } from '@angular/common/http';
-import {Router} from "@angular/router";
-// import { environment } from '../../../environments/environment';
-
-interface UserProfile {
-  username: string;
-  name: string;
-  email: string;
-  leetcodeId: string;
-  organisation: string;
-  country: string;
-}
+import { Router } from "@angular/router";
+import { UpdateProfileResponse, UserProfile, UserProfileResponse } from '../../shared/types/profile.types';
+import { API_BASE_URL } from '../../shared/constants';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrl: './profile.component.scss'
+  styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
-  profileForm: FormGroup;
+  profileForm: FormGroup = this.initializeForm();
   isEditing: boolean = false;
-  initialFormValues: any;
-  baseUrl: string = "http://localhost:8080";
-
+  isLoading: boolean = false;
+  initialFormValues: UserProfile | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -34,79 +25,127 @@ export class ProfileComponent implements OnInit {
     private http: HttpClient,
     private router: Router
   ) {
+    this.checkAndLoadProfile();
+  }
+
+  ngOnInit(): void {}
+
+  private initializeForm(): FormGroup {
+    return this.fb.group({
+      username: ['', [Validators.required, Validators.minLength(3)]],
+      fullname: [{ value: '', disabled: true }, [Validators.required, Validators.minLength(2)]],
+      email: [{ value: '', disabled: true }, [Validators.required, Validators.email]],
+      leetcodeId: [{ value: '', disabled: true }, [Validators.required, Validators.minLength(3)]],
+      country: [{ value: '', disabled: true }, [Validators.required, Validators.minLength(2)]],
+      organisation: [{ value: '', disabled: true }, [Validators.required, Validators.minLength(2)]],
+    });
+  }
+
+  private checkAndLoadProfile(): void {
     const username = this.authService.getUsernameFromToken();
     if (username) {
       this.fetchUserProfile(username);
     } else {
       this.router.navigate(['/login']);
     }
-
-    this.profileForm = this.fb.group({
-      username: ['', [Validators.required, Validators.minLength(3)]],
-      fullname: ['', [Validators.required, Validators.minLength(2)]],
-      email: ['', [Validators.required, Validators.email]],
-      leetcodeId: ['', [Validators.required, Validators.minLength(3)]],
-      country: ['', [Validators.required, Validators.minLength(2)]],
-      organisation: ['', [Validators.required, Validators.minLength(2)]],
-    });
-    this.profileForm.disable();
   }
 
-  ngOnInit() {
+  fetchUserProfile(username: string): void {
+    this.isLoading = true;
+    const url = `${API_BASE_URL}/users/profile/${username}`;
 
-  }
-
-  fetchUserProfile(username: string) {
-    this.http.get<any>(`${this.baseUrl}/users/profile/${username}`)
+    this.http.get<UserProfileResponse>(url)
       .subscribe({
         next: (response) => {
           if (response.code === 200) {
             const profile = response.user_profile;
+            // Set initial values
             this.profileForm.patchValue({
               username: profile.username,
               fullname: profile.name,
               email: profile.email,
               leetcodeId: profile.leetcodeId,
               country: profile.country,
-              organisation: profile.organisation
+              organisation: profile.organisation,
             });
-            this.initialFormValues = this.profileForm.value;
+            this.initialFormValues = { ...profile };
+            this.setFormState(false); // Ensure form is in non-editing state initially
           }
+        },
+        error: (error) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: error.error?.message || 'Failed to load profile',
+          });
+        },
+        complete: () => {
+          this.isLoading = false;
         }
       });
   }
 
-  onEdit() {
-    this.isEditing = true;
-    this.profileForm.enable();
+  onEdit(): void {
+    this.setFormState(true);
   }
 
-  onCancel() {
-    this.isEditing = false;
-    this.profileForm.disable();
-    // Reset form to initial values
-    this.profileForm.patchValue(this.initialFormValues);
+  onCancel(): void {
+    if (this.hasFormChanged()) {
+      if (confirm('You have unsaved changes. Are you sure you want to cancel?')) {
+        this.resetForm();
+      }
+    } else {
+      this.resetForm();
+    }
+  }
+
+  private resetForm(): void {
+    if (this.initialFormValues) {
+      this.profileForm.patchValue({
+        username: this.initialFormValues.username,
+        fullname: this.initialFormValues.name,
+        email: this.initialFormValues.email,
+        leetcodeId: this.initialFormValues.leetcodeId,
+        country: this.initialFormValues.country,
+        organisation: this.initialFormValues.organisation,
+      });
+    }
+    this.setFormState(false);
+  }
+
+  private setFormState(editing: boolean): void {
+    this.isEditing = editing;
+
+    // Always keep leetcodeId disabled
+    this.profileForm.get('leetcodeId')?.disable();
+
+    // Handle other form controls
+    Object.keys(this.profileForm.controls).forEach(key => {
+      if (key !== 'leetcodeId') {
+        const control = this.profileForm.get(key);
+        if (control) {
+          editing ? control.enable() : control.disable();
+        }
+      }
+    });
   }
 
   hasFormChanged(): boolean {
-    return JSON.stringify(this.initialFormValues) !== JSON.stringify(this.profileForm.value);
-  }
+    if (!this.initialFormValues) return false;
 
-  getChangedValues() {
-    const currentValues = this.profileForm.value;
-    const changedValues: any = {};
-
-    Object.keys(currentValues).forEach(key => {
-      if (currentValues[key] !== this.initialFormValues[key]) {
-        changedValues[key] = currentValues[key];
+    const currentValues = this.profileForm.getRawValue();
+    return Object.keys(currentValues).some(key => {
+      if (key === 'leetcodeId') return false;
+      if (key === 'fullname') {
+        return currentValues[key] !== this.initialFormValues?.name;
       }
+      return currentValues[key] !== this.initialFormValues?.[key as keyof UserProfile];
     });
-
-    return changedValues;
   }
 
-  onSave() {
+  onSave(): void {
     if (this.profileForm.invalid) {
+      this.markFormGroupTouched(this.profileForm);
       this.messageService.add({
         severity: 'error',
         summary: 'Validation Error',
@@ -121,35 +160,75 @@ export class ProfileComponent implements OnInit {
         summary: 'No Changes',
         detail: 'No changes were made to the profile'
       });
-      this.isEditing = false;
-      this.profileForm.disable();
+      this.setFormState(false);
       return;
     }
 
     const changedValues = this.getChangedValues();
+    this.updateProfile(changedValues);
+  }
 
-    this.http.patch(`${this.baseUrl}/users/update-profile`, changedValues)
+  private updateProfile(changedValues: Partial<UserProfile>): void {
+    this.isLoading = true;
+    const url = `${API_BASE_URL}/users/update-profile`;
+
+    this.http.patch<UpdateProfileResponse>(url, changedValues)
       .subscribe({
-        next: (response: any) => {
+        next: (response: UpdateProfileResponse) => {
           if (response.code === 200) {
             this.messageService.add({
-              severity: 'info',
+              severity: 'success',
               summary: 'Success',
               detail: 'Profile updated successfully'
             });
-            this.isEditing = false;
-            this.profileForm.disable();
-            this.initialFormValues = this.profileForm.value;
+            const currentValues = this.profileForm.getRawValue();
+            this.initialFormValues = {
+              ...this.initialFormValues,
+              ...currentValues,
+              name: currentValues.fullname
+            } as UserProfile;
+            this.setFormState(false);
           }
         },
-        error: (error) => {
+        error: (error: any) => {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
-            detail: error.error.message || 'Failed to update profile'
+            detail: error.error?.message || 'Failed to update profile'
           });
+        },
+        complete: () => {
+          this.isLoading = false;
         }
       });
+  }
+
+  private markFormGroupTouched(formGroup: FormGroup): void {
+    Object.values(formGroup.controls).forEach(control => {
+      control.markAsTouched();
+      if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
+      }
+    });
+  }
+
+  getChangedValues(): Partial<UserProfile> {
+    const currentValues = this.profileForm.getRawValue();
+    const changedValues: Partial<UserProfile> = {};
+
+    Object.keys(currentValues).forEach(key => {
+      if (key === 'leetcodeId') return;
+
+      if (key === 'fullname') {
+        if (currentValues[key] !== this.initialFormValues?.name) {
+          changedValues.name = currentValues[key];
+        }
+      } else if (currentValues[key] !== this.initialFormValues?.[key as keyof UserProfile]) {
+        changedValues[key as keyof UserProfile] = currentValues[key];
+      }
+    });
+
+    return changedValues;
   }
 
   getFieldError(fieldName: string): string {
@@ -159,8 +238,7 @@ export class ProfileComponent implements OnInit {
         return `${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)} is required`;
       }
       if (control.errors['minlength']) {
-        return `${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)} must be at least ${control.errors['minlength']
-          .requiredLength} characters`;
+        return `${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)} must be at least ${control.errors['minlength'].requiredLength} characters`;
       }
       if (control.errors['email']) {
         return 'Please enter a valid email address';

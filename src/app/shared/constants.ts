@@ -94,3 +94,7 @@ export const AUTH_PATHS = {
   ROLE: `${API_BASE_URL}/auth/member/role`,
   LOGOUT: `${API_BASE_URL}/auth/member/logout`
 };
+
+export const PLATFORM_PATHS = {
+  PLATFORM_STATS: `${API_BASE_URL}/platform-stats`,
+};

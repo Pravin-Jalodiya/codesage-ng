@@ -1,39 +1,22 @@
-import {Component, inject, signal, OnInit} from '@angular/core';
-import { AuthService } from "../../services/auth/auth.service";
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {MessageService} from "primeng/api";
-import {Router} from "@angular/router";
-
-interface PlatformStatsResponse {
-  code: number;
-  message: string;
-  stats: {
-    ActiveUserInLast24Hours: number;
-    TotalQuestionsCount: number;
-    DifficultyWiseQuestionsCount: {
-      easy: number;
-      medium: number;
-      hard: number;
-    };
-    TopicWiseQuestionsCount: Record<string, number>;
-    CompanyWiseQuestionsCount: Record<string, number>;
-  };
-}
+import { MessageService } from 'primeng/api';
+import { Router } from '@angular/router';
+import { PLATFORM_PATHS } from '../../shared/constants';
+import {PlatformStatsResponse} from "../../shared/types/platform.types";
 
 @Component({
   selector: 'app-progress',
   templateUrl: './platform.component.html',
-  styleUrl: './platform.component.scss'
+  styleUrls: ['./platform.component.scss']
 })
-
 export class PlatformComponent implements OnInit {
-  private http = inject(HttpClient);
-  private messageService: MessageService = inject(MessageService);
-  private readonly baseUrl = 'http://localhost:8080';
+  http = inject(HttpClient);
+  messageService: MessageService = inject(MessageService);
 
   loading = signal<boolean>(false);
 
-  // Platform Stats
+  // Platform stats
   activeUsers = signal<number>(0);
   totalQuestions = signal<number>(0);
   easyQuestions = signal<number>(0);
@@ -54,11 +37,10 @@ export class PlatformComponent implements OnInit {
 
   private fetchPlatformStats(): void {
     this.loading.set(true);
-    const url = `${this.baseUrl}/platform-stats`;
 
-    this.http.get<PlatformStatsResponse>(url).subscribe({
+    this.http.get<PlatformStatsResponse>(PLATFORM_PATHS.PLATFORM_STATS).subscribe({
       next: (response) => {
-        if(response.code === 200) {
+        if (response.code === 200) {
           this.loading.set(false);
 
           // Update platform stats
@@ -80,17 +62,16 @@ export class PlatformComponent implements OnInit {
           summary: 'Error',
           detail: 'Failed to fetch platform statistics'
         });
+        this.loading.set(false);  // Ensure loading state is reset on error
       }
     });
   }
 
-  protected readonly Object = Object;
+  ngOnInit(): void {}
 
-  ngOnInit(): void {
-  }
-
-  onRefresh(){
+  onRefresh(): void {
     this.fetchPlatformStats();
   }
 
+  protected readonly Object = Object;
 }
