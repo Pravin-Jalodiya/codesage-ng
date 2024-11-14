@@ -1,38 +1,13 @@
-// users-table.component.ts
-import {Component, computed, inject, signal, WritableSignal} from '@angular/core';
-import {AuthService} from "../../services/auth/auth.service";
+import {Component, computed, inject, signal} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
+
 import {ConfirmationService, MessageService} from "primeng/api";
-import {FormsModule} from "@angular/forms";
 import {PaginatorState} from 'primeng/paginator';
 
-interface FilterOption {
-  name: string;
-}
-
-interface UsersListResponse {
-  code: number;
-  message: string;
-  total: number;
-  users: User[];
-}
-
-interface UserBanToggleResponse {
-  code: number,
-  message: string;
-}
-
-interface User {
-  role: string,
-  username: string,
-  name: string,
-  email: string,
-  organisation: string,
-  country: string,
-  is_banned: boolean,
-  leetcode_id: string,
-  last_seen: Date
-}
+import {AuthService} from "../../services/auth/auth.service";
+import {FilterOption, User, UsersListResponse} from '../../shared/types/user.types';
+import {UserService} from '../../services/user/user.service';
+import {MESSAGES, UI_CONSTANTS, FILTER_OPTIONS} from '../../shared/constants';
 
 @Component({
   selector: 'app-users-table',
@@ -41,16 +16,14 @@ interface User {
 })
 export class UsersTableComponent {
   authService = inject(AuthService);
+  userService = inject(UserService);
   private http: HttpClient = inject(HttpClient);
   private messageService = inject(MessageService);
   private confirmationService = inject(ConfirmationService);
 
   role = computed<string>(() => this.authService.userRole());
   searchQuery = signal<string>("");
-  userStates: FilterOption[] = [
-    { name: 'Banned' },
-    { name: 'Active' },
-  ];
+  userStates: FilterOption[] = FILTER_OPTIONS.USER_STATES;
   users = signal<User[]>([]);
   selectedState = signal<FilterOption | undefined>(undefined);
 
@@ -66,14 +39,12 @@ export class UsersTableComponent {
   filteredUsers = computed<User[]>(() => {
     let filtered = this.users();
 
-    // Apply search filter
     if (this.searchQuery()) {
       filtered = filtered.filter(user =>
         user.username.toLowerCase().includes(this.searchQuery().toLowerCase())
       );
     }
 
-    // Apply state filter
     if (this.selectedState()) {
       const state = this.selectedState()?.name.toLowerCase() === "banned";
       filtered = filtered.filter(user => user.is_banned === state);
@@ -82,7 +53,6 @@ export class UsersTableComponent {
     return filtered;
   });
 
-  // Add paginated users computed property
   paginatedUsers = computed(() => {
     const filtered = this.filteredUsers();
     const startIndex = this.first();
@@ -90,7 +60,6 @@ export class UsersTableComponent {
     return filtered.slice(startIndex, endIndex);
   });
 
-  // Add total records computed property
   totalRecords = computed(() => this.filteredUsers().length);
 
   onPageChange(event: PaginatorState) {
@@ -100,14 +69,14 @@ export class UsersTableComponent {
   }
 
   fetchUsers() {
-    this.http.get<UsersListResponse>('http://localhost:8080/users').subscribe({
-      next: (response) => {
+    this.userService.getUsers().subscribe({
+      next: (response: UsersListResponse) => {
         this.users.set(response.users);
       },
       error: (error: HttpErrorResponse) => {
         this.messageService.add({
           severity: 'error',
-          summary: 'Error',
+          summary: MESSAGES.ERROR.GENERAL_ERROR_SUMMARY,
           detail: error.error.message,
         });
       }
@@ -116,31 +85,31 @@ export class UsersTableComponent {
 
   onUserDelete(user: User) {
     this.confirmationService.confirm({
-      message: `Are you sure you want to delete user "${user.username}"?`,
-      header: 'Delete Confirmation',
-      icon: 'pi pi-info-circle',
-     acceptButtonStyleClass: 'p-button-danger p-button-text',
-     rejectButtonStyleClass: 'p-button-text p-button-text',
-     acceptIcon: 'none',
-     rejectIcon: 'none',
+      message: MESSAGES.CONFIRM.DELETE_USER(user.username),
+      header: MESSAGES.CONFIRM.DELETE_USER_HEADER,
+      icon: UI_CONSTANTS.ICONS.INFO_CIRCLE,
+      acceptButtonStyleClass: UI_CONSTANTS.BUTTON_STYLES.DANGER_TEXT,
+      rejectButtonStyleClass: UI_CONSTANTS.BUTTON_STYLES.TEXT,
+      acceptIcon: UI_CONSTANTS.ICONS.NONE,
+      rejectIcon: UI_CONSTANTS.ICONS.NONE,
       accept: () => {
         const currentUsers = this.users();
         this.users.update((currentUsers) => currentUsers.filter(u => u.username !== user.username));
 
-        this.http.delete(`http://localhost:8080/users/delete?username=${user.username}`).subscribe({
+        this.userService.deleteUser(user.username).subscribe({
           next: () => {
             this.messageService.add({
               severity: 'info',
-              summary: 'Success',
-              detail: 'User deleted successfully'
+              summary: MESSAGES.SUCCESS.GENERAL_SUCCESS_SUMMARY,
+              detail: MESSAGES.SUCCESS.USER_DELETE
             });
           },
           error: (error) => {
             this.users.set(currentUsers);
             this.messageService.add({
               severity: 'error',
-              summary: 'Error',
-              detail: error.error.message ?? "Failed to delete user",
+              summary: MESSAGES.ERROR.GENERAL_ERROR_SUMMARY,
+              detail: error.error.message ?? MESSAGES.ERROR.USER_DELETE_FAILED,
             });
           }
         });
@@ -155,14 +124,11 @@ export class UsersTableComponent {
     const currentUsers = this.users();
     this.users.set([...currentUsers]);
 
-    this.http.patch<UserBanToggleResponse>(
-      `http://localhost:8080/users/update-user-ban-state?username=${user.username}`,
-      {}
-    ).subscribe({
+    this.userService.toggleUserBanState(user.username, {}).subscribe({
       next: (response) => {
         this.messageService.add({
           severity: 'info',
-          summary: 'Status Updated',
+          summary: MESSAGES.INFO.STATUS_UPDATED,
           detail: response.message,
         });
       },
@@ -173,8 +139,8 @@ export class UsersTableComponent {
 
         this.messageService.add({
           severity: 'error',
-          summary: 'Error',
-          detail: error.error.message ?? "Failed to update user",
+          summary: MESSAGES.ERROR.GENERAL_ERROR_SUMMARY,
+          detail: error.error.message ?? MESSAGES.ERROR.USER_UPDATE_FAILED,
         });
       }
     });

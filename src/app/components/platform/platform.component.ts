@@ -1,9 +1,10 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
-import { PLATFORM_PATHS } from '../../shared/constants';
-import {PlatformStatsResponse} from "../../shared/types/platform.types";
+
+import { MessageService } from 'primeng/api';
+
+import { UserService } from '../../services/user/user.service';
+import { MESSAGES } from '../../shared/constants';
 
 @Component({
   selector: 'app-progress',
@@ -11,8 +12,8 @@ import {PlatformStatsResponse} from "../../shared/types/platform.types";
   styleUrls: ['./platform.component.scss']
 })
 export class PlatformComponent implements OnInit {
-  http = inject(HttpClient);
   messageService: MessageService = inject(MessageService);
+  userService: UserService = inject(UserService);
 
   loading = signal<boolean>(false);
 
@@ -38,7 +39,7 @@ export class PlatformComponent implements OnInit {
   private fetchPlatformStats(): void {
     this.loading.set(true);
 
-    this.http.get<PlatformStatsResponse>(PLATFORM_PATHS.PLATFORM_STATS).subscribe({
+    this.userService.fetchPlatformStats().subscribe({
       next: (response) => {
         if (response.code === 200) {
           this.loading.set(false);
@@ -56,13 +57,12 @@ export class PlatformComponent implements OnInit {
         }
       },
       error: (error) => {
-        console.error('Error fetching platform stats:', error);
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'Failed to fetch platform statistics'
+          detail: MESSAGES.ERROR.PLATFORM_FETCH_FAILED
         });
-        this.loading.set(false);  // Ensure loading state is reset on error
+        this.loading.set(false);
       }
     });
   }

@@ -17,7 +17,6 @@ export interface SignupResponse {
   };
 }
 
-// Interfaces for Login
 export interface LoginRequest {
   username: string;
   password: string;
@@ -30,14 +29,12 @@ export interface LoginResponse {
   token: string;
 }
 
-// Interfaces for GetRole
 export interface GetRoleResponse {
   code: number;
   message: string;
   role: string;
 }
 
-// Interfaces for Logout
 export interface LogoutResponse {
   code: number;
   message: string;

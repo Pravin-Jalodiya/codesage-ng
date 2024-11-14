@@ -1,30 +1,15 @@
 import { Component, OnInit, inject, signal, computed } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { AuthService } from '../../services/auth/auth.service';
-import { Role } from "../../shared/config/roles.config";
+import { HttpParams } from '@angular/common/http';
+
 import { PaginatorState } from 'primeng/paginator';
 import { ConfirmationService, MessageService } from "primeng/api";
 import { debounceTime, Subject } from 'rxjs';
 
-interface Question {
-  question_id: string;
-  question_title: string;
-  difficulty: string;
-  question_link: string;
-  topic_tags: string[];
-  company_tags: string[];
-}
-
-interface FilterOption {
-  name: string;
-}
-
-interface QuestionsResponse {
-  code: number;
-  message: string;
-  questions: Question[];
-  total: number;
-}
+import { FilterOption, Question, QuestionsResponse } from '../../shared/types/question.types';
+import { API_ENDPOINTS, MESSAGES } from '../../shared/constants';
+import { QuestionService } from '../../services/question/question.service';
+import { AuthService } from '../../services/auth/auth.service';
+import { Role } from "../../shared/config/roles.config";
 
 @Component({
   selector: 'app-questions-table',
@@ -33,9 +18,9 @@ interface QuestionsResponse {
 })
 export class QuestionsTableComponent implements OnInit {
   public authService: AuthService = inject(AuthService);
-  private http: HttpClient = inject(HttpClient);
   private confirmationService = inject(ConfirmationService);
   private messageService = inject(MessageService);
+  private questionService = inject(QuestionService);
 
   role = computed(() => this.authService.userRole());
 
@@ -104,10 +89,8 @@ export class QuestionsTableComponent implements OnInit {
 
   loadQuestions() {
     const params = this.buildParams();
-
-    this.http.get<QuestionsResponse>('http://localhost:8080/questions', { params })
-      .subscribe({
-        next: (response) => {
+      this.questionService.getQuestions(API_ENDPOINTS.QUESTIONS.LIST , params).subscribe({
+        next: (response: QuestionsResponse) => {
           // Sort questions by ID before setting them
           const sortedQuestions = [...response.questions].sort((a, b) =>
             parseInt(a.question_id) - parseInt(b.question_id)
@@ -119,7 +102,7 @@ export class QuestionsTableComponent implements OnInit {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
-            detail: 'Failed to fetch questions'
+            detail: MESSAGES.ERROR.PROGRESS_FETCH_FAILED
           });
         }
       });
@@ -127,7 +110,7 @@ export class QuestionsTableComponent implements OnInit {
 
   loadFilterOptions() {
     // Get all questions without pagination to build filter options
-    this.http.get<QuestionsResponse>('http://localhost:8080/questions').subscribe({
+    this.questionService.getQuestions(API_ENDPOINTS.QUESTIONS.LIST).subscribe({
       next: (response) => {
         const uniqueCompanies = new Set<string>();
         const uniqueTopics = new Set<string>();
@@ -174,12 +157,10 @@ export class QuestionsTableComponent implements OnInit {
   }
 
   pickRandomQuestion() {
-    // Get a random offset within the total number of filtered results
     const randomOffset = Math.floor(Math.random() * this.totalRecords());
     const params = this.buildParams().set('offset', randomOffset.toString()).set('limit', '1');
 
-    this.http.get<QuestionsResponse>('http://localhost:8080/questions', { params })
-      .subscribe({
+    this.questionService.getQuestions(API_ENDPOINTS.QUESTIONS.LIST , params).subscribe({
         next: (response) => {
           if (response.questions.length > 0) {
             this.redirectToQuestion(response.questions[0].question_link);
@@ -196,20 +177,20 @@ export class QuestionsTableComponent implements OnInit {
       acceptIcon: 'none',
       rejectIcon: 'none',
       accept: () => {
-        this.http.delete(`http://localhost:8080/question?id=${question.question_id}`).subscribe({
+        this.questionService.deleteQuestion(question.question_id).subscribe({
           next: () => {
             this.messageService.add({
               severity: 'info',
               summary: 'Success',
-              detail: 'Question deleted successfully'
+              detail: MESSAGES.SUCCESS.QUESTION_DELETE
             });
-            this.loadQuestions(); // Reload current page
+            this.loadQuestions();
           },
           error: (error) => {
             this.messageService.add({
               severity: 'error',
               summary: 'Error',
-              detail: 'Failed to delete question'
+              detail: MESSAGES.ERROR.QUESTION_DELETE_FAILED
             });
           }
         });

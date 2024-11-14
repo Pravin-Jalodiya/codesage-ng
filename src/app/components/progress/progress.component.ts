@@ -1,38 +1,9 @@
 import {Component, inject, signal, OnInit} from '@angular/core';
-import { AuthService } from "../../services/auth/auth.service";
 import { HttpClient } from '@angular/common/http';
 import {MessageService} from "primeng/api";
 import {Router} from "@angular/router";
 
-interface UserProgressResponse {
-  code: number;
-  message: string;
-  leetcodeStats: {
-    TotalQuestionsCount: number;
-    TotalQuestionsDoneCount: number;
-    TotalEasyCount: number;
-    TotalMediumCount: number;
-    TotalHardCount: number;
-    EasyDoneCount: number;
-    MediumDoneCount: number;
-    HardDoneCount: number;
-    recent_ac_submission_title: string[];
-    recent_ac_submissions_title_slugs: string[];
-    recent_ac_submission_ids: string[];
-  };
-  codesageStats: {
-    TotalQuestionsCount: number;
-    TotalQuestionsDoneCount: number;
-    TotalEasyCount: number;
-    TotalMediumCount: number;
-    TotalHardCount: number;
-    EasyDoneCount: number;
-    MediumDoneCount: number;
-    HardDoneCount: number;
-    CompanyWiseStats: Record<string, number>;
-    TopicWiseStats: Record<string, number>;
-  };
-}
+import { AuthService } from "../../services/auth/auth.service";
 
 interface RecentSubmission {
   title: string;
@@ -89,9 +60,8 @@ export class ProgressComponent implements OnInit{
 
   private fetchUserProgress(username: string): void {
     this.loading.set(true)
-    const url = `http://localhost:8080/users/progress/${username}`;
 
-    this.http.get<UserProgressResponse>(url).subscribe({
+    this.http.get<UserProgressResponse>().subscribe({
       next: (response) => {
         if(response.code === 200) {
           this.loading.set(false);
@@ -130,7 +100,6 @@ export class ProgressComponent implements OnInit{
         }
         },
       error: (error) => {
-        console.error('Error fetching user progress:', error);
         this.messageService.add({
           severity: 'contrast',
           summary: 'Error',

@@ -10,7 +10,7 @@
     (onSelect)="onSelectedFiles($event)"
     (onError)="onError($event)"
     [customUpload]="true"
-    (uploadHandler)="uploadFile($event)"
+    (uploadHandler)="uploadFile()"
     styleClass="custom-upload"
   >
     <ng-template pTemplate="header" let-files
@@ -63,7 +63,8 @@
     <ng-template pTemplate="content" let-files let-uploadedFiles="uploadedFiles" let-removeFileCallback="removeFileCallback">
       <div class="content-container">
         @if(toUpload() && ! (!files || files.length === 0)){
-          <p-progressBar [value]="uploadProgress()" [showValue]="false" styleClass="h-1rem w-full md:ml-auto"></p-progressBar>
+          <p-progressBar [value]="uploadProgress()" [showValue]="false"
+          styleClass="h-1rem w-full md:ml-auto"></p-progressBar>
         }
         <div *ngIf="files?.length > 0" class="file-preview-container">
           <div *ngFor="let file of files; let i = index" class="file-card">

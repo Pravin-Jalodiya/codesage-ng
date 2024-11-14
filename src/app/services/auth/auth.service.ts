@@ -41,7 +41,7 @@ export class AuthService {
       this.getRole().subscribe({
         next: (response: GetRoleResponse) => this.handleRoleResponse(response),
         error: (error: any) => this.handleError(error),
-        complete: () => console.log('Role request complete')
+
       });
     }
   }
@@ -54,7 +54,6 @@ export class AuthService {
   }
 
   private handleError(error: any): void {
-    console.error('Request failed', error);
     this.showError(error.error.message);
     this.router.navigate(['/login']);
   }
@@ -99,7 +98,6 @@ export class AuthService {
 
       return extractor(decodedToken);
     } catch (error) {
-      console.error('Error decoding token:', error);
       return null as any;
     }
   }
@@ -127,15 +125,10 @@ export class AuthService {
 
   handleSuccessfulLogin(response: LoginResponse): void {
     if (response && response.token) {
-      // Store the JWT token
       localStorage.setItem('authToken', response.token);
-
-      // Store user role and set signals
       this.userRole.set(response.role as Role);
       this.loggedIn.set(true);
 
-    } else {
-      console.error('Invalid response without token');
     }
   }
 

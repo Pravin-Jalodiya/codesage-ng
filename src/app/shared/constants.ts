@@ -39,17 +39,20 @@ export const API_ENDPOINTS = {
     LOGIN: '/auth/login'
   },
   USERS: {
+    LIST: '/users',
     PROFILE: (username: string) => `/users/profile/${username}`,
     UPDATE_PROFILE: '/users/update-profile',
-    PROGRESS: (username: string) => `/users/progress/${username}`
+    PROGRESS: (username: string) => `/users/progress/${username}`,
+    BAN: (username: string) => `/update-user-ban-state?username=${username}`,
+    DELETE: (username: string) => `/delete?username=${username}`,
   },
   QUESTIONS: {
     LIST: '/questions',
-    DELETE: (id: string) => `/question?id=${id}`
+    DELETE: (id: string) => `/question?id=${id}`,
+    UPLOAD: '/questions',
   }
 } as const;
 
-// src/app/core/constants/validation.constants.ts
 export const VALIDATION_RULES = {
   USERNAME: {
     MIN_LENGTH: 3,
@@ -64,23 +67,86 @@ export const VALIDATION_RULES = {
   GENERAL: {
     REQUIRED_MESSAGE: 'This field is required',
     INVALID_EMAIL: 'Please enter a valid email address'
+  },
+  FILE: {
+    MAX_SIZE_BYTES: 5 * 1024 * 1024,
+    TYPE_CSV: 'Only CSV files are allowed.'
   }
 } as const;
 
-// src/app/core/constants/message.constants.ts
 export const MESSAGES = {
+  UPLOAD_STATUS: {
+    PENDING: 'Pending',
+    READY: 'Ready to upload',
+    UPLOADING: 'Uploading...',
+    COMPLETED: 'Upload completed',
+    FAILED: 'Upload failed'
+  },
   SUCCESS: {
     SIGNUP: 'Your account has been created!',
     PROFILE_UPDATE: 'Profile updated successfully',
-    QUESTION_DELETE: 'Question deleted successfully'
+    QUESTION_DELETE: 'Question deleted successfully',
+    NO_CHANGES: 'No changes were made to the profile',
+    GENERAL_SUCCESS_SUMMARY: 'Success',
+    UPLOAD_SUCCESS_SUMMARY: 'Upload Success',
+    UPLOAD_SUCCESS_DETAIL: 'Your file was successfully uploaded.',
+    USER_DELETE: 'User deleted successfully'
   },
   ERROR: {
     SIGNUP_FAILED: 'Signup failed. Please try again.',
     PROFILE_UPDATE_FAILED: 'Failed to update profile',
     PROGRESS_FETCH_FAILED: 'Failed to fetch progress',
-    QUESTION_DELETE_FAILED: 'Failed to delete question'
+    QUESTION_DELETE_FAILED: 'Failed to delete question',
+    LOADING_PROFILE: 'Failed to load profile',
+    VALIDATION_ERROR: 'Please check all required fields',
+    PLATFORM_FETCH_FAILED: 'Failed to fetch platform statistics',
+    FILE_TYPE: VALIDATION_RULES.FILE.TYPE_CSV,
+    FILE_SIZE: `File size exceeds the maximum allowed limit of ${VALIDATION_RULES.FILE.MAX_SIZE_BYTES / (1024 * 1024)} MB.`,
+    MISSING_COLUMNS: 'The following required columns are missing',
+    EXTRA_COLUMNS: 'The following extra columns are present',
+    NO_DATA_ROWS: 'The CSV file has no data rows.',
+    CSV_VALIDATION_ERROR_SUMMARY: 'CSV Validation Error',
+    CSV_VALIDATION_ERROR_DETAIL: 'Please check the file and try again.',
+    FILE_READ_ERROR: 'Error reading the file.',
+    GENERAL_ERROR_SUMMARY: 'Error',
+    FIX_VALIDATION_ERRORS: 'Please fix the validation errors and try again.',
+    UPLOAD_FAILED: 'File upload failed.',
+    USER_DELETE_FAILED: 'Failed to delete user',
+    USER_UPDATE_FAILED: 'Failed to update user'
+  },
+  INFO: {
+    NO_CHANGES: 'No changes were made to the profile',
+    STATUS_UPDATED: 'Status Updated'
+  },
+  CONFIRM: {
+    UNSAVED_CHANGES: 'You have unsaved changes. Are you sure you want to cancel?',
+    DELETE_USER: (username: string) => `Are you sure you want to delete user "${username}"?`,
+    DELETE_USER_HEADER: 'Delete Confirmation'
   }
 } as const;
+
+export const UI_CONSTANTS = {
+  BUTTON_STYLES: {
+    DANGER_TEXT: 'p-button-danger p-button-text',
+    TEXT: 'p-button-text p-button-text'
+  },
+  ICONS: {
+    NONE: 'none',
+    INFO_CIRCLE: 'pi pi-info-circle'
+  }
+} as const;
+
+export const FILTER_OPTIONS = {
+  USER_STATES: [
+    { name: 'Banned' },
+    { name: 'Active' },
+  ]
+};
+
+
+export const FILE_LIMITS = {
+  MAX_SIZE_BYTES: 5 * 1024 * 1024
+};
 
 export const AddQuestionConstants = {
   ADD_QUESTION_TITLE: 'Add Questions',
@@ -97,4 +163,13 @@ export const AUTH_PATHS = {
 
 export const PLATFORM_PATHS = {
   PLATFORM_STATS: `${API_BASE_URL}/platform-stats`,
+};
+
+export const USER_PROFILE_ENDPOINT = `${API_BASE_URL}/users/profile/`;
+export const UPDATE_PROFILE_ENDPOINT = `${API_BASE_URL}/users/update-profile`;
+
+export const VALIDATION_ERRORS = {
+  required: (field: string) => `${field} is required`,
+  minLength: (field: string, length: number) => `${field} must be at least ${length} characters`,
+  invalidEmail: 'Please enter a valid email address'
 };

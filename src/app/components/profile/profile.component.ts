@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { AuthService } from "../../services/auth/auth.service";
-import { MessageService } from "primeng/api";
-import { HttpClient } from '@angular/common/http';
 import { Router } from "@angular/router";
-import { UpdateProfileResponse, UserProfile, UserProfileResponse } from '../../shared/types/profile.types';
-import { API_BASE_URL } from '../../shared/constants';
+
+import { MessageService } from "primeng/api";
+
+import { UpdateProfileResponse, UserProfile } from '../../shared/types/profile.types';
+import { API_BASE_URL, MESSAGES } from '../../shared/constants';
+import { UserService } from '../../services/user/user.service';
+import { AuthService } from "../../services/auth/auth.service";
 
 @Component({
   selector: 'app-profile',
@@ -22,7 +24,7 @@ export class ProfileComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private messageService: MessageService,
-    private http: HttpClient,
+    private userService: UserService,
     private router: Router
   ) {
     this.checkAndLoadProfile();
@@ -54,7 +56,7 @@ export class ProfileComponent implements OnInit {
     this.isLoading = true;
     const url = `${API_BASE_URL}/users/profile/${username}`;
 
-    this.http.get<UserProfileResponse>(url)
+    this.userService.fetchUserProfile(url)
       .subscribe({
         next: (response) => {
           if (response.code === 200) {
@@ -69,14 +71,14 @@ export class ProfileComponent implements OnInit {
               organisation: profile.organisation,
             });
             this.initialFormValues = { ...profile };
-            this.setFormState(false); // Ensure form is in non-editing state initially
+            this.setFormState(false);
           }
         },
         error: (error) => {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
-            detail: error.error?.message || 'Failed to load profile',
+            detail: MESSAGES.ERROR.LOADING_PROFILE,
           });
         },
         complete: () => {
@@ -91,7 +93,7 @@ export class ProfileComponent implements OnInit {
 
   onCancel(): void {
     if (this.hasFormChanged()) {
-      if (confirm('You have unsaved changes. Are you sure you want to cancel?')) {
+      if (confirm(MESSAGES.CONFIRM.UNSAVED_CHANGES)) {
         this.resetForm();
       }
     } else {
@@ -149,7 +151,7 @@ export class ProfileComponent implements OnInit {
       this.messageService.add({
         severity: 'error',
         summary: 'Validation Error',
-        detail: 'Please check all required fields'
+        detail: MESSAGES.ERROR.VALIDATION_ERROR
       });
       return;
     }
@@ -158,7 +160,7 @@ export class ProfileComponent implements OnInit {
       this.messageService.add({
         severity: 'info',
         summary: 'No Changes',
-        detail: 'No changes were made to the profile'
+        detail: MESSAGES.INFO.NO_CHANGES
       });
       this.setFormState(false);
       return;
@@ -172,14 +174,13 @@ export class ProfileComponent implements OnInit {
     this.isLoading = true;
     const url = `${API_BASE_URL}/users/update-profile`;
 
-    this.http.patch<UpdateProfileResponse>(url, changedValues)
-      .subscribe({
+      this.userService.updateUserProfile(url, changedValues).subscribe({
         next: (response: UpdateProfileResponse) => {
           if (response.code === 200) {
             this.messageService.add({
               severity: 'success',
               summary: 'Success',
-              detail: 'Profile updated successfully'
+              detail: MESSAGES.SUCCESS.PROFILE_UPDATE
             });
             const currentValues = this.profileForm.getRawValue();
             this.initialFormValues = {
@@ -194,7 +195,7 @@ export class ProfileComponent implements OnInit {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
-            detail: error.error?.message || 'Failed to update profile'
+            detail: MESSAGES.ERROR.PROFILE_UPDATE_FAILED
           });
         },
         complete: () => {
@@ -238,10 +239,11 @@ export class ProfileComponent implements OnInit {
         return `${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)} is required`;
       }
       if (control.errors['minlength']) {
-        return `${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)} must be at least ${control.errors['minlength'].requiredLength} characters`;
+        return `${fieldName.charAt(0).toUpperCase()
+          + fieldName.slice(1)} must be at least ${control.errors['minlength'].requiredLength} characters`;
       }
       if (control.errors['email']) {
-        return 'Please enter a valid email address';
+        return MESSAGES.ERROR.VALIDATION_ERROR;
       }
     }
     return '';
