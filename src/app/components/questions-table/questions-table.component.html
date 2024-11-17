@@ -78,9 +78,11 @@
             </div>
           </div>
           <div class="column-headings flex justify-content-center align-items-center">
-            <div class="column-heading-1 flex-1 flex justify-content-center">ID</div>
+            <div class="column-heading-1 flex-1 flex justify-content-center"
+                 [ngClass]="{'column-heading-1-admin': role() === Role.ADMIN}">ID</div>
             <div class="column-heading-2 flex justify-content-center">Title</div>
-            <div class="column-heading-3 flex-1 flex justify-content-center">Difficulty</div>
+            <div class="column-heading-3 flex-1 flex justify-content-center"
+                 [ngClass]="{'column-heading-3-admin': role() === Role.ADMIN}">Difficulty</div>
 
             @if (role() === Role.ADMIN) {
               <div class="column-heading-4 flex-1 flex justify-content-center">Action</div>
@@ -91,14 +93,16 @@
                 'questions-list-user': role() === Role.USER}">
             @for (question of questions(); track question.question_id; let i = $index) {
               <div class="question flex" [ngClass]="{'striped-background': i % 2 === 1}">
-                <div class="question-id flex flex-1 justify-content-center align-items-center">
+                <div class="question-id flex flex-grow-1 justify-content-center align-items-center"
+                     [ngClass]="{'question-id-admin': role() === Role.ADMIN}">
                   {{ question.question_id }}
                 </div>
                 <div class="question-title column-heading-2 flex justify-content-center align-items-center"
                      (click)="redirectToQuestion(question.question_link)">
                   {{ question.question_title }}
                 </div>
-                <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
+                <div class="question-difficulty flex flex-grow-1 justify-content-center align-items-center"
+                     [ngClass]="{'question-difficulty-admin': role() === Role.ADMIN}">
                   <div class="q-difficulty-container" [ngClass]="{'color-easy': question.difficulty === 'easy',
                 'color-medium': question.difficulty === 'medium', 'color-hard': question.difficulty === 'hard'}">
                   {{ question.difficulty }}
@@ -106,7 +110,7 @@
                 </div>
 
                 @if (role() === Role.ADMIN) {
-                  <div class="action flex flex-1 justify-content-center">
+                  <div class="action flex flex-grow-1 justify-content-center">
                     <img class="delete-icon" src="../../../assets/trash-icon.png"
                          (click)="onQuestionDelete(question)">
                   </div>
