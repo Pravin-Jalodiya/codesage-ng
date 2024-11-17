@@ -45,5 +45,5 @@ export class UserService {
       return this.http.patch<UpdateProfileResponse>(url, changedValues);
     }
 
-    getUserProgress(): Observable<userPro
+    // getUserProgress(): Observable<userPro
 }

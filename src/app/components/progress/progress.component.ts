@@ -1,9 +1,11 @@
 import {Component, inject, signal, OnInit} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {MessageService} from "primeng/api";
-import {Router} from "@angular/router";
+import {NavigationExtras, Router} from "@angular/router";
 
 import { AuthService } from "../../services/auth/auth.service";
+import {UserProgressResponse} from "../../shared/types/user.types";
+import {MESSAGES} from "../../shared/constants";
 
 interface RecentSubmission {
   title: string;
@@ -61,8 +63,8 @@ export class ProgressComponent implements OnInit{
   private fetchUserProgress(username: string): void {
     this.loading.set(true)
 
-    this.http.get<UserProgressResponse>().subscribe({
-      next: (response) => {
+    this.http.get<UserProgressResponse>(`http://localhost:8080/users/progress/${username}`).subscribe({
+      next: (response: UserProgressResponse) => {
         if(response.code === 200) {
           this.loading.set(false);
           // Update LeetCode progress
@@ -103,7 +105,7 @@ export class ProgressComponent implements OnInit{
         this.messageService.add({
           severity: 'contrast',
           summary: 'Error',
-          detail: 'Failed to fetch progress'
+          detail: MESSAGES.ERROR.PROGRESS_FETCH_FAILED,
         });
       }
     });
@@ -121,12 +123,30 @@ export class ProgressComponent implements OnInit{
   ngOnInit(): void {
   }
 
-  onRefresh(){
+  onRefresh(): void {
     const username = this.authService.getUsernameFromToken();
     if (username) {
       this.fetchUserProgress(username);
     } else {
       this.router.navigate(['/login']);
     }
+  }
+
+  onTopicClick(topic: string): void {
+    const navigationExtras: NavigationExtras = {
+      queryParams: {
+        topic: topic.toLowerCase()
+      }
+    };
+    this.router.navigate(['/questions'], navigationExtras);
+  }
+
+  onCompanyClick(company: string): void {
+    const navigationExtras: NavigationExtras = {
+      queryParams: {
+        company: company.toLowerCase()
+      }
+    };
+    this.router.navigate(['/questions'], navigationExtras);
   }
 }

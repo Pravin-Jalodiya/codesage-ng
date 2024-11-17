@@ -60,7 +60,7 @@ export class AuthService {
 
   isTokenValid(): boolean {
     try {
-      const token = localStorage.getItem(this.tokenKey);
+      const token = localStorage.getItem('authToken');
       if (!token) return false;
 
       const decodedToken = jwtDecode<CustomJwtPayload>(token);
@@ -87,7 +87,7 @@ export class AuthService {
 
   private extractFromToken<T>(extractor: (token: CustomJwtPayload | null) => T): T {
     try {
-      const token = localStorage.getItem(this.tokenKey);
+      const token = localStorage.getItem('authToken');
       if (!token) return null as any;
 
       const decodedToken = jwtDecode<CustomJwtPayload>(token);
@@ -126,6 +126,7 @@ export class AuthService {
   handleSuccessfulLogin(response: LoginResponse): void {
     if (response && response.token) {
       localStorage.setItem('authToken', response.token);
+      localStorage.setItem('userRole', response.role);
       this.userRole.set(response.role as Role);
       this.loggedIn.set(true);
 

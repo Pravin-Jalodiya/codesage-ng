@@ -36,6 +36,7 @@ export const adminGuard: CanActivateFn = (): Observable<boolean> => {
       }
       return isAdmin;
     }),
+
     catchError(() => {
       authService.showError('Error checking permissions');
       router.navigate(['/']);

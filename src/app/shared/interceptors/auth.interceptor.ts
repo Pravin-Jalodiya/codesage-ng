@@ -2,11 +2,7 @@ import {HttpErrorResponse, HttpEvent, HttpHandlerFn, HttpInterceptorFn, HttpRequ
 import {inject, Type} from "@angular/core";
 import { Router } from "@angular/router";
 
-
 import {catchError, EMPTY, Observable, throwError} from "rxjs";
-// import { AuthService } from "../../services/auth/auth.service";
-
-
 
 export const AuthInterceptor: HttpInterceptorFn =
   (req: HttpRequest<any>, next: HttpHandlerFn): Observable<HttpEvent<any>> => {

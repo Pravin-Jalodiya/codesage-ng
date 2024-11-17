@@ -25,3 +25,37 @@ export interface User {
   leetcode_id: string,
   last_seen: Date
 }
+
+export interface UserProgressResponse {
+  code: number;
+  message: string;
+  leetcodeStats: LeetcodeStats;
+  codesageStats: CodesageStats;
+}
+
+export interface LeetcodeStats {
+  TotalQuestionsCount: number;
+  TotalQuestionsDoneCount: number;
+  TotalEasyCount: number;
+  TotalMediumCount: number;
+  TotalHardCount: number;
+  EasyDoneCount: number;
+  MediumDoneCount: number;
+  HardDoneCount: number;
+  recent_ac_submission_title: string[];
+  recent_ac_submissions_title_slugs: string[];
+  recent_ac_submission_ids: string[];
+}
+
+export interface CodesageStats {
+  TotalQuestionsCount: number;
+  TotalQuestionsDoneCount: number;
+  TotalEasyCount: number;
+  TotalMediumCount: number;
+  TotalHardCount: number;
+  EasyDoneCount: number;
+  MediumDoneCount: number;
+  HardDoneCount: number;
+  CompanyWiseStats: Record<string, number>;
+  TopicWiseStats: Record<string, number>;
+}
