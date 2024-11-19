@@ -4,158 +4,160 @@
     <div class="profile-heading">
       Profile
     </div>
-    <div class="profile-header-container">
-      <div class="profile-picture">
-        <p-avatar
-          image="https://assets.leetcode.com/users/avatars/avatar_1678084041.png"
-          styleClass="mr-2"
-          size="xlarge"
-          shape="circle" />
-        <div>
-          <p class="user-name">
-            {{profileForm.get('fullname')?.value || 'User'}}
-          </p>
-          <p class="user-email">
-            {{profileForm.get('email')?.value}}
-          </p>
+    <div class="full-profile-container">
+      <div class="profile-header-container">
+        <div class="profile-picture">
+          <p-avatar
+            image="https://assets.leetcode.com/users/avatars/avatar_1678084041.png"
+            styleClass="mr-2"
+            size="xlarge"
+            shape="circle" />
+          <div>
+            <p class="user-name">
+              {{profileForm.get('fullname')?.value || 'User'}}
+            </p>
+            <p class="user-email">
+              {{profileForm.get('email')?.value}}
+            </p>
+          </div>
+        </div>
+        <div class="profile-edit">
+          @if (!isEditing) {
+            <button
+              pButton
+              class="edit-button no-box-shadow"
+              type="button"
+              (click)="onEdit()"
+              label="Edit">
+            </button>
+          }
         </div>
       </div>
-      <div class="profile-edit">
-        @if (!isEditing) {
-          <button
-            pButton
-            class="edit-button no-box-shadow"
-            type="button"
-            (click)="onEdit()"
-            label="Edit">
-          </button>
-        }
-      </div>
+      <form [formGroup]="profileForm" class="edit-profile-form">
+        <div class="profile-container">
+          <div class="p-grid">
+            <div class="p-col-6">
+              <p-floatLabel>
+                <input
+                  pInputText
+                  class="transparent-input"
+                  type="text"
+                  id="username"
+                  formControlName="username" />
+                <label for="username">Username*</label>
+              </p-floatLabel>
+              @if (profileForm.get('username')?.touched && profileForm.get('username')?.invalid) {
+                <small class="p-error">
+                  {{getFieldError('username')}}
+                </small>
+              }
+            </div>
+            <div class="p-col-6">
+              <p-floatLabel>
+                <input
+                  pInputText
+                  class="transparent-input"
+                  id="fullname"
+                  formControlName="fullname" />
+                <label for="fullname">Full Name*</label>
+              </p-floatLabel>
+              @if (profileForm.get('fullname')?.touched && profileForm.get('fullname')?.invalid) {
+                <small class="p-error">
+                  {{getFieldError('fullname')}}
+                </small>
+              }
+            </div>
+          </div>
+
+          <div class="p-grid">
+            <div class="p-col-6">
+              <p-floatLabel>
+                <input
+                  pInputText
+                  class="transparent-input"
+                  type="text"
+                  id="leetcodeId"
+                  formControlName="leetcodeId" />
+                <label for="leetcodeId">LeetCode ID*</label>
+              </p-floatLabel>
+              @if (profileForm.get('leetcodeId')?.touched && profileForm.get('leetcodeId')?.invalid) {
+                <small class="p-error">
+                  {{getFieldError('leetcodeId')}}
+                </small>
+              }
+            </div>
+            <div class="p-col-6">
+              <p-floatLabel>
+                <input
+                  pInputText
+                  class="transparent-input"
+                  id="email"
+                  formControlName="email" />
+                <label for="email">Email*</label>
+              </p-floatLabel>
+              @if (profileForm.get('email')?.touched && profileForm.get('email')?.invalid) {
+                <small class="p-error">
+                  {{getFieldError('email')}}
+                </small>
+              }
+            </div>
+          </div>
+
+          <div class="p-grid">
+            <div class="p-col-6">
+              <p-floatLabel>
+                <input
+                  pInputText
+                  class="transparent-input"
+                  type="text"
+                  id="country"
+                  formControlName="country" />
+                <label for="country">Country*</label>
+              </p-floatLabel>
+              @if (profileForm.get('country')?.touched && profileForm.get('country')?.invalid) {
+                <small class="p-error">
+                  {{getFieldError('country')}}
+                </small>
+              }
+            </div>
+            <div class="p-col-6">
+              <p-floatLabel>
+                <input
+                  pInputText
+                  class="transparent-input"
+                  id="organisation"
+                  formControlName="organisation" />
+                <label for="organisation">Organisation*</label>
+              </p-floatLabel>
+              @if (profileForm.get('organisation')?.touched && profileForm.get('organisation')?.invalid) {
+                <small class="p-error">
+                  {{getFieldError('organisation')}}
+                </small>
+              }
+            </div>
+          </div>
+
+          @if (isEditing) {
+            <div class="profile-actions">
+              <button
+                pButton
+                class="p-button-secondary mr-2 no-box-shadow edit-button"
+                type="button"
+                (click)="onCancel()"
+                label="Cancel">
+              </button>
+              <button
+                pButton
+                class="p-button-primary no-box-shadow edit-button"
+                type="button"
+                (click)="onSave()"
+                [disabled]="profileForm.invalid || !hasFormChanged()"
+                label="Save">
+              </button>
+            </div>
+          }
+        </div>
+      </form>
     </div>
-    <form [formGroup]="profileForm" class="edit-profile-form">
-      <div class="profile-container">
-        <div class="p-grid">
-          <div class="p-col-6">
-            <p-floatLabel>
-              <input
-                pInputText
-                class="transparent-input"
-                type="text"
-                id="username"
-                formControlName="username" />
-              <label for="username">Username*</label>
-            </p-floatLabel>
-            @if (profileForm.get('username')?.touched && profileForm.get('username')?.invalid) {
-              <small class="p-error">
-                {{getFieldError('username')}}
-              </small>
-            }
-          </div>
-          <div class="p-col-6">
-            <p-floatLabel>
-              <input
-                pInputText
-                class="transparent-input"
-                id="fullname"
-                formControlName="fullname" />
-              <label for="fullname">Full Name*</label>
-            </p-floatLabel>
-            @if (profileForm.get('fullname')?.touched && profileForm.get('fullname')?.invalid) {
-              <small class="p-error">
-                {{getFieldError('fullname')}}
-              </small>
-            }
-          </div>
-        </div>
-
-        <div class="p-grid">
-          <div class="p-col-6">
-            <p-floatLabel>
-              <input
-                pInputText
-                class="transparent-input"
-                type="text"
-                id="leetcodeId"
-                formControlName="leetcodeId" />
-              <label for="leetcodeId">LeetCode ID*</label>
-            </p-floatLabel>
-            @if (profileForm.get('leetcodeId')?.touched && profileForm.get('leetcodeId')?.invalid) {
-              <small class="p-error">
-                {{getFieldError('leetcodeId')}}
-              </small>
-            }
-          </div>
-          <div class="p-col-6">
-            <p-floatLabel>
-              <input
-                pInputText
-                class="transparent-input"
-                id="email"
-                formControlName="email" />
-              <label for="email">Email*</label>
-            </p-floatLabel>
-            @if (profileForm.get('email')?.touched && profileForm.get('email')?.invalid) {
-              <small class="p-error">
-                {{getFieldError('email')}}
-              </small>
-            }
-          </div>
-        </div>
-
-        <div class="p-grid">
-          <div class="p-col-6">
-            <p-floatLabel>
-              <input
-                pInputText
-                class="transparent-input"
-                type="text"
-                id="country"
-                formControlName="country" />
-              <label for="country">Country*</label>
-            </p-floatLabel>
-            @if (profileForm.get('country')?.touched && profileForm.get('country')?.invalid) {
-              <small class="p-error">
-                {{getFieldError('country')}}
-              </small>
-            }
-          </div>
-          <div class="p-col-6">
-            <p-floatLabel>
-              <input
-                pInputText
-                class="transparent-input"
-                id="organisation"
-                formControlName="organisation" />
-              <label for="organisation">Organisation*</label>
-            </p-floatLabel>
-            @if (profileForm.get('organisation')?.touched && profileForm.get('organisation')?.invalid) {
-              <small class="p-error">
-                {{getFieldError('organisation')}}
-              </small>
-            }
-          </div>
-        </div>
-
-        @if (isEditing) {
-          <div class="profile-actions">
-            <button
-              pButton
-              class="p-button-secondary mr-2 no-box-shadow edit-button"
-              type="button"
-              (click)="onCancel()"
-              label="Cancel">
-            </button>
-            <button
-              pButton
-              class="p-button-primary no-box-shadow edit-button"
-              type="button"
-              (click)="onSave()"
-              [disabled]="profileForm.invalid || !hasFormChanged()"
-              label="Save">
-            </button>
-          </div>
-        }
-      </div>
-    </form>
   </div>
 </div>

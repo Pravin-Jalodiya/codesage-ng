@@ -3,14 +3,7 @@
     <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
       <app-header></app-header>
     <div class="flex-column justify-content-center align-content-center align-items-center h-fit w-full">
-      @if (role() === Role.ADMIN) {
-        <div class="heading flex justify-content-center">
-          Delete Question
-        </div>
-      }
-      <div class="questions-table-container"
-           [ngClass]="{'questions-table-container-admin': role() === Role.ADMIN,
-           'questions-table-container-user': role() === Role.USER}">
+      <div class="questions-table-container">
         <div class="upper-half flex-column">
           <div class="questions-table-top">
             <div class="search-bar">
@@ -74,7 +67,15 @@
                   Pick one
                   <img src="../../../assets/random.png" alt="icon" class="button-icon" />
                 </button>
+              } @else {
+                <button pButton pRipple type="button" class="icon-button" (click)="showUploadForm()">
+                  Upload Questions
+                </button>
+                <p-dialog [resizable]="false" header="Upload file" [modal]="true" [(visible)]="visible" [style]="{ width: '60%' }">
+                    <file-upload></file-upload>
+                </p-dialog>
               }
+
             </div>
           </div>
           <div class="column-headings flex justify-content-center align-items-center">
@@ -88,9 +89,7 @@
               <div class="column-heading-4 flex-1 flex justify-content-center">Action</div>
             }
           </div>
-          <div class="questions-list flex-column justify-content-center align-items-center"
-               [ngClass]="{'questions-list-admin': role() === Role.ADMIN,
-                'questions-list-user': role() === Role.USER}">
+          <div class="questions-list flex-column justify-content-center align-items-center">
             @for (question of questions(); track question.question_id; let i = $index) {
               <div class="question flex" [ngClass]="{'striped-background': i % 2 === 1}">
                 <div class="question-id flex flex-grow-1 justify-content-center align-items-center"

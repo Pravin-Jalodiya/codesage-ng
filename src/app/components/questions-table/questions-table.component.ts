@@ -53,6 +53,9 @@ export class QuestionsTableComponent implements OnInit {
   // Search debounce
   private searchSubject = new Subject<string>();
 
+  // Upload Question form visibility
+  visible: boolean = false;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router
@@ -310,6 +313,10 @@ export class QuestionsTableComponent implements OnInit {
 
   private capitalize(str: string): string {
     return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
+  showUploadForm(){
+    this.visible = true;
   }
 
   protected readonly Role = Role;

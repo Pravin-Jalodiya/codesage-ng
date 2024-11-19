@@ -1,5 +1,5 @@
 .profile-header-container {
-  width: 60%;
+  width: 90%;
   max-width: 1200px;
   display: flex;
   justify-content: space-between;
@@ -9,12 +9,11 @@
 }
 
 .edit-profile-form {
-  width: 50%;
-  max-width: 1200px;
+  width: 90%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 15px;
+  padding-top: 25px;
   margin: 0 auto;
 }
 
@@ -32,6 +31,19 @@
   width: 50%;
   display: flex;
   justify-content: flex-end;
+}
+
+.full-profile-container {
+  width: 55%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0,0,0, 0.8);
+  border-radius: 30px;
+  padding: 8px;
+  margin: 1vh auto 1vh;
 }
 
 .edit-button {

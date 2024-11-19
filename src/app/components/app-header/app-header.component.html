@@ -5,27 +5,27 @@
     </div>
     <div class="right-header flex">
       <div class="navbar-options">
-        @if(isAdmin()) {
-          <div class="dropdown">
-            <div class="dropdown-button">{{ HeaderConstants.QUESTIONS }}
-              <i class="pi pi-angle-down"></i>
-            </div>
-            <div class="dropdown-content">
-              <div class="dropdown-item">
-                <button pButton class="add-questions-btn no-box-shadow" type="button" routerLink="/add-questions">
-                  {{ HeaderConstants.ADD_QUESTIONS }}
-                </button>
-              </div>
-              <div class="dropdown-item" routerLink="/delete-question">
-                <button pButton class="remove-question-btn no-box-shadow" type="button">
-                  {{ HeaderConstants.DELETE_QUESTION }}
-                </button>
-              </div>
-            </div>
-          </div>
-        }
+<!--        @if(isAdmin()) {-->
+<!--          <div class="dropdown">-->
+<!--            <div class="dropdown-button">{{ HeaderConstants.QUESTIONS }}-->
+<!--              <i class="pi pi-angle-down"></i>-->
+<!--            </div>-->
+<!--            <div class="dropdown-content">-->
+<!--              <div class="dropdown-item">-->
+<!--                <button pButton class="add-questions-btn no-box-shadow" type="button" routerLink="/add-questions">-->
+<!--                  {{ HeaderConstants.ADD_QUESTIONS }}-->
+<!--                </button>-->
+<!--              </div>-->
+<!--              <div class="dropdown-item" routerLink="/delete-question">-->
+<!--                <button pButton class="remove-question-btn no-box-shadow" type="button">-->
+<!--                  {{ HeaderConstants.DELETE_QUESTION }}-->
+<!--                </button>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        }-->
+        <div class="option" routerLink="/questions">{{ HeaderConstants.QUESTIONS }}</div>
         @if(role() === Role.USER) {
-          <div class="option" routerLink="/questions">{{ HeaderConstants.QUESTIONS }}</div>
           <div class="option" routerLink="/progress">{{ HeaderConstants.PROGRESS }}</div>
         }
         @if(role() === Role.ADMIN) {
