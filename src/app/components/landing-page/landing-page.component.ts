@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import {Component, inject} from '@angular/core';
 
 import {LandingPageConstants} from "../../shared/constants";
+import {AuthService} from "../../services/auth/auth.service";
 
 @Component({
   selector: 'app-landing-page',
@@ -9,4 +10,5 @@ import {LandingPageConstants} from "../../shared/constants";
 })
 export class LandingPageComponent {
   protected readonly LandingPageConstants = LandingPageConstants;
+  private authService: AuthService = inject(AuthService);
 }

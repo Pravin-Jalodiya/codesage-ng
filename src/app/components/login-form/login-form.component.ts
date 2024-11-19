@@ -62,7 +62,7 @@ export class LoginFormComponent implements OnInit {
   }
 
   private navigateBasedOnRole(role: Role) {
-    this.router.navigate([role === Role.ADMIN ? '/platform' : '/progress']);
+    this.router.navigate([role === Role.ADMIN ? '/platform' : '/questions']);
   }
 
   private showError(message: string): void {

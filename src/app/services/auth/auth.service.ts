@@ -37,11 +37,11 @@ export class AuthService {
     private messageService: MessageService,
     private router: Router
   ) {
+    console.log("Role has been set!")
     if (this.loggedIn()) {
       this.getRole().subscribe({
         next: (response: GetRoleResponse) => this.handleRoleResponse(response),
         error: (error: any) => this.handleError(error),
-
       });
     }
   }
