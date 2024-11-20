@@ -43,6 +43,7 @@ import {DateAndTimePipe} from "./shared/pipes/dateAndTime.pipe";
 import {PlatformComponent} from "./components/platform/platform.component";
 import {MatIcon} from "@angular/material/icon";
 import {DialogModule} from "primeng/dialog";
+import { NotFoundComponent } from './components/not-found/not-found.component';
 
 
 @NgModule({
@@ -60,7 +61,8 @@ import {DialogModule} from "primeng/dialog";
         UsersTableComponent,
         ProgressComponent,
         PlatformComponent,
-        DateAndTimePipe
+        DateAndTimePipe,
+        NotFoundComponent
     ],
     imports: [
         CommonModule,

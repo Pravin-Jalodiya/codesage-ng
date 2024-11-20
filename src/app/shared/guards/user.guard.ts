@@ -8,19 +8,9 @@ import {AuthService} from "../../services/auth/auth.service";
 import {Role} from "../config/roles.config";
 
 
-export const adminGuard: CanActivateFn = (): Observable<boolean> => {
-  const authService : AuthService = inject(AuthService);
-  const router : Router = inject(Router);
-
-  if (!authService.loggedIn()) {
-    router.navigate(['/login']);
-    return of(false);
-  }
-
-  if (!authService.isTokenValid()) {
-    router.navigate(['/login']);
-    return of(false);
-  }
+export const userGuard: CanActivateFn = (): Observable<boolean> => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
 
   return authService.getRole().pipe(
     map(response => {
@@ -29,12 +19,12 @@ export const adminGuard: CanActivateFn = (): Observable<boolean> => {
         return false;
       }
 
-      const isAdmin : boolean = response.role === Role.ADMIN;
-      if (!isAdmin) {
-        // authService.showError('Unauthorized: Admin access required');
+      const isUser : boolean = response.role === Role.USER;
+      if (!isUser) {
+        // authService.showError('Unauthorized: User access required');
         router.navigate(['/not-found']);
       }
-      return isAdmin;
+      return isUser;
     }),
 
     catchError(() => {

@@ -28,7 +28,7 @@ interface CustomJwtPayload extends BaseJwtPayload {
 export class AuthService {
   userRole: WritableSignal<Role> = signal<Role>(Role.USER);
   username: WritableSignal<string> = signal<string>("");
-  loggedIn = signal<boolean>(this.hasToken());
+  loggedIn: WritableSignal<boolean> = signal<boolean>(this.hasToken());
 
   private readonly tokenKey = 'authToken';
 
@@ -39,6 +39,7 @@ export class AuthService {
   ) {
     console.log("Role has been set!")
     if (this.loggedIn()) {
+      console.log("Role has been set!")
       this.getRole().subscribe({
         next: (response: GetRoleResponse) => this.handleRoleResponse(response),
         error: (error: any) => this.handleError(error),
@@ -47,6 +48,7 @@ export class AuthService {
   }
 
   private handleRoleResponse(response: GetRoleResponse): void {
+    console.log(response.role)
     if (response.code === 200) {
       localStorage.setItem('userRole', response.role);
       this.userRole.set(response.role as Role);
@@ -108,15 +110,13 @@ export class AuthService {
 
   login(username: string, password: string): Observable<LoginResponse> {
     const loginPayload: LoginRequest = { username, password };
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
-    return this.http.post<LoginResponse>(AUTH_PATHS.LOGIN, loginPayload, { headers });
+    return this.http.post<LoginResponse>(AUTH_PATHS.LOGIN, loginPayload);
   }
 
   signup(data: SignupRequest): Observable<SignupResponse> {
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
-    return this.http.post<SignupResponse>(AUTH_PATHS.SIGNUP, data, { headers });
+    return this.http.post<SignupResponse>(AUTH_PATHS.SIGNUP, data);
   }
 
   showError(message: string): void {

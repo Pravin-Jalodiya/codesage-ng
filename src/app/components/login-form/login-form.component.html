@@ -2,7 +2,7 @@
 <div class="background">
   <div class="background-overlay">
     <div class="header">
-      <div class="logo-text">{{ LoginConstants.LOGO_TEXT }}</div>
+      <div class="logo-text cursor-pointer" routerLink="/">{{ LoginConstants.LOGO_TEXT }}</div>
     </div>
     @if (loading) {
       <div class="blur-bg"></div>
@@ -31,15 +31,17 @@
         </div>
         <div class="input-field">
           <p-floatLabel>
-            <input
-              pInputText
-              id="password"
-              type="password"
-              formControlName="password"
-              class="transparent-input no-box-shadow"
-              required
-            />
-            <label>{{ LoginConstants.PASSWORD_LABEL }}</label>
+              <p-password
+                id="password"
+                type="password"
+                [toggleMask]="true"
+                [feedback]="false"
+                [style]="{ width: '100%' }"
+                formControlName="password"
+                class="transparent-input no-box-shadow"
+                required
+              />
+              <label>{{ LoginConstants.PASSWORD_LABEL }}</label>
           </p-floatLabel>
           @if (loginForm.get('password')?.touched && loginForm.get('password')?.invalid) {
             <div class="error-message">{{ LoginConstants.PASSWORD_ERROR }}</div>

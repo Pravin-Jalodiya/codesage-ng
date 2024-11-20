@@ -96,9 +96,21 @@ label {
   display: none;
 }
 
-:host::ng-deep p-inputtext p-component p-element transparent-input ng-pristine p-filled ng-touched {
+:host::ng-deep .p-inputtext.p-component.p-element.transparent-input.ng-pristine.p-filled.ng-touched {
   background: white;
   color: black;
   font-weight: 900;
   font-family: monospace;
+}
+
+:host::ng-deep p-password {
+  width: 100%;
+  display: block;
+}
+
+:host::ng-deep .p-password-input {
+  width: 100%;
+  box-shadow: none;
+  color: white;
+  border-radius: 30px;
 }

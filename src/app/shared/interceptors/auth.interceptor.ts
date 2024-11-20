@@ -1,5 +1,5 @@
 import {HttpErrorResponse, HttpEvent, HttpHandlerFn, HttpInterceptorFn, HttpRequest} from "@angular/common/http";
-import {inject, Type} from "@angular/core";
+import {inject} from "@angular/core";
 import { Router } from "@angular/router";
 
 import {catchError, EMPTY, Observable, throwError} from "rxjs";

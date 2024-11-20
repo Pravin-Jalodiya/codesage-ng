@@ -156,3 +156,15 @@ input:focus {
 :host::ng-deep .p-inputtext:disabled {
   color: white;
 }
+
+:host::ng-deep .p-confirm-dialog-reject, .p-confirm-dialog-accept {
+  text-align: center;
+}
+
+:host::ng-deep .p-button-label {
+  padding-left: 2px;
+  padding-right: 2px;
+  box-shadow: none;
+  margin: 1px;
+  color: black;
+}

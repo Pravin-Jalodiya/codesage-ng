@@ -2,7 +2,7 @@
   <div class="background">
     <div class="background-overlay">
       <div class="header">
-        <div class="logo-text">Codesage</div>
+        <div class="logo-text cursor-pointer" routerLink="/">Codesage</div>
       </div>
       < />
       @if (loading) {
@@ -39,7 +39,16 @@
             <div class="p-grid">
               <div class="p-col-6">
                 <p-floatLabel>
-                  <input pInputText class="transparent-input" type="password" id="password" formControlName="password" required />
+                  <p-password
+                    id="password"
+                    type="password"
+                    [toggleMask]="true"
+                    [feedback]="false"
+                    [style]="{ width: '100%' }"
+                    formControlName="password"
+                    class="transparent-input no-box-shadow"
+                    required
+                  />
                   <label for="password">Password*</label>
                 </p-floatLabel>
                 @if (signupForm.get('password')?.touched && signupForm.get('password')?.invalid) {
@@ -48,12 +57,16 @@
               </div>
               <div class="p-col-6">
                 <p-floatLabel>
-                  <input pInputText
-                         class="transparent-input"
-                         type="password"
-                         id="confirm-password"
-                         formControlName="confirmPassword"
-                         required />
+                  <p-password
+                    id="confirm-password"
+                    type="password"
+                    [toggleMask]="true"
+                    [feedback]="false"
+                    [style]="{ width: '100%' }"
+                    formControlName="confirmPassword"
+                    class="transparent-input no-box-shadow"
+                    required
+                  />
                   <label for="confirm-password">Confirm Password*</label>
                 </p-floatLabel>
                 @if (signupForm.get('confirmPassword')?.touched && signupForm.get('confirmPassword')?.invalid) {

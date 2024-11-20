@@ -84,3 +84,15 @@ input:focus {
 .login-link:hover {
   text-decoration: underline;
 }
+
+:host::ng-deep p-password {
+  width: 100%;
+  display: block;
+}
+
+:host::ng-deep .p-password-input {
+  width: 100%;
+  box-shadow: none;
+  border-radius: 30px;
+  color: white;
+}

@@ -5,7 +5,7 @@
 }
 
 .upper-half {
-  padding-top: 5%;
+  padding-top: 3%;
   height: 10%;
   width: 100%;
 }
@@ -21,6 +21,7 @@
 .lower-half {
   height: 75%;
   width: 100%;
+  margin: 20px;
 }
 
 .codesage-stats-content, .leetcode-stats-content {
@@ -38,14 +39,20 @@
   color: white;
 }
 
-.recent-submissions-table, .topic-tags, .company-tags {
+.topic-tags, .company-tags {
   color: black;
   height: 90%;
   width: 90%;
 }
 
+.recent-submissions-table {
+  color: black;
+  height: 60%;
+  width: 98%;
+}
+
 .topic-tags, .company-tags {
-  width: 49%;
+  width: 48%;
 }
 
 .codesage-stats-heading, .leetcode-stats-heading, .submissions-table-heading, .topic-tags-heading, .company-tags-heading {
@@ -55,13 +62,30 @@
   font-family: 'Raleway', sans-serif;
 }
 
-.submissions-list, .company-tag-cards, .topic-tag-cards {
-  height: 320px;
+.company-tag-cards, .topic-tag-cards {
+  height: 480px;
   width: 90%;
   overflow-y: scroll;
   -ms-overflow-style: none;
   scrollbar-width: none;
   padding: 10px;
+}
+
+.submissions-list {
+  height: fit-content;
+  width: 90%;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  padding: 10px;
+}
+
+.company-tags-content, .topic-tags-content {
+  margin: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
 
 .submissions-list::-webkit-scrollbar {

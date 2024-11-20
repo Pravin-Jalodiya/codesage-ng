@@ -1,0 +1,37 @@
+.not-found-404 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  top: 0;
+}
+
+.text-404 {
+  font-size: 180px;
+  margin: 0;
+  font-weight: bold;
+  letter-spacing: 4px;
+  color: white;
+}
+
+.page-not-found {
+  font-size: 24px;
+  margin: 0 0 30px;
+  font-weight: 400;
+  color: white;
+}
+
+a {
+  font-size: 18px;
+  color: white;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #ccc;
+  border-color: white;
+  text-decoration: underline;
+}

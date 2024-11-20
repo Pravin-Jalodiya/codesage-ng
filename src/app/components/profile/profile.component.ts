@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 
-import { MessageService } from "primeng/api";
+import {ConfirmationService, MessageService} from "primeng/api";
 
 import { UpdateProfileResponse, UserProfile } from '../../shared/types/profile.types';
 import { API_BASE_URL, MESSAGES } from '../../shared/constants';
@@ -25,7 +25,8 @@ export class ProfileComponent implements OnInit {
     private authService: AuthService,
     private messageService: MessageService,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private confirmationService: ConfirmationService,
   ) {
     this.checkAndLoadProfile();
   }
@@ -93,9 +94,16 @@ export class ProfileComponent implements OnInit {
 
   onCancel(): void {
     if (this.hasFormChanged()) {
-      if (confirm(MESSAGES.CONFIRM.UNSAVED_CHANGES)) {
-        this.resetForm();
-      }
+      this.confirmationService.confirm({
+        message: `Are you sure you want to leave?`,
+        header: 'Unsaved Changes',
+        icon: 'pi pi-info-circle',
+        acceptIcon: 'none',
+        rejectIcon: 'none',
+        accept: (): void => {
+          this.resetForm();
+        },
+      });
     } else {
       this.resetForm();
     }
@@ -195,7 +203,7 @@ export class ProfileComponent implements OnInit {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
-            detail: MESSAGES.ERROR.PROFILE_UPDATE_FAILED
+            detail: error.error.message || MESSAGES.ERROR.PROFILE_UPDATE_FAILED
           });
         },
         complete: () => {

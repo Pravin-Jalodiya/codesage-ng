@@ -9,32 +9,39 @@ import {SignupFormComponent} from "./components/signup-form/signup-form.componen
 import {LoginFormComponent} from "./components/login-form/login-form.component";
 import {LandingPageComponent} from "./components/landing-page/landing-page.component";
 import {adminGuard} from "./shared/guards/admin.guard";
+import {userGuard} from "./shared/guards/user.guard";
+import {authGuard} from "./shared/guards/auth.guard";
+import {NotFoundComponent} from "./components/not-found/not-found.component";
 
 export const routes: Routes = [
   { path: '', component: LandingPageComponent },
   { path: 'login', component: LoginFormComponent },
   { path: 'signup', component: SignupFormComponent },
-  { path: 'profile', component: ProfileComponent },
-  {
-    path: 'add-questions',
-    component: AddQuestionComponent,
-    canActivate: [adminGuard]
+  { path: 'profile',
+    component: ProfileComponent,
+    canActivate: [authGuard],
   },
-  {
-    path: 'delete-question',
+  { path: 'questions',
     component: QuestionsTableComponent,
-    canActivate: [adminGuard]
+    canActivate: [authGuard]
   },
-  { path: 'questions', component: QuestionsTableComponent },
   {
-    path: 'manage-users',
+    path: 'users',
     component: UsersTableComponent,
-    canActivate: [adminGuard]
+    canActivate: [authGuard, adminGuard]
   },
   {
     path: 'platform',
     component: PlatformComponent,
-    canActivate: [adminGuard]
+    canActivate: [authGuard ,adminGuard]
   },
-  { path: 'progress', component: ProgressComponent }
+  { path: 'progress',
+    component: ProgressComponent,
+    canActivate: [authGuard ,userGuard]
+  },
+  {
+    path: '**',
+    component: NotFoundComponent,
+    canActivate: [authGuard]
+  }
 ];
