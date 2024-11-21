@@ -11,15 +11,15 @@ export const AuthInterceptor: HttpInterceptorFn =
       return next(req);
     }
 
-    const router = inject(Router)
-    const token = localStorage.getItem('authToken')
+    const router: Router = inject(Router)
+    const token:string | null = localStorage.getItem('authToken')
 
     if(!token){
       router.navigate(['/login']);
       return EMPTY
     }
 
-    const newRequest = req.clone({
+    const newRequest : HttpRequest<any> = req.clone({
       setHeaders: {Authorization: `Bearer ${token}`, Accept: "application/json"}
     })
     return next(newRequest).pipe(

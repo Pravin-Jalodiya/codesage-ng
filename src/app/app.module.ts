@@ -39,7 +39,7 @@ import { UsersTableComponent } from './components/users-table/users-table.compon
 import { ProgressComponent } from './components/progress/progress.component';
 import {AuthInterceptor} from "./shared/interceptors/auth.interceptor";
 import {ConfirmDialogModule} from "primeng/confirmdialog";
-import {DateAndTimePipe} from "./shared/pipes/dateAndTime.pipe";
+import {DateAndTimePipe} from "./shared/pipes/date-and-time.pipe";
 import {PlatformComponent} from "./components/platform/platform.component";
 import {MatIcon} from "@angular/material/icon";
 import {DialogModule} from "primeng/dialog";
@@ -96,6 +96,7 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
         DialogModule,
     ],
     bootstrap: [AppComponent, ],
+    exports: [AppHeaderComponent],
     providers: [AuthService, provideHttpClient(withInterceptors([AuthInterceptor])), provideRouter(routes), MessageService, CircleProgressOptions, ConfirmationService]
 })
 export class AppModule { }

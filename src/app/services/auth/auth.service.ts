@@ -1,5 +1,5 @@
 import { Injectable, signal, WritableSignal } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Router } from "@angular/router";
 import { MessageService } from "primeng/api";
 import { Observable } from 'rxjs';
@@ -55,7 +55,7 @@ export class AuthService {
     }
   }
 
-  private handleError(error: any): void {
+  handleError(error: any): void {
     this.showError(error.error.message);
     this.router.navigate(['/login']);
   }
@@ -84,7 +84,7 @@ export class AuthService {
   }
 
   getUserIdFromToken(): string | undefined {
-    return this.extractFromToken(token => token?.userId);
+    return this.extractFromToken(token  => token?.userId);
   }
 
   private extractFromToken<T>(extractor: (token: CustomJwtPayload | null) => T): T {
