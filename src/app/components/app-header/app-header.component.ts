@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import {Component, computed, inject, Signal} from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Role } from '../../shared/config/roles.config';
@@ -13,8 +13,8 @@ import { HeaderConstants } from "../../shared/constants";
 export class AppHeaderComponent {
   router = inject(Router);
   authService: AuthService = inject(AuthService);
-  role = computed((): Role => this.authService.userRole());
-  isAdmin = computed(() => this.role() === Role.ADMIN);
+  role : Signal <Role> = computed((): Role => this.authService.userRole());
+  isAdmin : Signal<boolean> = computed(() : boolean => this.role() === Role.ADMIN);
   protected readonly Role = Role;
 
   onLogout(): void {
@@ -25,5 +25,5 @@ export class AppHeaderComponent {
     this.router.navigate(['/login']);
   }
 
-  protected readonly HeaderConstants = HeaderConstants;
+  protected readonly HeaderConstants : typeof HeaderConstants = HeaderConstants;
 }

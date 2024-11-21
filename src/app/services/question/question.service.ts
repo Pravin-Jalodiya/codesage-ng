@@ -21,7 +21,7 @@ export class QuestionService {
   }
 
   uploadQuestions(formData: FormData): Observable<HttpEvent<NoBodyResponse>>{
-    return this.http.post<NoBodyResponse>(API_ENDPOINTS.QUESTIONS.UPLOAD, formData, {
+    return this.http.post<NoBodyResponse>(API_ENDPOINTS.BASE_URL + API_ENDPOINTS.QUESTIONS.UPLOAD, formData, {
       reportProgress: true,
       observe: 'events'
     })

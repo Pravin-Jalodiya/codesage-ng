@@ -53,7 +53,8 @@
               <div class="company-tag-cards flex-wrap overflow-y-scroll">
                 @for(topic of Object.keys(topicStats()); track topic; let i = $index){
                   <div class="topic-tag-card inline-block p-2 m-1 rounded-full">
-                    <span class="topic-tag-card-text" [ngClass]="{'striped-background': i % 2 === 1}">{{topic}}</span>
+                    <span class="topic-tag-card-text cursor-pointer" [ngClass]="{'striped-background': i % 2 === 1}"
+                          (click)="onTopicClick(topic)">{{topic}}</span>
                     <span class="topic-tag-card-number">x{{topicStats()[topic]}}</span>
                   </div>
                 } @empty {
@@ -70,7 +71,8 @@
               <div class="company-tag-cards flex-wrap overflow-y-scroll">
                 @for(company of Object.keys(companyStats()); track company; let i = $index){
                   <div class="company-tag-card inline-block p-2 m-1 rounded-full">
-                    <span class="company-tag-card-text" [ngClass]="{'striped-background': i % 2 === 1}">{{company}}</span>
+                    <span class="company-tag-card-text cursor-pointer" [ngClass]="{'striped-background': i % 2 === 1}"
+                          (click)="onCompanyClick(company)">{{company}}</span>
                     <span class="company-tag-card-number">x{{companyStats()[company]}}</span>
                   </div>
                 } @empty {

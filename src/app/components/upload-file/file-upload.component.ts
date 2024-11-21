@@ -1,10 +1,12 @@
 import { Component, OnInit, signal, WritableSignal } from '@angular/core';
-import { HttpEventType, HttpResponse } from "@angular/common/http";
+import {HttpEvent, HttpEventType, HttpResponse} from "@angular/common/http";
 
 import { MessageService, PrimeNGConfig } from 'primeng/api';
 
 import { QuestionService } from '../../services/question/question.service';
 import { API_ENDPOINTS, MESSAGES, FILE_LIMITS, VALIDATION_RULES } from '../../shared/constants';
+import {NoBodyResponse} from "../../shared/types/question.types";
+import {FileSelectEvent, FileUploadErrorEvent, FileUploadEvent} from "primeng/fileupload";
 
 @Component({
   selector: 'file-upload',
@@ -21,7 +23,7 @@ export class FileUploadComponent implements OnInit {
   uploadProgress: WritableSignal<number> = signal<number>(0);
   toUpload: WritableSignal<boolean> = signal<boolean>(false);
 
-  private readonly requiredColumns = [
+  private readonly requiredColumns: string[] = [
     'title_slug', 'id', 'title', 'difficulty',
     'leetcode question link', 'topic tags', 'company tags'
   ];
@@ -32,16 +34,16 @@ export class FileUploadComponent implements OnInit {
     private questionService: QuestionService
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.config.ripple = true;
   }
 
-  choose(event: Event, chooseCallback: Function) {
+  choose(event: Event, chooseCallback: Function): void {
     event.preventDefault();
     chooseCallback();
   }
 
-  uploadEvent(uploadCallback: Function) {
+  uploadEvent(uploadCallback: Function): void {
     if (this.validationErrors.length === 0) {
       uploadCallback();
     } else {
@@ -53,7 +55,7 @@ export class FileUploadComponent implements OnInit {
     }
   }
 
-  onUploadComplete(event: any) {
+  onUploadComplete(event: FileUploadEvent): void {
     this.uploadStatus = MESSAGES.UPLOAD_STATUS.COMPLETED;
     this.toUpload.set(false);
     this.messageService.add({
@@ -63,7 +65,7 @@ export class FileUploadComponent implements OnInit {
     });
   }
 
-  onError(event: any) {
+  onError(event: FileUploadErrorEvent): void {
     this.uploadStatus = MESSAGES.UPLOAD_STATUS.FAILED;
     this.toUpload.set(false);
     this.messageService.add({
@@ -73,12 +75,13 @@ export class FileUploadComponent implements OnInit {
     });
   }
 
-  onSelectedFiles(event: { currentFiles: File[] }) {
+  onSelectedFiles(event: FileSelectEvent): void {
     this.toUpload.set(true);
     this.validationErrors = [];
     this.files = event.currentFiles;
+    this.uploadProgress.set(0);
 
-    const file = this.files[0];
+    const file: File = this.files[0];
     if (!this.validateFile(file)) {
       this.toUpload.set(false);
       return;
@@ -102,7 +105,7 @@ export class FileUploadComponent implements OnInit {
       return false;
     }
 
-    const reader = new FileReader();
+    const reader: FileReader = new FileReader();
     reader.onload = () => this.processFileContent(reader.result as string);
     reader.onerror = () => {
       this.validationErrors.push(MESSAGES.ERROR.FILE_READ_ERROR);
@@ -113,16 +116,16 @@ export class FileUploadComponent implements OnInit {
     return this.validationErrors.length === 0;
   }
 
-  private processFileContent(content: string) {
-    const lines = content.trim().split('\n');
-    const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+  private processFileContent(content: string): void {
+    const lines: string[] = content.trim().split('\n');
+    const headers: string[] = lines[0].split(',').map(h => h.trim().toLowerCase());
 
-    const missingColumns = this.requiredColumns.filter(col => !headers.includes(col));
+    const missingColumns: string[] = this.requiredColumns.filter(col => !headers.includes(col));
     if (missingColumns.length > 0) {
       this.validationErrors.push(`${MESSAGES.ERROR.MISSING_COLUMNS}: ${missingColumns.join(', ')}`);
     }
 
-    const extraColumns = headers.filter(h => !this.requiredColumns.includes(h));
+    const extraColumns: string[] = headers.filter(h => !this.requiredColumns.includes(h));
     if (extraColumns.length > 0) {
       this.validationErrors.push(`${MESSAGES.ERROR.EXTRA_COLUMNS}: ${extraColumns.join(', ')}`);
     }
@@ -136,7 +139,7 @@ export class FileUploadComponent implements OnInit {
     }
   }
 
-  private displayValidationErrors() {
+  private displayValidationErrors(): void {
     this.messageService.add({
       severity: 'error',
       summary: MESSAGES.ERROR.CSV_VALIDATION_ERROR_SUMMARY,
@@ -145,7 +148,7 @@ export class FileUploadComponent implements OnInit {
     });
   }
 
-  uploadFile() {
+  uploadFile(): void {
     if (this.validationErrors.length > 0) {
       this.messageService.add({
         severity: 'error',
@@ -155,16 +158,16 @@ export class FileUploadComponent implements OnInit {
       return;
     }
 
-    const formData = new FormData();
+    const formData: FormData = new FormData();
     formData.append('questions_file', this.files[0]);
 
     this.questionService.uploadQuestions(formData).subscribe({
-      next: (event) => this.handleUploadEvent(event),
+      next: (event: any) => this.handleUploadEvent(event),
       error: (error) => this.handleError(error)
     });
   }
 
-  private handleUploadEvent(event: any) {
+  private handleUploadEvent(event: any): void {
     if (event.type === HttpEventType.UploadProgress) {
       this.uploadProgress.set(Math.round(100 * event.loaded / event.total));
       this.uploadStatus = MESSAGES.UPLOAD_STATUS.UPLOADING;
@@ -180,7 +183,7 @@ export class FileUploadComponent implements OnInit {
     }
   }
 
-  private handleError(error: any) {
+  private handleError(error: { error: { message: string; }; }): void {
     this.toUpload.set(false);
     this.uploadStatus = MESSAGES.UPLOAD_STATUS.FAILED;
     this.messageService.add({
@@ -190,13 +193,14 @@ export class FileUploadComponent implements OnInit {
     });
   }
 
-  onRemoveFile(event: any, file: any, removeFileCallback: (arg0: any, arg1: any) => void, index: any) {
+  onRemoveFile(event: MouseEvent , file: any, removeFileCallback: (arg0: any, arg1: any) => void, index: number): void {
     this.toUpload.set(false);
     removeFileCallback(event, index);
     this.resetFileUploadState();
+    this.uploadProgress.set(0);
   }
 
-  private resetFileUploadState() {
+  private resetFileUploadState(): void {
     this.totalSize = 0;
     this.totalSizePercent = 0;
     this.validationErrors = [];
@@ -209,7 +213,7 @@ export class FileUploadComponent implements OnInit {
            'progress-danger';
   }
 
-  getStatusSeverity() {
+  getStatusSeverity(): "success" | "danger" | "info" | "contrast" {
     switch (this.uploadStatus) {
       case MESSAGES.UPLOAD_STATUS.COMPLETED: return 'success';
       case MESSAGES.UPLOAD_STATUS.FAILED: return 'danger';
@@ -220,13 +224,13 @@ export class FileUploadComponent implements OnInit {
 
   formatSize(bytes: number): string {
     if (bytes === 0) return '0 B';
-    const k = 1024, dm = 2, sizes = ['B', 'KB', 'MB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    const k: number = 1024, dm: number = 2, sizes: string[] = ['B', 'KB', 'MB'];
+    const i: number = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
   }
 
   downloadSampleFile() {
-    const link = document.createElement('a');
+    const link: HTMLAnchorElement = document.createElement('a');
     link.href = 'assets/sample-template.csv';
     link.download = 'sample-template.csv';
     link.click();

@@ -1,10 +1,11 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import {Component, OnInit, inject, signal, WritableSignal} from '@angular/core';
+import {NavigationExtras, Router} from '@angular/router';
 
 import { MessageService } from 'primeng/api';
 
 import { UserService } from '../../services/user/user.service';
 import { MESSAGES } from '../../shared/constants';
+import {ErrorResponse, PlatformStatsResponse} from "../../shared/types/platform.types";
 
 @Component({
   selector: 'app-progress',
@@ -15,16 +16,16 @@ export class PlatformComponent implements OnInit {
   messageService: MessageService = inject(MessageService);
   userService: UserService = inject(UserService);
 
-  loading = signal<boolean>(false);
+  loading : WritableSignal<boolean>  = signal<boolean>(false);
 
   // Platform stats
-  activeUsers = signal<number>(0);
-  totalQuestions = signal<number>(0);
-  easyQuestions = signal<number>(0);
-  mediumQuestions = signal<number>(0);
-  hardQuestions = signal<number>(0);
-  companyStats = signal<Record<string, number>>({});
-  topicStats = signal<Record<string, number>>({});
+  activeUsers : WritableSignal<number> = signal<number>(0);
+  totalQuestions : WritableSignal<number> = signal<number>(0);
+  easyQuestions : WritableSignal<number> = signal<number>(0);
+  mediumQuestions : WritableSignal<number> = signal<number>(0);
+  hardQuestions : WritableSignal<number> = signal<number>(0);
+  companyStats :  WritableSignal<Record<string, number>> = signal<Record<string, number>>({});
+  topicStats :  WritableSignal<Record<string, number>> = signal<Record<string, number>>({});
 
   constructor(private router: Router) {
     this.fetchPlatformStats();
@@ -32,7 +33,7 @@ export class PlatformComponent implements OnInit {
 
   private filterEmptyKeys(stats: Record<string, number>): Record<string, number> {
     return Object.fromEntries(
-      Object.entries(stats).filter(([key]) => key.trim() !== '')
+      Object.entries(stats).filter(([key]) : boolean => key.trim() !== '')
     );
   }
 
@@ -40,7 +41,7 @@ export class PlatformComponent implements OnInit {
     this.loading.set(true);
 
     this.userService.fetchPlatformStats().subscribe({
-      next: (response) => {
+      next: (response : PlatformStatsResponse) => {
         if (response.code === 200) {
           this.loading.set(false);
 
@@ -56,7 +57,7 @@ export class PlatformComponent implements OnInit {
           this.topicStats.set(this.filterEmptyKeys(response.stats.TopicWiseQuestionsCount));
         }
       },
-      error: (error) => {
+      error: (error: ErrorResponse) => {
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
@@ -73,5 +74,23 @@ export class PlatformComponent implements OnInit {
     this.fetchPlatformStats();
   }
 
-  protected readonly Object = Object;
+  onTopicClick(topic: string): void {
+    const navigationExtras: NavigationExtras = {
+      queryParams: {
+        topic: topic.toLowerCase()
+      }
+    };
+    this.router.navigate(['/questions'], navigationExtras);
+  }
+
+  onCompanyClick(company: string): void {
+    const navigationExtras: NavigationExtras = {
+      queryParams: {
+        company: company.toLowerCase()
+      }
+    };
+    this.router.navigate(['/questions'], navigationExtras);
+  }
+
+  protected readonly Object : ObjectConstructor = Object;
 }

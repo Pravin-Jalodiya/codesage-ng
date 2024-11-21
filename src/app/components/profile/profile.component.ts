@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import { Router } from "@angular/router";
 
 import {ConfirmationService, MessageService} from "primeng/api";
 
-import { UpdateProfileResponse, UserProfile } from '../../shared/types/profile.types';
-import { API_BASE_URL, MESSAGES } from '../../shared/constants';
+import {UpdateProfileResponse, UserProfile, UserProfileResponse} from '../../shared/types/profile.types';
+import {API_BASE_URL, MESSAGES, UI_CONSTANTS} from '../../shared/constants';
 import { UserService } from '../../services/user/user.service';
 import { AuthService } from "../../services/auth/auth.service";
+import {ErrorResponse} from "../../shared/types/platform.types";
 
 @Component({
   selector: 'app-profile',
@@ -45,7 +46,7 @@ export class ProfileComponent implements OnInit {
   }
 
   private checkAndLoadProfile(): void {
-    const username = this.authService.getUsernameFromToken();
+    const username : string | undefined = this.authService.getUsernameFromToken();
     if (username) {
       this.fetchUserProfile(username);
     } else {
@@ -55,13 +56,12 @@ export class ProfileComponent implements OnInit {
 
   fetchUserProfile(username: string): void {
     this.isLoading = true;
-    const url = `${API_BASE_URL}/users/profile/${username}`;
 
-    this.userService.fetchUserProfile(url)
+    this.userService.fetchUserProfile(username)
       .subscribe({
-        next: (response) => {
+        next: (response : UserProfileResponse): void => {
           if (response.code === 200) {
-            const profile = response.user_profile;
+            const profile : UserProfile = response.user_profile;
             // Set initial values
             this.profileForm.patchValue({
               username: profile.username,
@@ -75,14 +75,14 @@ export class ProfileComponent implements OnInit {
             this.setFormState(false);
           }
         },
-        error: (error) => {
+        error: (error: ErrorResponse) : void => {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
             detail: MESSAGES.ERROR.LOADING_PROFILE,
           });
         },
-        complete: () => {
+        complete: (): void => {
           this.isLoading = false;
         }
       });
@@ -95,9 +95,11 @@ export class ProfileComponent implements OnInit {
   onCancel(): void {
     if (this.hasFormChanged()) {
       this.confirmationService.confirm({
-        message: `Are you sure you want to leave?`,
+        message: MESSAGES.CONFIRM.UNSAVED_CHANGES,
         header: 'Unsaved Changes',
-        icon: 'pi pi-info-circle',
+        icon: UI_CONSTANTS.ICONS.INFO_CIRCLE,
+        acceptButtonStyleClass: UI_CONSTANTS.BUTTON_STYLES.DANGER_TEXT,
+        rejectButtonStyleClass: UI_CONSTANTS.BUTTON_STYLES.TEXT,
         acceptIcon: 'none',
         rejectIcon: 'none',
         accept: (): void => {
@@ -174,16 +176,15 @@ export class ProfileComponent implements OnInit {
       return;
     }
 
-    const changedValues = this.getChangedValues();
+    const changedValues: Partial<UserProfile>  = this.getChangedValues();
     this.updateProfile(changedValues);
   }
 
   private updateProfile(changedValues: Partial<UserProfile>): void {
     this.isLoading = true;
-    const url = `${API_BASE_URL}/users/update-profile`;
 
-      this.userService.updateUserProfile(url, changedValues).subscribe({
-        next: (response: UpdateProfileResponse) => {
+      this.userService.updateUserProfile(changedValues).subscribe({
+        next: (response: UpdateProfileResponse): void => {
           if (response.code === 200) {
             this.messageService.add({
               severity: 'success',
@@ -199,14 +200,14 @@ export class ProfileComponent implements OnInit {
             this.setFormState(false);
           }
         },
-        error: (error: any) => {
+        error: (error: ErrorResponse) : void => {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
-            detail: error.error.message || MESSAGES.ERROR.PROFILE_UPDATE_FAILED
+            detail: error.message || MESSAGES.ERROR.PROFILE_UPDATE_FAILED
           });
         },
-        complete: () => {
+        complete: (): void => {
           this.isLoading = false;
         }
       });
@@ -241,7 +242,7 @@ export class ProfileComponent implements OnInit {
   }
 
   getFieldError(fieldName: string): string {
-    const control = this.profileForm.get(fieldName);
+    const control :  AbstractControl<any, any> | null = this.profileForm.get(fieldName);
     if (control?.touched && control?.errors) {
       if (control.errors['required']) {
         return `${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)} is required`;

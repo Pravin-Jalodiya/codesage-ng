@@ -1,3 +1,5 @@
+import {Question} from "./types/question.types";
+
 export const HeaderConstants = {
   LOGO_TEXT: 'Codesage',
   QUESTIONS: 'Questions',
@@ -39,16 +41,16 @@ export const API_ENDPOINTS = {
     LOGIN: '/auth/login'
   },
   USERS: {
-    LIST: '/users',
-    PROFILE: (username: string) => `/users/profile/${username}`,
-    UPDATE_PROFILE: '/users/update-profile',
-    PROGRESS: (username: string) => `/users/progress/${username}`,
-    BAN: (username: string) => `/update-user-ban-state?username=${username}`,
-    DELETE: (username: string) => `/delete?username=${username}`,
+    LIST: `/users`,
+    PROFILE: (username: string): string => `${API_BASE_URL}/users/profile/${username}`,
+    UPDATE_PROFILE: `/users/update-profile`,
+    PROGRESS: (username: string): string => `${API_BASE_URL}/users/progress/${username}`,
+    BAN: (username: string): string => `${API_BASE_URL}/users/update-user-ban-state?username=${username}`,
+    DELETE: (username: string): string => `${API_BASE_URL}/users/delete?username=${username}`,
   },
   QUESTIONS: {
     LIST: '/questions',
-    DELETE: (id: string) => `/question?id=${id}`,
+    DELETE: (id: string): string => `${API_BASE_URL}/question?id=${id}`,
     UPLOAD: '/questions',
   }
 } as const;
@@ -120,8 +122,9 @@ export const MESSAGES = {
   },
   CONFIRM: {
     UNSAVED_CHANGES: 'You have unsaved changes. Are you sure you want to cancel?',
-    DELETE_USER: (username: string) => `Are you sure you want to delete user "${username}"?`,
-    DELETE_USER_HEADER: 'Delete Confirmation'
+    DELETE_USER: (username: string): string => `Are you sure you want to delete user "${username}"?`,
+    DELETE_HEADER: 'Delete Confirmation',
+    DELETE_QUESTION: (question: Question): string => `Are you sure you want to delete the question "${question.question_title}"?`
   }
 } as const;
 
@@ -167,6 +170,7 @@ export const PLATFORM_PATHS = {
 
 export const USER_PROFILE_ENDPOINT = `${API_BASE_URL}/users/profile/`;
 export const UPDATE_PROFILE_ENDPOINT = `${API_BASE_URL}/users/update-profile`;
+
 
 export const VALIDATION_ERRORS = {
   required: (field: string) => `${field} is required`,

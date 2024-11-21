@@ -59,7 +59,7 @@ export class SignupFormComponent implements OnInit {
       };
 
       this.authService.signup(signupData).subscribe({
-        next: (response: SignupResponse) => {
+        next: (response: SignupResponse): void => {
           this.loading = false;
           if (response.code === 200) {
             this.router.navigate(['/login']);
@@ -70,7 +70,7 @@ export class SignupFormComponent implements OnInit {
             });
           }
         },
-        error: (error: { error: { message: string } }) => {
+        error: (error: { error: { message: string } }): void => {
           this.loading = false;
           this.showError(error.error.message ?? 'Signup failed. Please try again.');
         }

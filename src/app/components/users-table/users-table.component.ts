@@ -1,11 +1,11 @@
-import {Component, computed, inject, signal} from '@angular/core';
+import {Component, computed, inject, Signal, signal, WritableSignal} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 
 import {ConfirmationService, MessageService} from "primeng/api";
 import {PaginatorState} from 'primeng/paginator';
 
 import {AuthService} from "../../services/auth/auth.service";
-import {FilterOption, User, UsersListResponse} from '../../shared/types/user.types';
+import {FilterOption, User, UserBanToggleResponse, UsersListResponse} from '../../shared/types/user.types';
 import {UserService} from '../../services/user/user.service';
 import {MESSAGES, UI_CONSTANTS, FILTER_OPTIONS} from '../../shared/constants';
 
@@ -15,29 +15,29 @@ import {MESSAGES, UI_CONSTANTS, FILTER_OPTIONS} from '../../shared/constants';
   styleUrl: './users-table.component.scss'
 })
 export class UsersTableComponent {
-  authService = inject(AuthService);
-  userService = inject(UserService);
+  authService: AuthService = inject(AuthService);
+  userService: UserService = inject(UserService);
   private http: HttpClient = inject(HttpClient);
-  private messageService = inject(MessageService);
-  private confirmationService = inject(ConfirmationService);
+  private messageService: MessageService = inject(MessageService);
+  private confirmationService: ConfirmationService = inject(ConfirmationService);
 
-  role = computed<string>(() => this.authService.userRole());
-  searchQuery = signal<string>("");
+  role: Signal<string> = computed<string>(() => this.authService.userRole());
+  searchQuery: WritableSignal<string> = signal<string>("");
   userStates: FilterOption[] = FILTER_OPTIONS.USER_STATES;
-  users = signal<User[]>([]);
-  selectedState = signal<FilterOption | undefined>(undefined);
+  users: WritableSignal<User[]> = signal<User[]>([]);
+  selectedState: WritableSignal<FilterOption | undefined> = signal<FilterOption | undefined>(undefined);
 
   // Pagination signals
-  currentPage = signal<number>(0);
-  pageSize = signal<number>(15);
-  first = signal<number>(0);
+  currentPage: WritableSignal<number> = signal<number>(0);
+  pageSize:  WritableSignal<number> = signal<number>(15);
+  first:  WritableSignal<number> = signal<number>(0);
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.fetchUsers();
   }
 
-  filteredUsers = computed<User[]>(() => {
-    let filtered = this.users();
+  filteredUsers: Signal<User[]> = computed<User[]>(() => {
+    let filtered: User[] = this.users();
 
     if (this.searchQuery()) {
       filtered = filtered.filter(user =>
@@ -46,34 +46,34 @@ export class UsersTableComponent {
     }
 
     if (this.selectedState()) {
-      const state = this.selectedState()?.name.toLowerCase() === "banned";
+      const state: boolean = this.selectedState()?.name.toLowerCase() === "banned";
       filtered = filtered.filter(user => user.is_banned === state);
     }
 
     return filtered;
   });
 
-  paginatedUsers = computed(() => {
-    const filtered = this.filteredUsers();
-    const startIndex = this.first();
-    const endIndex = startIndex + this.pageSize();
+  paginatedUsers : Signal<User[]> = computed(() => {
+    const filtered : User[] = this.filteredUsers();
+    const startIndex: number = this.first();
+    const endIndex: number = startIndex + this.pageSize();
     return filtered.slice(startIndex, endIndex);
   });
 
-  totalRecords = computed(() => this.filteredUsers().length);
+  totalRecords: Signal<number> = computed(() => this.filteredUsers().length);
 
-  onPageChange(event: PaginatorState) {
+  onPageChange(event: PaginatorState): void {
     if (event.first !== undefined) this.first.set(event.first);
     if (event.rows !== undefined) this.pageSize.set(event.rows);
     if (event.page !== undefined) this.currentPage.set(event.page);
   }
 
-  fetchUsers() {
+  fetchUsers(): void {
     this.userService.getUsers().subscribe({
       next: (response: UsersListResponse) => {
         this.users.set(response.users);
       },
-      error: (error: HttpErrorResponse) => {
+      error: (error: HttpErrorResponse): void => {
         this.messageService.add({
           severity: 'error',
           summary: MESSAGES.ERROR.GENERAL_ERROR_SUMMARY,
@@ -83,28 +83,29 @@ export class UsersTableComponent {
     });
   }
 
-  onUserDelete(user: User) {
+  onUserDelete(user: User): void {
     this.confirmationService.confirm({
       message: MESSAGES.CONFIRM.DELETE_USER(user.username),
-      header: MESSAGES.CONFIRM.DELETE_USER_HEADER,
+      header: MESSAGES.CONFIRM.DELETE_HEADER,
       icon: UI_CONSTANTS.ICONS.INFO_CIRCLE,
       acceptButtonStyleClass: UI_CONSTANTS.BUTTON_STYLES.DANGER_TEXT,
       rejectButtonStyleClass: UI_CONSTANTS.BUTTON_STYLES.TEXT,
       acceptIcon: UI_CONSTANTS.ICONS.NONE,
       rejectIcon: UI_CONSTANTS.ICONS.NONE,
-      accept: () => {
-        const currentUsers = this.users();
-        this.users.update((currentUsers) => currentUsers.filter(u => u.username !== user.username));
+      accept: (): void => {
+        const currentUsers: User[] = this.users();
+        this.users.update((currentUsers: User[]) => currentUsers
+          .filter(u => u.username !== user.username));
 
         this.userService.deleteUser(user.username).subscribe({
-          next: () => {
+          next: (): void => {
             this.messageService.add({
               severity: 'info',
               summary: MESSAGES.SUCCESS.GENERAL_SUCCESS_SUMMARY,
               detail: MESSAGES.SUCCESS.USER_DELETE
             });
           },
-          error: (error) => {
+          error: (error): void => {
             this.users.set(currentUsers);
             this.messageService.add({
               severity: 'error',
@@ -117,22 +118,22 @@ export class UsersTableComponent {
     });
   }
 
-  onToggleBanStatus(event: any, user: User) {
-    const previousState = user.is_banned;
+  onToggleBanStatus(event: any, user: User): void {
+    const previousState: boolean = user.is_banned;
     user.is_banned = event.checked;
 
-    const currentUsers = this.users();
+    const currentUsers: User[] = this.users();
     this.users.set([...currentUsers]);
 
     this.userService.toggleUserBanState(user.username, {}).subscribe({
-      next: (response) => {
+      next: (response : UserBanToggleResponse): void => {
         this.messageService.add({
           severity: 'info',
           summary: MESSAGES.INFO.STATUS_UPDATED,
           detail: response.message,
         });
       },
-      error: (error) => {
+      error: (error): void => {
         user.is_banned = previousState;
         this.users.set([...currentUsers]);
         event.source.writeValue(previousState);

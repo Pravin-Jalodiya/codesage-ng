@@ -8,5 +8,5 @@ import { AddQuestionConstants } from '../../shared/constants';
   styleUrls: ['./add-question.component.scss'],
 })
 export class AddQuestionComponent {
-  protected readonly AddQuestionConstants = AddQuestionConstants;
+  protected readonly AddQuestionConstants : { ADD_QUESTION_TITLE: string }  = AddQuestionConstants;
 }

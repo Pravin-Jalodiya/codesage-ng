@@ -1,4 +1,4 @@
-import {Component, inject, signal, OnInit} from '@angular/core';
+import {Component, inject, signal, OnInit, WritableSignal} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {MessageService} from "primeng/api";
 import {NavigationExtras, Router} from "@angular/router";
@@ -6,6 +6,8 @@ import {NavigationExtras, Router} from "@angular/router";
 import { AuthService } from "../../services/auth/auth.service";
 import {UserProgressResponse} from "../../shared/types/user.types";
 import {MESSAGES} from "../../shared/constants";
+import {UserService} from "../../services/user/user.service";
+import {ErrorResponse} from "../../shared/types/platform.types";
 
 interface RecentSubmission {
   title: string;
@@ -19,41 +21,41 @@ interface RecentSubmission {
 })
 
 export class ProgressComponent implements OnInit{
-  private http = inject(HttpClient);
+  private http: HttpClient = inject(HttpClient);
   private messageService: MessageService = inject(MessageService);
+  private userService: UserService = inject(UserService);
 
-  loading = signal<boolean>(false);
+  loading:  WritableSignal<boolean> = signal<boolean>(false);
 
   // LeetCode Stats
-  lcTotalQuestions = signal<number>(0);
-  lcTotalProgress = signal<string>("");
-  lcTotalDone = signal<number>(0);
-  lcTotalEasy = signal<number>(0);
-  lcTotalMedium = signal<number>(0);
-  lcTotalHard = signal<number>(0);
-  lcEasyDone = signal<number>(0);
-  lcMediumDone = signal<number>(0);
-  lcHardDone = signal<number>(0);
+  lcTotalQuestions : WritableSignal<number> = signal<number>(0);
+  lcTotalProgress : WritableSignal<string> = signal<string>("");
+  lcTotalDone : WritableSignal<number> = signal<number>(0);
+  lcTotalEasy : WritableSignal<number> = signal<number>(0);
+  lcTotalMedium : WritableSignal<number> = signal<number>(0);
+  lcTotalHard : WritableSignal<number> = signal<number>(0);
+  lcEasyDone : WritableSignal<number> = signal<number>(0);
+  lcMediumDone : WritableSignal<number> = signal<number>(0);
+  lcHardDone : WritableSignal<number> = signal<number>(0);
 
   // Combined signal for recent submissions
-  recentSubmissions = signal<RecentSubmission[]>([]);
+  recentSubmissions: WritableSignal<RecentSubmission[]> = signal<RecentSubmission[]>([]);
 
   // CodeSage Stats
-  csTotalQuestions = signal<number>(0);
-  csTotalProgress = signal<string>("");
-  csTotalDone = signal<number>(0);
-  csTotalEasy = signal<number>(0);
-  csTotalMedium = signal<number>(0);
-  csTotalHard = signal<number>(0);
-  csEasyDone = signal<number>(0);
-  csMediumDone = signal<number>(0);
-  csHardDone = signal<number>(0);
-  companyStats = signal<Record<string, number>>({});
-  topicStats = signal<Record<string, number>>({});
+  csTotalQuestions : WritableSignal<number> = signal<number>(0);
+  csTotalProgress :  WritableSignal<string>  = signal<string>("");
+  csTotalDone : WritableSignal<number> = signal<number>(0);
+  csTotalEasy : WritableSignal<number> = signal<number>(0);
+  csTotalMedium : WritableSignal<number> = signal<number>(0);
+  csTotalHard : WritableSignal<number> = signal<number>(0);
+  csEasyDone : WritableSignal<number> = signal<number>(0);
+  csMediumDone : WritableSignal<number> = signal<number>(0);
+  csHardDone : WritableSignal<number> = signal<number>(0);
+  companyStats : WritableSignal<Record<string, number>> = signal<Record<string, number>>({});
+  topicStats : WritableSignal<Record<string, number>> = signal<Record<string, number>>({});
 
   constructor(private authService: AuthService, private router: Router) {
-    const username = this.authService.getUsernameFromToken();
-    console.log("Progress constructor called!")
+    const username : string | undefined = this.authService.getUsernameFromToken();
     if (username) {
       this.fetchUserProgress(username);
     } else {
@@ -64,7 +66,7 @@ export class ProgressComponent implements OnInit{
   private fetchUserProgress(username: string): void {
     this.loading.set(true)
 
-    this.http.get<UserProgressResponse>(`http://localhost:8080/users/progress/${username}`).subscribe({
+    this.userService.getUserProgress(username).subscribe({
       next: (response: UserProgressResponse) => {
         if(response.code === 200) {
           this.loading.set(false);
@@ -80,8 +82,8 @@ export class ProgressComponent implements OnInit{
           this.lcTotalProgress.set(this.lcTotalDone()+ "/" + this.lcTotalQuestions());
 
           // Combine recent submission data
-          const combinedSubmissions = response.leetcodeStats.recent_ac_submission_title.map(
-            (title, index) => ({
+          const combinedSubmissions: { title: string, id: string }[] = response.leetcodeStats.recent_ac_submission_title.map(
+            (title: string, index : number) : {id: string, title: string} => ({
               title,
               id: response.leetcodeStats.recent_ac_submission_ids[index]
             })
@@ -102,7 +104,7 @@ export class ProgressComponent implements OnInit{
           this.csTotalProgress.set(this.csTotalDone()+ "/" + this.csTotalQuestions());
         }
         },
-      error: (error) => {
+      error: (error: ErrorResponse) : void => {
         this.messageService.add({
           severity: 'contrast',
           summary: 'Error',
@@ -114,18 +116,18 @@ export class ProgressComponent implements OnInit{
 
   redirectToSubmission(submissionId: string): void {
     if (submissionId) {
-      const link = `https://leetcode.com/submissions/detail/${submissionId}`;
+      const link: string = `https://leetcode.com/submissions/detail/${submissionId}`;
       window.open(link, '_blank');
     }
   }
 
-  protected readonly Object = Object;
+  protected readonly Object : ObjectConstructor = Object;
 
   ngOnInit(): void {
   }
 
   onRefresh(): void {
-    const username = this.authService.getUsernameFromToken();
+    const username : string | undefined = this.authService.getUsernameFromToken();
     if (username) {
       this.fetchUserProgress(username);
     } else {

@@ -89,7 +89,7 @@ export class AuthService {
 
   private extractFromToken<T>(extractor: (token: CustomJwtPayload | null) => T): T {
     try {
-      const token = localStorage.getItem('authToken');
+      const token : string | null = localStorage.getItem('authToken');
       if (!token) return null as any;
 
       const decodedToken = jwtDecode<CustomJwtPayload>(token);

@@ -18,7 +18,7 @@ export class LoginFormComponent implements OnInit {
   loginForm: FormGroup;
   loading: boolean = false;
 
-  protected readonly LoginConstants = LoginConstants;
+  protected readonly LoginConstants : typeof LoginConstants = LoginConstants;
 
   constructor(
     private fb: FormBuilder,
@@ -32,7 +32,7 @@ export class LoginFormComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
+  ngOnInit() : void {
     if (this.authService.loggedIn()) {
       this.navigateBasedOnRole(this.authService.userRole());
     }
@@ -44,7 +44,7 @@ export class LoginFormComponent implements OnInit {
       const { username, password } = this.loginForm.value;
 
       this.authService.login(username, password).subscribe({
-        next: (response: LoginResponse) => {
+        next: (response: LoginResponse) : void => {
           this.loading = false;
           if (response.code === 200) {
             this.authService.handleSuccessfulLogin(response);

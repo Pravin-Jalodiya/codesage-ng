@@ -17,3 +17,8 @@ export interface PlatformStatsResponse {
   message: string;
   stats: PlatformStats;
 }
+
+export interface ErrorResponse {
+  error_code: number;
+  message: string;
+}

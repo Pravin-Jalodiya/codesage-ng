@@ -9,6 +9,6 @@ import {AuthService} from "../../services/auth/auth.service";
   styleUrl: './landing-page.component.scss'
 })
 export class LandingPageComponent {
-  protected readonly LandingPageConstants = LandingPageConstants;
+  protected readonly LandingPageConstants : typeof LandingPageConstants = LandingPageConstants;
   private authService: AuthService = inject(AuthService);
 }

@@ -8,5 +8,5 @@ import { Component } from '@angular/core';
 export class PaginatorComponent {
   first: number = 0;
   rows: number = 10;
-  onPageChange() {}
+  onPageChange() : void {}
 }

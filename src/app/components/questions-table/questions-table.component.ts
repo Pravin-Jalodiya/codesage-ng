@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import {Component, OnInit, inject, signal, computed, Query, WritableSignal, Signal} from '@angular/core';
 import { HttpParams } from '@angular/common/http';
 import { Router, ActivatedRoute } from "@angular/router";
 
@@ -7,10 +7,11 @@ import { ConfirmationService, MessageService } from "primeng/api";
 import { debounceTime, Subject } from 'rxjs';
 
 import { FilterOption, Question, QuestionsResponse } from '../../shared/types/question.types';
-import { API_ENDPOINTS, MESSAGES } from '../../shared/constants';
+import {API_ENDPOINTS, MESSAGES, UI_CONSTANTS} from '../../shared/constants';
 import { QuestionService } from '../../services/question/question.service';
 import { AuthService } from '../../services/auth/auth.service';
 import { Role } from "../../shared/config/roles.config";
+import {ErrorResponse} from "../../shared/types/platform.types";
 
 @Component({
   selector: 'app-questions-table',
@@ -19,31 +20,31 @@ import { Role } from "../../shared/config/roles.config";
 })
 export class QuestionsTableComponent implements OnInit {
   public authService: AuthService = inject(AuthService);
-  private confirmationService = inject(ConfirmationService);
-  private messageService = inject(MessageService);
-  private questionService = inject(QuestionService);
-  private pendingTopicFilter = signal<string | null>(null);
-  private pendingCompanyFilter = signal<string | null>(null);
-  private pendingDifficultyFilter = signal<string | null>(null);
+  private confirmationService : ConfirmationService = inject(ConfirmationService);
+  private messageService : MessageService = inject(MessageService);
+  private questionService : QuestionService = inject(QuestionService);
+  private pendingTopicFilter : WritableSignal<string | null> = signal<string | null>(null);
+  private pendingCompanyFilter : WritableSignal<string | null> = signal<string | null>(null);
+  private pendingDifficultyFilter : WritableSignal<string | null> = signal<string | null>(null);
 
-  role = computed(() => this.authService.userRole());
+  role : Signal<Role> = computed(() => this.authService.userRole());
 
   // Pagination signals
-  currentPage = signal<number>(0);
-  pageSize = signal<number>(15);
-  first = signal<number>(0);
-  totalRecords = signal<number>(0);
+  currentPage : WritableSignal<number> = signal<number>(0);
+  pageSize : WritableSignal<number> = signal<number>(15);
+  first : WritableSignal<number> = signal<number>(0);
+  totalRecords : WritableSignal<number> = signal<number>(0);
 
   // Data and filter signals
-  questions = signal<Question[]>([]);
-  searchQuery = signal<string>('');
-  selectedCompany = signal<FilterOption | null>(null);
-  selectedTopic = signal<FilterOption | null>(null);
-  selectedDifficulty = signal<FilterOption | null>(null);
+  questions : WritableSignal<Question[]> = signal<Question[]>([]);
+  searchQuery : WritableSignal<string> = signal<string>('');
+  selectedCompany :  WritableSignal<FilterOption | null> = signal<FilterOption | null>(null);
+  selectedTopic :  WritableSignal<FilterOption | null> = signal<FilterOption | null>(null);
+  selectedDifficulty :  WritableSignal<FilterOption | null> = signal<FilterOption | null>(null);
 
   // Filter options
-  companies = signal<FilterOption[]>([]);
-  topics = signal<FilterOption[]>([]);
+  companies : WritableSignal<FilterOption[]> = signal<FilterOption[]>([]);
+  topics : WritableSignal<FilterOption[]> = signal<FilterOption[]>([]);
   difficulties: FilterOption[] = [
     { name: 'Easy' },
     { name: 'Medium' },
@@ -51,7 +52,7 @@ export class QuestionsTableComponent implements OnInit {
   ];
 
   // Search debounce
-  private searchSubject = new Subject<string>();
+  private searchSubject : Subject<string> = new Subject<string>();
 
   // Upload Question form visibility
   visible: boolean = false;
@@ -61,11 +62,11 @@ export class QuestionsTableComponent implements OnInit {
     private router: Router
   ) {}
 
-  ngOnInit() {
+  ngOnInit() : void {
     // Set up search debounce
     this.searchSubject.pipe(
       debounceTime(300)
-    ).subscribe(() => {
+    ).subscribe((): void => {
       this.first.set(0);
       this.loadQuestions();
       this.updateURL();
@@ -89,9 +90,9 @@ export class QuestionsTableComponent implements OnInit {
     this.loadFilterOptions();
   }
 
-  private updateURL() {
+  private updateURL(): void {
     // Get current query params
-    const currentParams = { ...this.route.snapshot.queryParams };
+    const currentParams: { [p: string]: any } = { ...this.route.snapshot.queryParams };
 
     // Update or remove topic param
     if (this.selectedTopic()) {
@@ -123,7 +124,7 @@ export class QuestionsTableComponent implements OnInit {
   }
 
   private buildParams(): HttpParams {
-    let params = new HttpParams()
+    let params : HttpParams = new HttpParams()
       .set('offset', this.first().toString())
       .set('limit', this.pageSize().toString());
 
@@ -146,18 +147,18 @@ export class QuestionsTableComponent implements OnInit {
     return params;
   }
 
-  loadQuestions() {
+  loadQuestions(): void {
     const params = this.buildParams();
     this.questionService.getQuestions(API_ENDPOINTS.QUESTIONS.LIST, params).subscribe({
-      next: (response: QuestionsResponse) => {
+      next: (response: QuestionsResponse): void => {
         // Sort questions by ID before setting them
-        const sortedQuestions = [...response.questions].sort((a, b) =>
+        const sortedQuestions : Question[] = [...response.questions].sort((a : Question, b : Question) =>
           parseInt(a.question_id) - parseInt(b.question_id)
         );
         this.questions.set(sortedQuestions);
         this.totalRecords.set(response.total);
       },
-      error: () => {
+      error: (): void => {
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
@@ -169,10 +170,10 @@ export class QuestionsTableComponent implements OnInit {
 
   private applyPendingFilters(): void {
     // Apply topic filter if pending
-    const pendingTopic = this.pendingTopicFilter();
+    const pendingTopic: string | null = this.pendingTopicFilter();
     if (pendingTopic) {
       const topicName = this.capitalize(pendingTopic);
-      const matchingTopic = this.topics().find(t => t.name === topicName);
+      const matchingTopic: FilterOption | undefined = this.topics().find(t => t.name === topicName);
       if (matchingTopic) {
         this.selectedTopic.set(matchingTopic);
         this.pendingTopicFilter.set(null);  // Clear the pending filter
@@ -180,10 +181,10 @@ export class QuestionsTableComponent implements OnInit {
     }
 
     // Apply company filter if pending
-    const pendingCompany = this.pendingCompanyFilter();
+    const pendingCompany: string | null = this.pendingCompanyFilter();
     if (pendingCompany) {
-      const companyName = this.capitalize(pendingCompany);
-      const matchingCompany = this.companies().find(c => c.name === companyName);
+      const companyName: string = this.capitalize(pendingCompany);
+      const matchingCompany: FilterOption | undefined = this.companies().find(c => c.name === companyName);
       if (matchingCompany) {
         this.selectedCompany.set(matchingCompany);
         this.pendingCompanyFilter.set(null);  // Clear the pending filter
@@ -191,10 +192,10 @@ export class QuestionsTableComponent implements OnInit {
     }
 
     // Apply difficulty filter if pending
-    const pendingDifficulty = this.pendingDifficultyFilter();
+    const pendingDifficulty: string | null = this.pendingDifficultyFilter();
     if (pendingDifficulty) {
-      const difficultyName = this.capitalize(pendingDifficulty);
-      const matchingDifficulty = this.difficulties.find(d => d.name === difficultyName);
+      const difficultyName: string = this.capitalize(pendingDifficulty);
+      const matchingDifficulty: FilterOption | undefined = this.difficulties.find(d => d.name === difficultyName);
       if (matchingDifficulty) {
         this.selectedDifficulty.set(matchingDifficulty);
         this.pendingDifficultyFilter.set(null);  // Clear the pending filter
@@ -209,12 +210,12 @@ export class QuestionsTableComponent implements OnInit {
     }
   }
 
-  loadFilterOptions() {
+  loadFilterOptions(): void {
     // Get all questions without pagination to build filter options
     this.questionService.getQuestions(API_ENDPOINTS.QUESTIONS.LIST).subscribe({
-      next: (response) => {
-        const uniqueCompanies = new Set<string>();
-        const uniqueTopics = new Set<string>();
+      next: (response : QuestionsResponse) => {
+        const uniqueCompanies: Set<string> = new Set<string>();
+        const uniqueTopics: Set<string> = new Set<string>();
 
         response.questions.forEach(q => {
           q.company_tags.forEach(tag => uniqueCompanies.add(this.capitalize(tag)));
@@ -230,45 +231,45 @@ export class QuestionsTableComponent implements OnInit {
     });
   }
 
-  onPageChange(event: PaginatorState) {
+  onPageChange(event: PaginatorState): void {
     if (event.first !== undefined) this.first.set(event.first);
     if (event.rows !== undefined) this.pageSize.set(event.rows);
     if (event.page !== undefined) this.currentPage.set(event.page);
     this.loadQuestions();
   }
 
-  onSearchChange(query: string) {
+  onSearchChange(query: string): void {
     this.searchQuery.set(query);
     this.searchSubject.next(query);
   }
 
-  onCompanySelect(company: FilterOption | null) {
+  onCompanySelect(company: FilterOption | null): void {
     this.selectedCompany.set(company);
     this.first.set(0);
     this.loadQuestions();
     this.updateURL();
   }
 
-  onTopicSelect(topic: FilterOption | null) {
+  onTopicSelect(topic: FilterOption | null): void {
     this.selectedTopic.set(topic);
     this.first.set(0);
     this.loadQuestions();
     this.updateURL();
   }
 
-  onDifficultySelect(difficulty: FilterOption | null) {
+  onDifficultySelect(difficulty: FilterOption | null): void {
     this.selectedDifficulty.set(difficulty);
     this.first.set(0);
     this.loadQuestions();
     this.updateURL();
   }
 
-  pickRandomQuestion() {
-    const randomOffset = Math.floor(Math.random() * this.totalRecords());
-    const params = this.buildParams().set('offset', randomOffset.toString()).set('limit', '1');
+  pickRandomQuestion(): void {
+    const randomOffset: number = Math.floor(Math.random() * this.totalRecords());
+    const params: HttpParams = this.buildParams().set('offset', randomOffset.toString()).set('limit', '1');
 
     this.questionService.getQuestions(API_ENDPOINTS.QUESTIONS.LIST, params).subscribe({
-      next: (response) => {
+      next: (response: QuestionsResponse): void => {
         if (response.questions.length > 0) {
           this.redirectToQuestion(response.questions[0].question_link);
         }
@@ -276,16 +277,18 @@ export class QuestionsTableComponent implements OnInit {
     });
   }
 
-  onQuestionDelete(question: Question) {
+  onQuestionDelete(question: Question): void {
     this.confirmationService.confirm({
-      message: `Are you sure you want to delete the question "${question.question_title}"?`,
-      header: 'Delete Confirmation',
-      icon: 'pi pi-info-circle',
+      message: MESSAGES.CONFIRM.DELETE_QUESTION(question),
+      header: MESSAGES.CONFIRM.DELETE_HEADER,
+      icon: UI_CONSTANTS.ICONS.INFO_CIRCLE,
+      acceptButtonStyleClass: UI_CONSTANTS.BUTTON_STYLES.DANGER_TEXT,
+      rejectButtonStyleClass: UI_CONSTANTS.BUTTON_STYLES.TEXT,
       acceptIcon: 'none',
       rejectIcon: 'none',
-      accept: () => {
+      accept: (): void => {
         this.questionService.deleteQuestion(question.question_id).subscribe({
-          next: () => {
+          next: (): void => {
             this.messageService.add({
               severity: 'info',
               summary: 'Success',
@@ -293,7 +296,7 @@ export class QuestionsTableComponent implements OnInit {
             });
             this.loadQuestions();
           },
-          error: (error) => {
+          error: (error: ErrorResponse): void => {
             this.messageService.add({
               severity: 'error',
               summary: 'Error',
@@ -305,7 +308,7 @@ export class QuestionsTableComponent implements OnInit {
     });
   }
 
-  redirectToQuestion(link: string) {
+  redirectToQuestion(link: string): void {
     if (link) {
       window.open(link, '_blank');
     }
@@ -315,7 +318,7 @@ export class QuestionsTableComponent implements OnInit {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
-  showUploadForm(){
+  showUploadForm(): void {
     this.visible = true;
   }
 
