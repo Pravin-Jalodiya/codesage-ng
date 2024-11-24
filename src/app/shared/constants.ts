@@ -114,7 +114,8 @@ export const MESSAGES = {
     FIX_VALIDATION_ERRORS: 'Please fix the validation errors and try again.',
     UPLOAD_FAILED: 'File upload failed.',
     USER_DELETE_FAILED: 'Failed to delete user',
-    USER_UPDATE_FAILED: 'Failed to update user'
+    USER_UPDATE_FAILED: 'Failed to update user',
+    LOADING_AVATAR: 'Failed to load avatar',
   },
   INFO: {
     NO_CHANGES: 'No changes were made to the profile',
@@ -177,3 +178,9 @@ export const VALIDATION_ERRORS = {
   minLength: (field: string, length: number) => `${field} must be at least ${length} characters`,
   invalidEmail: 'Please enter a valid email address'
 };
+
+export const DEFAULTS = {
+  USER: {
+    AVATAR: 'https://assets.leetcode.com/users/default_avatar.jpg'
+  }
+}

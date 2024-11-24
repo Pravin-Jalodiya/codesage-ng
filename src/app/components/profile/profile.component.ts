@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, computed, OnInit, Signal, signal, WritableSignal} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import { Router } from "@angular/router";
 
 import {ConfirmationService, MessageService} from "primeng/api";
 
 import {UpdateProfileResponse, UserProfile, UserProfileResponse} from '../../shared/types/profile.types';
-import {API_BASE_URL, MESSAGES, UI_CONSTANTS} from '../../shared/constants';
+import {API_BASE_URL, MESSAGES, UI_CONSTANTS, DEFAULTS} from '../../shared/constants';
 import { UserService } from '../../services/user/user.service';
 import { AuthService } from "../../services/auth/auth.service";
 import {ErrorResponse} from "../../shared/types/platform.types";
@@ -20,6 +20,7 @@ export class ProfileComponent implements OnInit {
   isEditing: boolean = false;
   isLoading: boolean = false;
   initialFormValues: UserProfile | null = null;
+  userAvatar: Signal<string> = computed(() : string => this.userService.userAvatar())
 
   constructor(
     private fb: FormBuilder,
@@ -56,7 +57,6 @@ export class ProfileComponent implements OnInit {
 
   fetchUserProfile(username: string): void {
     this.isLoading = true;
-
     this.userService.fetchUserProfile(username)
       .subscribe({
         next: (response : UserProfileResponse): void => {
@@ -257,4 +257,5 @@ export class ProfileComponent implements OnInit {
     }
     return '';
   }
+
 }

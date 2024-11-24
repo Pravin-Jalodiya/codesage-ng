@@ -16,7 +16,7 @@
           }
         </div>
         <div class="avatar-dropdown">
-          <p-avatar image="https://assets.leetcode.com/users/avatars/avatar_1678084041.png" styleClass="mr-2" size="large" shape="circle"></p-avatar>
+          <p-avatar image="{{ userAvatar() }}" styleClass="mr-2" size="large" shape="circle"></p-avatar>
           <div class="avatar-dropdown-content">
             <div class="dropdown-item" routerLink="/profile"><i class="pi pi-user mr-2"></i>{{ HeaderConstants.PROFILE }}</div>
             <div class="dropdown-item" (click)="onLogout()"><i class="pi pi-sign-out mr-2"></i>{{ HeaderConstants.LOGOUT }}</div>

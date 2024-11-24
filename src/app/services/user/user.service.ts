@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable, signal, WritableSignal} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
@@ -6,7 +6,7 @@ import { MessageService } from 'primeng/api';
 import { Observable } from 'rxjs';
 
 import { PlatformStatsResponse } from '../../shared/types/platform.types';
-import {API_ENDPOINTS, PLATFORM_PATHS} from '../../shared/constants';
+import {API_ENDPOINTS, DEFAULTS, PLATFORM_PATHS} from '../../shared/constants';
 import { UpdateProfileResponse, UserProfile, UserProfileResponse } from '../../shared/types/profile.types';
 import {UserBanToggleResponse, UserProgressResponse, UsersListResponse} from '../../shared/types/user.types';
 import { NoBodyResponse } from '../../shared/types/question.types';
@@ -18,6 +18,7 @@ export class UserService {
   constructor( private http: HttpClient,
     private messageService: MessageService,
     private router: Router) {}
+    userAvatar: WritableSignal<string> = signal(DEFAULTS.USER.AVATAR);
 
     getUsers(): Observable<UsersListResponse>{
       return this.http.get<UsersListResponse>(API_ENDPOINTS.BASE_URL + API_ENDPOINTS.USERS.LIST)

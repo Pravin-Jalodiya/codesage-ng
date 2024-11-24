@@ -5,6 +5,7 @@ export interface UserProfile {
   leetcodeId: string;
   organisation: string;
   country: string;
+  avatar: string;
 }
 
 export interface UserProfileResponse {
