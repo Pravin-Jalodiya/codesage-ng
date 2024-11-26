@@ -105,6 +105,7 @@ export class ProgressComponent implements OnInit{
         }
         },
       error: (error: ErrorResponse) : void => {
+        this.loading.set(false);
         this.messageService.add({
           severity: 'contrast',
           summary: 'Error',

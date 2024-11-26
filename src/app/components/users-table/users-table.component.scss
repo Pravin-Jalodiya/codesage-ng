@@ -13,11 +13,10 @@
 
 .questions-table-container {
   background-color: rgba(255, 255, 255, 0.6);
-  width: fit-content;
+  width: 90%;
   max-height: 70vh;
-  min-width: 95%;
   margin: 5vh auto 4vh;
-  padding: 2rem;
+  padding: 2vw;
   border-radius: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.9);
 }
@@ -25,13 +24,14 @@
 .questions-table-top {
   display: flex;
   justify-content: space-between;
-  height: 2rem;
+  height: 3vh;
 }
 
 .search-bar {
   background-color: #ffffff;
   border-radius: 30px;
   min-width: 35%;
+  height: 32px;
   display: flex;
   align-items: center;
   padding: 0.5rem 1rem;
@@ -39,10 +39,10 @@
 }
 
 .search-bar input[type="text"] {
+  width: 100%;
   border: none;
   outline: none;
-  font-size: 1rem;
-  width: 100%;
+  flex-grow: 1;
   background-color: transparent;
 }
 
@@ -109,17 +109,23 @@
   display: flex;
   font-family: 'Raleway', sans-serif;
   font-weight: bold;
+  font-size: 1.2vw;
   justify-content: space-between;
   margin: 20px auto 20px;
 }
 
 .question {
   border-radius: 25px;
-  height: 3rem;
+  height: 5vh;
   background-color: #ffffff;
   font-family: monospace, sans-serif;
 }
 
+.column-heading, .question-content {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
 
 .action {
   display: inline-block;
@@ -152,13 +158,30 @@
 }
 
 .questions-list {
-  height: 20em;
+  height: 420px;
   overflow-y: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  padding: 10px;
 }
 
 .questions-list::-webkit-scrollbar {
-  scrollbar-width: 0;
   display: none;
+}
+
+.question {
+  border-radius: 25px;
+  height: 5vh;
+  margin-bottom: 4px;
+  background-color: #ffffff;
+  font-family: monospace, sans-serif;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.question:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.8);
 }
 
 .striped-background {
@@ -185,6 +208,14 @@
   width: 45%;
   margin: 2vh auto 2vh;
   height: fit-content;
+}
+
+.overflow-text {
+  display: block;
+  max-width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 :host::ng-deep .p-paginator {

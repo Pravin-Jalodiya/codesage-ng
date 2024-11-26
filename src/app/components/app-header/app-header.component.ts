@@ -6,7 +6,7 @@ import { AuthService } from '../../services/auth/auth.service';
 import {HeaderConstants, MESSAGES} from "../../shared/constants";
 import {ProfileComponent} from "../profile/profile.component";
 import {UserService} from "../../services/user/user.service";
-import { UserProfileResponse} from "../../shared/types/profile.types";
+import {UserProfile, UserProfileResponse} from "../../shared/types/profile.types";
 import {ErrorResponse} from "../../shared/types/platform.types";
 import {MessageService} from "primeng/api";
 
@@ -16,34 +16,35 @@ import {MessageService} from "primeng/api";
   styleUrls: ['./app-header.component.scss']
 })
 export class AppHeaderComponent {
-  router = inject(Router);
+  router: Router = inject(Router);
   authService: AuthService = inject(AuthService);
   userService: UserService = inject(UserService);
   messageService: MessageService = inject(MessageService);
   role : Signal <Role> = computed((): Role => this.authService.userRole());
   protected readonly Role = Role;
-  userAvatar: Signal<string> = computed(() : string => this.userService.userAvatar())
+  userAvatar: Signal<string> = computed(() : string => this.userService.userAvatar());
 
   ngOnInit(): void {
-    this.checkAndLoadAvatar();
+    console.log("app head called")
+    this.checkAndLoadProfile();
   }
 
-  private checkAndLoadAvatar(): void {
+  checkAndLoadProfile(): void {
     const username : string | undefined = this.authService.getUsernameFromToken();
     if (username) {
-      this.fetchUserAvatar(username);
+      this.fetchUserProfile(username);
     } else {
       this.router.navigate(['/login']);
     }
   }
 
-  fetchUserAvatar(username: string): void {
+  fetchUserProfile(username: string): void {
     this.userService.fetchUserProfile(username)
       .subscribe({
         next: (response : UserProfileResponse): void => {
           if (response.code === 200) {
-            const userAvatar : string = response.user_profile.avatar;
-            this.userService.userAvatar.update((default_avatar : string) => userAvatar);
+            const avatar : string = response.user_profile.avatar;
+            this.userService.userAvatar.update((default_avatar : string) => avatar);
           }
         },
         error: (error: ErrorResponse) : void => {

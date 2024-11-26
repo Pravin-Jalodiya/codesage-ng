@@ -1,4 +1,4 @@
-import {Component, OnInit, inject, signal, computed, Query, WritableSignal, Signal} from '@angular/core';
+import {Component, OnInit, inject, signal, computed, WritableSignal, Signal} from '@angular/core';
 import { HttpParams } from '@angular/common/http';
 import { Router, ActivatedRoute } from "@angular/router";
 

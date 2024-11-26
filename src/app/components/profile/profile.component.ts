@@ -20,7 +20,8 @@ export class ProfileComponent implements OnInit {
   isEditing: boolean = false;
   isLoading: boolean = false;
   initialFormValues: UserProfile | null = null;
-  userAvatar: Signal<string> = computed(() : string => this.userService.userAvatar())
+
+  userAvatar: Signal<string> = computed(() : string => this.userService.userAvatar());
 
   constructor(
     private fb: FormBuilder,
@@ -57,6 +58,7 @@ export class ProfileComponent implements OnInit {
 
   fetchUserProfile(username: string): void {
     this.isLoading = true;
+
     this.userService.fetchUserProfile(username)
       .subscribe({
         next: (response : UserProfileResponse): void => {
@@ -242,7 +244,7 @@ export class ProfileComponent implements OnInit {
   }
 
   getFieldError(fieldName: string): string {
-    const control :  AbstractControl<any, any> | null = this.profileForm.get(fieldName);
+    const control :  AbstractControl<string, string> | null = this.profileForm.get(fieldName);
     if (control?.touched && control?.errors) {
       if (control.errors['required']) {
         return `${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)} is required`;

@@ -39,6 +39,20 @@
   padding: 10px;
 }
 
+.column-heading, .question-content {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.overflow-text {
+  display: block;
+  max-width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
 .questions-list::-webkit-scrollbar {
   display: none;
 }
@@ -47,7 +61,7 @@
     display: flex;
     align-items: center;
     border-radius: 30px;
-    height: 2rem;
+    height: 32px;
     min-width: 35%;
     background: white;
     padding: 0.5rem 1rem;
@@ -159,7 +173,7 @@
 }
 
 .column-heading-1, .column-heading-3 {
-  min-width: 15%;
+  min-width: 10%;
 }
 
 .column-heading-1-admin, .column-heading-3-admin, .column-heading-4 {
@@ -172,7 +186,7 @@
 }
 
 .question-id, .question-difficulty {
-  min-width: 15%;
+  min-width: 10%;
 }
 
 .question-id-admin, .question-difficulty-admin, .action {
@@ -189,7 +203,7 @@
 
 .question {
   border-radius: 25px;
-  height: 3rem;
+  height: 5vh;
   margin-bottom: 4px;
   background-color: #ffffff;
   font-family: monospace, sans-serif;

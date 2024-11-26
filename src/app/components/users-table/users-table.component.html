@@ -11,17 +11,17 @@
               type="text"
               pInputText
               [ngModel]="searchQuery()"
-              (ngModelChange)="searchQuery.set($event)"
+              (ngModelChange)="onSearchChange($event)"
               name="searchQuery"
-              placeholder="Search users by name"
-              class="search-bar no-box-shadow" />
+              placeholder="Search users by username"
+              class="no-box-shadow" />
           </div>
           <div class="filters">
             <p-dropdown
               #stateDropdown
               [options]="userStates"
               [ngModel]="selectedState()"
-              (ngModelChange)="selectedState.set($event)"
+              (ngModelChange)="onStatusSelect($event)"
               name="stateFilter"
               placeholder="filter"
               [showClear]="true"
@@ -34,32 +34,32 @@
         </div>
 
         <div class="column-headings flex align-items-center justify-content-center">
-          <div class="column-heading-1 flex-1 flex justify-content-center">Username</div>
-          <div class="column-heading-2 flex-1 flex justify-content-center">Leetcode ID</div>
-          <div class="column-heading-3 flex-1 flex justify-content-center">Country</div>
-          <div class="column-heading-4 flex-1 flex justify-content-center">Last Seen</div>
-          <div class="column-heading-5 flex-1 flex justify-content-center">Status</div>
-          <div class="column-heading-6 flex-1 flex justify-content-center">Actions</div>
+          <div class="column-heading flex-1 flex justify-content-center">Username</div>
+          <div class="column-heading flex-1 flex justify-content-center">Leetcode ID</div>
+          <div class="column-heading flex-1 flex justify-content-center">Country</div>
+          <div class="column-heading flex-1 flex justify-content-center">Last Seen</div>
+          <div class="column-heading flex-1 flex justify-content-center">Status</div>
+          <div class="column-heading flex-1 flex justify-content-center">Actions</div>
         </div>
 
         <div class="questions-list">
-          @for(user of paginatedUsers(); track user.username; let i = $index){
+          @for(user of users(); track user.username; let i = $index){
             <div class="question flex"[ngClass]="{'striped-background': i % 2 === 1}">
-              <div class="question-id flex flex-1 justify-content-center align-items-center">
-                {{user.username}}
+              <div class="question-content flex flex-1 justify-content-center align-items-center">
+                <span class="overflow-text">{{ user.username }}</span>
               </div>
-              <div class="question-title flex flex-1 justify-content-center align-items-center">
-                {{ user.leetcode_id }}
+              <div class="question-content flex flex-1 justify-content-center align-items-center">
+                <span class="overflow-text">{{ user.leetcode_id }}</span>
               </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                {{ user.country }}
+              <div class="question-content flex flex-1 justify-content-center align-items-center">
+                <span class="overflow-text">{{ user.country }}</span>
               </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
-                {{ user.last_seen | customDateAndTime }}
+              <div class="question-content flex flex-1 justify-content-center align-items-center">
+                <span class="overflow-text">{{ user.last_seen | customDateAndTime }}</span>
               </div>
-              <div class="question-difficulty flex flex-1 justify-content-center align-items-center">
+              <div class="question-content flex flex-1 justify-content-center align-items-center">
                 <span class="status" [class.text-red-500]="user.is_banned" [class.text-green-500]="!user.is_banned"
-                [ngClass]="{'green': !user.is_banned, 'red': user.is_banned}">
+                      [ngClass]="{'green': !user.is_banned, 'red': user.is_banned}">
                   {{ user.is_banned ? 'Banned' : 'Active' }}
                 </span>
               </div>
