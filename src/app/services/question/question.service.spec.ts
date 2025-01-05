@@ -36,6 +36,7 @@ describe('QuestionService', () => {
         {
           question_id: '1',
           question_title: 'Test Question',
+          question_title_slug: 'test-question-1',
           difficulty: 'Easy',
           question_link: 'https://example.com',
           topic_tags: ['Array'],

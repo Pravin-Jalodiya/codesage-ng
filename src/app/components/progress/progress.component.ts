@@ -54,7 +54,7 @@ export class ProgressComponent implements OnInit{
 
   constructor(private authService: AuthService, private router: Router) {
     const username : string | undefined = this.authService.getUsernameFromToken();
-    if (username) {
+    if (username) {co
       this.fetchUserProgress(username);
     } else {
       this.router.navigate(['/login']);
