@@ -130,15 +130,16 @@ describe('LoginFormComponent', () => {
   });
 
   it('should handle unsuccessful login and show error message', () => {
-    const response = { code: 401, role: 'USER', message: "Login successful", token: "xwrrzsfWAdsdardf2312edasdsd" };
     const errorResponse = new HttpErrorResponse({
-      error : {
-        error_code : 1100,
+      error: {
+        error_code: 1100,
         message: "test"
       },
       status: 401,
-    })
-    authService.login.and.returnValue(throwError(()=>errorResponse));
+      statusText: 'Unauthorized',
+    });
+
+    authService.login.and.returnValue(throwError(() => errorResponse));
 
     component.loginForm.patchValue({
       username: 'testuser',
@@ -149,9 +150,10 @@ describe('LoginFormComponent', () => {
     expect(messageService.add).toHaveBeenCalledWith({
       severity: 'error',
       summary: 'Error',
-      detail: errorResponse.message
+      detail: 'test' // Use the actual message provided in the error object
     });
   });
+
 
   describe('Initialization Navigation', () => {
     it('should not navigate if user is not logged in', () => {

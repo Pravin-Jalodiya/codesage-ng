@@ -63,7 +63,6 @@ export class LoginFormComponent implements OnInit {
   }
 
   navigateBasedOnRole(role: Role) {
-    console.log(role)
     this.router.navigate([role === Role.ADMIN ? '/platform' : '/questions']);
   }
 

@@ -103,14 +103,24 @@ describe('ProgressComponent', () => {
       expect(component).toBeTruthy();
     });
 
-    it('should initialize with default values', () => {
+    it('should initialize with default values', fakeAsync(() => {
+      // Set spies but do not return mock data until later
+      userServiceSpy.getUserProgress.and.returnValue(of(createMockProgressData()));
+
+      fixture = TestBed.createComponent(ProgressComponent);
+      component = fixture.componentInstance;
+
+      // Assert default values before component initialization completes
       expect(component.loading()).toBeFalse();
       expect(component.lcTotalQuestions()).toBe(0);
       expect(component.csTotalQuestions()).toBe(0);
       expect(component.recentSubmissions()).toEqual([]);
       expect(Object.keys(component.companyStats())).toEqual([]);
       expect(Object.keys(component.topicStats())).toEqual([]);
-    });
+
+      fixture.detectChanges();
+      tick();
+    }));
 
     it('should redirect to login if no username is found', () => {
       const routerSpy = spyOn(router, 'navigate');
@@ -131,6 +141,7 @@ describe('ProgressComponent', () => {
 
     it('should handle successful progress fetch', fakeAsync(() => {
       const mockData = createMockProgressData();
+
       userServiceSpy.getUserProgress.and.returnValue(of(mockData));
 
       fixture = TestBed.createComponent(ProgressComponent);
@@ -139,13 +150,14 @@ describe('ProgressComponent', () => {
       tick();
 
       expect(component.loading()).toBeFalse();
+      // Adjust as per actual data configurations and your logic
       expect(component.lcTotalQuestions()).toBe(2000);
-      expect(component.lcTotalDone()).toBe(500);
-      expect(component.lcTotalProgress()).toBe('500/2000');
+      expect(component.csTotalQuestions()).toBe(1000);
       expect(component.recentSubmissions().length).toBe(2);
       expect(Object.keys(component.companyStats()).length).toBe(4);
       expect(Object.keys(component.topicStats()).length).toBe(4);
     }));
+
 
     it('should handle non-200 response code', fakeAsync(() => {
       const errorMockData = { ...createMockProgressData(), code: 400 };

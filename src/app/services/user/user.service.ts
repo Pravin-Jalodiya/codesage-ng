@@ -18,7 +18,6 @@ export class UserService {
   constructor( private http: HttpClient,
     private messageService: MessageService,
     private router: Router) {
-    console.log('UserService called')
   }
 
   userAvatar: WritableSignal<string> = signal(DEFAULTS.USER.AVATAR);
