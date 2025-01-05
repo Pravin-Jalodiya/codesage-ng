@@ -1,5 +1,6 @@
 export interface Question {
   question_id: string;
+  question_title_slug: string
   question_title: string;
   difficulty: string;
   question_link: string;

@@ -1,15 +1,15 @@
-import {Injectable, signal, WritableSignal} from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Injectable, signal, WritableSignal } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { MessageService } from 'primeng/api';
 import { Observable } from 'rxjs';
 
+import { API_ENDPOINTS, DEFAULTS, PLATFORM_PATHS } from '../../shared/constants';
 import { PlatformStatsResponse } from '../../shared/types/platform.types';
-import {API_ENDPOINTS, DEFAULTS, PLATFORM_PATHS} from '../../shared/constants';
 import { UpdateProfileResponse, UserProfile, UserProfileResponse } from '../../shared/types/profile.types';
-import {UserBanToggleResponse, UserProgressResponse, UsersListResponse} from '../../shared/types/user.types';
 import { NoBodyResponse } from '../../shared/types/question.types';
+import { UserBanToggleResponse, UserProgressListResponse, UserProgressResponse, UsersListResponse } from '../../shared/types/user.types';
 
 @Injectable({
   providedIn: 'root'
@@ -52,5 +52,9 @@ export class UserService {
 
     getUserProgress(username: string): Observable<UserProgressResponse>{
       return this.http.get<UserProgressResponse>(API_ENDPOINTS.USERS.PROGRESS(username));
+    }
+
+    getUserProgressList(): Observable<UserProgressListResponse> {
+      return this.http.get<UserProgressListResponse>(`${API_ENDPOINTS.USERS.PROGRESS_LIST()}`);
     }
 }

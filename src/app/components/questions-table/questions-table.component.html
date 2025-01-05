@@ -1,20 +1,23 @@
 <div class="background">
   <div class="background-overlay">
-    <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
-      <app-header></app-header>
-    <div class="flex-column justify-content-center align-content-center align-items-center h-fit w-full">
+    <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
+    <app-header></app-header>
+    <div
+      class="flex-column justify-content-center align-content-center align-items-center h-fit w-full"
+    >
       <div class="questions-table-container">
         <div class="upper-half flex-column">
           <div class="questions-table-top">
             <div class="search-bar">
               <i class="pi pi-search"></i>
               <input
-              type="text"
-              pInputText
-              class="no-box-shadow"
-              [ngModel]="searchQuery()"
-              (ngModelChange)="onSearchChange($event)"
-              placeholder="Search question by title or ID" />
+                type="text"
+                pInputText
+                class="no-box-shadow"
+                [ngModel]="searchQuery()"
+                (ngModelChange)="onSearchChange($event)"
+                placeholder="Search question by title or ID"
+              />
             </div>
 
             <div class="filters">
@@ -29,7 +32,8 @@
                   [checkmark]="true"
                   [editable]="true"
                   optionLabel="name"
-                  (click)="companyDropdown.show()">
+                  (click)="companyDropdown.show()"
+                >
                 </p-dropdown>
               </div>
 
@@ -44,7 +48,8 @@
                   [checkmark]="true"
                   [showClear]="true"
                   optionLabel="name"
-                  (click)="topicDropdown.show()">
+                  (click)="topicDropdown.show()"
+                >
                 </p-dropdown>
               </div>
 
@@ -59,88 +64,160 @@
                   [checkmark]="true"
                   [editable]="true"
                   optionLabel="name"
-                  (click)="difficultyDropdown.show()">
+                  (click)="difficultyDropdown.show()"
+                >
                 </p-dropdown>
               </div>
               @if (role() === Role.USER) {
-                <button pButton pRipple type="button" class="icon-button" (click)="pickRandomQuestion()">
-                  Pick one
-                  <img src="../../../assets/random.png" alt="icon" class="button-icon" />
-                </button>
+              <button
+                pButton
+                pRipple
+                type="button"
+                class="icon-button"
+                (click)="pickRandomQuestion()"
+              >
+                Pick one
+                <img
+                  src="../../../assets/random.png"
+                  alt="icon"
+                  class="button-icon"
+                />
+              </button>
               } @else {
-                <button pButton pRipple type="button" class="icon-button" (click)="showUploadForm()">
-                 Upload Questions
-                </button>
-                <p-dialog [resizable]="false" header="Upload file" [modal]="true" [(visible)]="visible" [style]="{ width: '60%' }">
-                    <file-upload></file-upload>
-                </p-dialog>
+              <button
+                pButton
+                pRipple
+                type="button"
+                class="icon-button"
+                (click)="showUploadForm()"
+              >
+                Upload Questions
+              </button>
+              <p-dialog
+                [resizable]="false"
+                header="Upload file"
+                [modal]="true"
+                [(visible)]="visible"
+                [style]="{ width: '60%' }"
+                [draggable]="false"
+              >
+                <file-upload></file-upload>
+              </p-dialog>
               }
-
             </div>
           </div>
-          <div class="column-headings flex justify-content-center align-items-center">
-            <div class="column-heading-1 flex-1 flex justify-content-center"
-                 [ngClass]="{'column-heading-1-admin': role() === Role.ADMIN}">ID</div>
-            <div class="column-heading-2 flex justify-content-center">Title</div>
-            <div class="column-heading-3 flex-1 flex justify-content-center"
-                 [ngClass]="{'column-heading-3-admin': role() === Role.ADMIN}">Difficulty</div>
+          <div
+            class="column-headings flex justify-content-center align-items-center"
+          >
+            <div
+              class="column-heading-1 flex-1 flex justify-content-center"
+              [ngClass]="{ 'column-heading-1-admin': role() === Role.ADMIN }"
+            >
+              ID
+            </div>
+            <div class="column-heading-2 flex justify-content-center">
+              Title
+            </div>
+            <div
+              class="column-heading-3 flex-1 flex justify-content-center"
+              [ngClass]="{ 'column-heading-3-admin': role() === Role.ADMIN }"
+            >
+              Difficulty
+            </div>
 
             @if (role() === Role.ADMIN) {
-              <div class="column-heading-4 flex-1 flex justify-content-center">Action</div>
-            }
-
-            @if (role() === Role.USER) {
-              <div class="column-heading-4 flex-1 flex justify-content-center">Status</div>
+            <div class="column-heading-4 flex-1 flex justify-content-center">
+              Action
+            </div>
+            } @if (role() === Role.USER) {
+            <div class="column-heading-4 flex-1 flex justify-content-center">
+              Status
+            </div>
             }
           </div>
-          <div class="questions-list flex-column justify-content-center align-items-center">
-            @for (question of questions(); track question.question_id; let i = $index) {
-              <div class="question flex" [ngClass]="{'striped-background': i % 2 === 1}">
-                <div class="question-id flex flex-grow-1 justify-content-center align-items-center"
-                     [ngClass]="{'question-id-admin': role() === Role.ADMIN}">
-                  <span class="overflow-text">{{ question.question_id }}</span>
-                </div>
-                <div class="question-title column-heading-2 flex justify-content-center align-items-center"
-                     (click)="redirectToQuestion(question.question_link)">
-                  <span class="overflow-text">{{ question.question_title }}</span>
-                </div>
-                <div class="question-difficulty flex flex-grow-1 justify-content-center align-items-center"
-                     [ngClass]="{'question-difficulty-admin': role() === Role.ADMIN}">
-                  <div class="q-difficulty-container" [ngClass]="{'color-easy': question.difficulty === 'easy',
-                'color-medium': question.difficulty === 'medium', 'color-hard': question.difficulty === 'hard'}">
+          <div
+            class="questions-list flex-column justify-content-center align-items-center"
+          >
+            @for (question of questions(); track question.question_id; let i =
+            $index) {
+            <div
+              class="question flex"
+              [ngClass]="{ 'striped-background': i % 2 === 1 }"
+            >
+              <div
+                class="question-id flex flex-grow-1 justify-content-center align-items-center"
+                [ngClass]="{ 'question-id-admin': role() === Role.ADMIN }"
+              >
+                <span class="overflow-text">{{ question.question_id }}</span>
+              </div>
+              <div
+                class="question-title column-heading-2 flex justify-content-center align-items-center"
+                (click)="redirectToQuestion(question.question_link)"
+              >
+                <span class="overflow-text">{{ question.question_title }}</span>
+              </div>
+              <div
+                class="question-difficulty flex flex-grow-1 justify-content-center align-items-center"
+                [ngClass]="{
+                  'question-difficulty-admin': role() === Role.ADMIN
+                }"
+              >
+                <div
+                  class="q-difficulty-container"
+                  [ngClass]="{
+                    'color-easy': question.difficulty === 'easy',
+                    'color-medium': question.difficulty === 'medium',
+                    'color-hard': question.difficulty === 'hard'
+                  }"
+                >
                   <span class="overflow-text">{{ question.difficulty }}</span>
-                  </div>
                 </div>
-
-                @if (role() === Role.ADMIN) {
-                  <div class="action flex flex-grow-1 justify-content-center">
-                    <img class="delete-icon" src="../../../assets/trash-icon.png"
-                         (click)="onQuestionDelete(question)">
-                  </div>
-                }
-
-                @if (role() === Role.USER) {
-                  <div class="action flex flex-grow-1 justify-content-center">
-                    <img class="delete-icon" src="../../../assets/check-button.png">
-                  </div>
-                }
-
               </div>
+
+              @if (role() === Role.ADMIN) {
+              <div class="action flex flex-grow-1 justify-content-center">
+                <img
+                  class="delete-icon"
+                  src="../../../assets/trash-icon.png"
+                  (click)="onQuestionDelete(question)"
+                />
+              </div>
+              } @if (role() === Role.USER) {
+              <div class="action flex flex-grow-1 justify-content-center">
+                @if (isQuestionCompleted(question.question_title_slug)) {
+                <img
+                  class="delete-icon"
+                  src="../../../assets/check-button.png"
+                  alt="green check symbol"
+                />
+                } @else {
+                <img
+                  class="delete-icon"
+                  src="../../../assets/pending.png"
+                  alt="status pending symbol"
+                />
+                }
+              </div>
+              }
+            </div>
             } @empty {
-              <div class="no-questions flex justify-content-center align-items-center h-full">
-                No questions found
-              </div>
+            <div
+              class="no-questions flex justify-content-center align-items-center h-full"
+            >
+              No questions found
+            </div>
             }
           </div>
         </div>
         <div class="paginator flex justify-content-center align-items-center">
           <div class="w-21rem">
             <p-paginator
-            [first]="first()"
-            [rows]="pageSize()"
-            [totalRecords]="totalRecords()"
-            (onPageChange)="onPageChange($event)">
-          </p-paginator>
+              [first]="first()"
+              [rows]="pageSize()"
+              [totalRecords]="totalRecords()"
+              (onPageChange)="onPageChange($event)"
+            >
+            </p-paginator>
           </div>
         </div>
       </div>

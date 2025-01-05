@@ -5,7 +5,8 @@ import { MessageService } from 'primeng/api';
 
 import { UserService } from '../../services/user/user.service';
 import { MESSAGES } from '../../shared/constants';
-import {ErrorResponse, PlatformStatsResponse} from "../../shared/types/platform.types";
+import {PlatformStatsResponse} from "../../shared/types/platform.types";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-progress',
@@ -57,7 +58,7 @@ export class PlatformComponent implements OnInit {
           this.topicStats.set(this.filterEmptyKeys(response.stats.TopicWiseQuestionsCount));
         }
       },
-      error: (error: ErrorResponse) => {
+      error: (error: HttpErrorResponse) => {
         this.messageService.add({
           severity: 'error',
           summary: 'Error',

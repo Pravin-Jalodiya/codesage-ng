@@ -6,9 +6,10 @@ import { AuthService } from '../../services/auth/auth.service';
 import {HeaderConstants, MESSAGES} from "../../shared/constants";
 import {ProfileComponent} from "../profile/profile.component";
 import {UserService} from "../../services/user/user.service";
-import {UserProfile, UserProfileResponse} from "../../shared/types/profile.types";
-import {ErrorResponse} from "../../shared/types/platform.types";
+import {UserProfileResponse} from "../../shared/types/profile.types";
+
 import {MessageService} from "primeng/api";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-header',
@@ -25,7 +26,6 @@ export class AppHeaderComponent {
   userAvatar: Signal<string> = computed(() : string => this.userService.userAvatar());
 
   ngOnInit(): void {
-    console.log("app head called")
     this.checkAndLoadProfile();
   }
 
@@ -47,7 +47,7 @@ export class AppHeaderComponent {
             this.userService.userAvatar.update((default_avatar : string) => avatar);
           }
         },
-        error: (error: ErrorResponse) : void => {
+        error: (error: HttpErrorResponse) : void => {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',

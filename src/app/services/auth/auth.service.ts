@@ -1,5 +1,5 @@
 import { Injectable, signal, WritableSignal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import { Router } from "@angular/router";
 import { MessageService } from "primeng/api";
 import { Observable } from 'rxjs';
@@ -10,7 +10,7 @@ import {
   LoginRequest,
   LoginResponse,
   GetRoleResponse,
-  LogoutResponse
+  LogoutResponse, ForgotPasswordResponse, ResetPasswordResponse
 } from "../../shared/types/auth.types";
 import { AUTH_PATHS } from '../../shared/constants';
 import { jwtDecode, JwtPayload as BaseJwtPayload } from "jwt-decode";
@@ -29,6 +29,7 @@ export class AuthService {
   userRole: WritableSignal<Role> = signal<Role>(Role.USER);
   username: WritableSignal<string> = signal<string>("");
   loggedIn: WritableSignal<boolean> = signal<boolean>(this.hasToken());
+  forgotPasswordEmail: WritableSignal<string> = signal<string>('');
 
   private readonly tokenKey = 'authToken';
 
@@ -37,9 +38,7 @@ export class AuthService {
     private messageService: MessageService,
     private router: Router
   ) {
-    console.log("Role has been set!")
     if (this.loggedIn()) {
-      console.log("Role has been set!")
       this.getRole().subscribe({
         next: (response: GetRoleResponse) => this.handleRoleResponse(response),
         error: (error: any) => this.handleError(error),
@@ -48,25 +47,24 @@ export class AuthService {
   }
 
   private handleRoleResponse(response: GetRoleResponse): void {
-    console.log(response.role)
     if (response.code === 200) {
       localStorage.setItem('userRole', response.role);
       this.userRole.set(response.role as Role);
     }
   }
 
-  handleError(error: any): void {
+  handleError(error: HttpErrorResponse): void {
     this.showError(error.error.message);
     this.router.navigate(['/login']);
   }
 
   isTokenValid(): boolean {
     try {
-      const token = localStorage.getItem('authToken');
+      const token: string | null = localStorage.getItem('authToken');
       if (!token) return false;
 
-      const decodedToken = jwtDecode<CustomJwtPayload>(token);
-      const isExpired = !decodedToken.exp || decodedToken.exp * 1000 < Date.now();
+      const decodedToken : CustomJwtPayload = jwtDecode<CustomJwtPayload>(token);
+      const isExpired : boolean = !decodedToken.exp || decodedToken.exp * 1000 < Date.now();
 
       return !decodedToken.banState && !isExpired;
     } catch {
@@ -92,7 +90,7 @@ export class AuthService {
       const token : string | null = localStorage.getItem('authToken');
       if (!token) return null as any;
 
-      const decodedToken = jwtDecode<CustomJwtPayload>(token);
+      const decodedToken : CustomJwtPayload = jwtDecode<CustomJwtPayload>(token);
       if (!decodedToken.exp || decodedToken.exp * 1000 < Date.now() || decodedToken.banState) {
         localStorage.removeItem(this.tokenKey);
         return null as any;
@@ -135,5 +133,21 @@ export class AuthService {
 
   logout(): Observable<LogoutResponse> {
     return this.http.post<LogoutResponse>(AUTH_PATHS.LOGOUT, {});
+  }
+
+  forgotPassword(email: string): Observable<ForgotPasswordResponse> {
+    return this.http.post<ForgotPasswordResponse>(AUTH_PATHS.FORGOT_PASSWORD, { email });
+  }
+
+  resetPassword(
+    password: string,
+    otp: string
+  ): Observable<ResetPasswordResponse> {
+    return this.http.post<ResetPasswordResponse>(AUTH_PATHS.RESET_PASSWORD, {
+        email: this.forgotPasswordEmail(),
+        password,
+        otp,
+      }
+    );
   }
 }

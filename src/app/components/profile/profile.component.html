@@ -1,10 +1,8 @@
 <div class="background">
   <div class="background-overlay">
-    <app-header/>
+    <app-header />
     <p-confirmDialog></p-confirmDialog>
-    <div class="profile-heading">
-      Profile
-    </div>
+    <div class="profile-heading">Profile</div>
     <div class="full-profile-container">
       <div class="profile-header-container">
         <div class="profile-picture">
@@ -12,25 +10,33 @@
             image="{{ userAvatar() }}"
             styleClass="mr-2"
             size="xlarge"
-            shape="circle" />
+            shape="circle"
+          />
           <div>
             <p class="user-name">
-              {{profileForm.get('fullname')?.value || 'User'}}
+              {{ profileForm.get("fullname")?.value || "User" }}
             </p>
             <p class="user-email">
-              {{profileForm.get('email')?.value}}
+              {{ profileForm.get("email")?.value }}
             </p>
           </div>
         </div>
         <div class="profile-edit">
           @if (!isEditing) {
-            <button
-              pButton
-              class="edit-button no-box-shadow"
-              type="button"
-              (click)="onEdit()"
-              label="Edit">
-            </button>
+          <button
+            pButton
+            class="change-password-button no-box-shadow"
+            type="button"
+            (click)="showChangePasswordDialog()"
+            label="Change Password"
+          ></button>
+          <button
+            pButton
+            class="edit-button no-box-shadow ml-2"
+            type="button"
+            (click)="onEdit()"
+            label="Edit"
+          ></button>
           }
         </div>
       </div>
@@ -44,13 +50,15 @@
                   class="transparent-input"
                   type="text"
                   id="username"
-                  formControlName="username" />
+                  formControlName="username"
+                />
                 <label for="username">Username*</label>
               </p-floatLabel>
-              @if (profileForm.get('username')?.touched && profileForm.get('username')?.invalid) {
-                <small class="p-error">
-                  {{getFieldError('username')}}
-                </small>
+              @if (profileForm.get('username')?.touched &&
+              profileForm.get('username')?.invalid) {
+              <small class="p-error">
+                {{ getFieldError("username") }}
+              </small>
               }
             </div>
             <div class="p-col-6">
@@ -59,13 +67,15 @@
                   pInputText
                   class="transparent-input"
                   id="fullname"
-                  formControlName="fullname" />
+                  formControlName="fullname"
+                />
                 <label for="fullname">Full Name*</label>
               </p-floatLabel>
-              @if (profileForm.get('fullname')?.touched && profileForm.get('fullname')?.invalid) {
-                <small class="p-error">
-                  {{getFieldError('fullname')}}
-                </small>
+              @if (profileForm.get('fullname')?.touched &&
+              profileForm.get('fullname')?.invalid) {
+              <small class="p-error">
+                {{ getFieldError("fullname") }}
+              </small>
               }
             </div>
           </div>
@@ -78,13 +88,15 @@
                   class="transparent-input"
                   type="text"
                   id="leetcodeId"
-                  formControlName="leetcodeId" />
+                  formControlName="leetcodeId"
+                />
                 <label for="leetcodeId">LeetCode ID*</label>
               </p-floatLabel>
-              @if (profileForm.get('leetcodeId')?.touched && profileForm.get('leetcodeId')?.invalid) {
-                <small class="p-error">
-                  {{getFieldError('leetcodeId')}}
-                </small>
+              @if (profileForm.get('leetcodeId')?.touched &&
+              profileForm.get('leetcodeId')?.invalid) {
+              <small class="p-error">
+                {{ getFieldError("leetcodeId") }}
+              </small>
               }
             </div>
             <div class="p-col-6">
@@ -93,13 +105,15 @@
                   pInputText
                   class="transparent-input"
                   id="email"
-                  formControlName="email" />
+                  formControlName="email"
+                />
                 <label for="email">Email*</label>
               </p-floatLabel>
-              @if (profileForm.get('email')?.touched && profileForm.get('email')?.invalid) {
-                <small class="p-error">
-                  {{getFieldError('email')}}
-                </small>
+              @if (profileForm.get('email')?.touched &&
+              profileForm.get('email')?.invalid) {
+              <small class="p-error">
+                {{ getFieldError("email") }}
+              </small>
               }
             </div>
           </div>
@@ -112,13 +126,15 @@
                   class="transparent-input"
                   type="text"
                   id="country"
-                  formControlName="country" />
+                  formControlName="country"
+                />
                 <label for="country">Country*</label>
               </p-floatLabel>
-              @if (profileForm.get('country')?.touched && profileForm.get('country')?.invalid) {
-                <small class="p-error">
-                  {{getFieldError('country')}}
-                </small>
+              @if (profileForm.get('country')?.touched &&
+              profileForm.get('country')?.invalid) {
+              <small class="p-error">
+                {{ getFieldError("country") }}
+              </small>
               }
             </div>
             <div class="p-col-6">
@@ -127,38 +143,159 @@
                   pInputText
                   class="transparent-input"
                   id="organisation"
-                  formControlName="organisation" />
+                  formControlName="organisation"
+                />
                 <label for="organisation">Organisation*</label>
               </p-floatLabel>
-              @if (profileForm.get('organisation')?.touched && profileForm.get('organisation')?.invalid) {
-                <small class="p-error">
-                  {{getFieldError('organisation')}}
-                </small>
+              @if (profileForm.get('organisation')?.touched &&
+              profileForm.get('organisation')?.invalid) {
+              <small class="p-error">
+                {{ getFieldError("organisation") }}
+              </small>
               }
             </div>
           </div>
 
           @if (isEditing) {
-            <div class="profile-actions">
-              <button
-                pButton
-                class="p-button-secondary mr-2 no-box-shadow edit-button"
-                type="button"
-                (click)="onCancel()"
-                label="Cancel">
-              </button>
-              <button
-                pButton
-                class="p-button-primary no-box-shadow edit-button"
-                type="button"
-                (click)="onSave()"
-                [disabled]="profileForm.invalid || !hasFormChanged()"
-                label="Save">
-              </button>
-            </div>
+          <div class="form-actions">
+            <button
+              pButton
+              class="p-button-secondary mr-2 no-box-shadow edit-button"
+              type="button"
+              (click)="onCancel()"
+              label="Cancel"
+            ></button>
+            <button
+              pButton
+              class="p-button-primary no-box-shadow edit-button"
+              type="button"
+              (click)="onSave()"
+              [disabled]="profileForm.invalid || !hasFormChanged()"
+              label="Save"
+            ></button>
+          </div>
           }
         </div>
       </form>
     </div>
   </div>
 </div>
+
+<!--<p-dialog-->
+<!--  header="Change Password"-->
+<!--  [(visible)]="changePasswordVisible"-->
+<!--  [modal]="true"-->
+<!--  [style]="{ width: '25%' }"-->
+<!--  [resizable]="false"-->
+<!--  [draggable]="false"-->
+<!--&gt;-->
+<!--  <form [formGroup]="changePasswordForm" class="change-password-form">-->
+<!--    <div class="change-password-container">-->
+<!--      <div class="p-grid-2">-->
+<!--        <div class="p-col-2">-->
+<!--          <p-floatLabel>-->
+<!--            <p-password-->
+<!--              id="new-password"-->
+<!--              type="password"-->
+<!--              [toggleMask]="true"-->
+<!--              [feedback]="false"-->
+<!--              [style]="{ width: '100%' }"-->
+<!--              formControlName="newPassword"-->
+<!--              class="transparent-input no-box-shadow"-->
+<!--              required-->
+<!--            />-->
+<!--            <label for="new-password">New Password*</label>-->
+<!--          </p-floatLabel>-->
+<!--          @if (changePasswordForm.get('newPassword')?.touched) {-->
+<!--          <div class="error-message">-->
+<!--            {{ getFieldError("newPassword") }}-->
+<!--          </div>-->
+<!--          }-->
+<!--        </div>-->
+<!--        <div class="p-col-2">-->
+<!--          <p-floatLabel>-->
+<!--            <p-password-->
+<!--              id="confirm-new-password"-->
+<!--              type="password"-->
+<!--              [toggleMask]="true"-->
+<!--              [feedback]="false"-->
+<!--              [style]="{ width: '100%' }"-->
+<!--              formControlName="confirmNewPassword"-->
+<!--              class="transparent-input no-box-shadow"-->
+<!--              required-->
+<!--            />-->
+<!--            <label for="confirm-new-password">Confirm New Password*</label>-->
+<!--          </p-floatLabel>-->
+<!--          @if (changePasswordForm.get('confirmNewPassword')?.touched) {-->
+<!--          <div class="error-message">-->
+<!--            {{-->
+<!--              passwordMismatch()-->
+<!--                ? "Passwords do not match"-->
+<!--                : getFieldError("confirmNewPassword")-->
+<!--            }}-->
+<!--          </div>-->
+<!--          }-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="form-actions">-->
+<!--        <button-->
+<!--          pButton-->
+<!--          class="confirm-button no-box-shadow"-->
+<!--          type="button"-->
+<!--          (click)="onChangePassword()"-->
+<!--          [disabled]="changePasswordForm.invalid || passwordMismatch()"-->
+<!--          label="Confirm"-->
+<!--        ></button>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </form>-->
+<!--</p-dialog>-->
+<p-dialog header="Change Password" [(visible)]="changePasswordVisible" [modal]="true" [style]="{ width: '30%' }" [resizable]="false" [draggable]="false">
+  <form [formGroup]="changePasswordForm" class="change-password-form">
+    <div class="change-password-container">
+      <div class="p-grid-2">
+        <div class="p-col-2">
+          <p-floatLabel>
+            <p-password
+              id="new-password"
+              type="password"
+              [toggleMask]="true"
+              [feedback]="false"
+              [style]="{ width: '100%' }"
+              formControlName="newPassword"
+              class="transparent-input no-box-shadow"
+              required
+            />
+            <label for="new-password">New Password*</label>
+          </p-floatLabel>
+          <div class="error-message">
+            {{ getNewPasswordError() }}
+          </div>
+        </div>
+        <div class="p-col-2">
+          <p-floatLabel>
+            <p-password
+              id="confirm-new-password"
+              type="password"
+              [toggleMask]="true"
+              [feedback]="false"
+              [style]="{ width: '100%' }"
+              formControlName="confirmNewPassword"
+              class="transparent-input no-box-shadow"
+              required
+            />
+            <label for="confirm-new-password">Confirm New Password*</label>
+          </p-floatLabel>
+          <div class="error-message" *ngIf="passwordMismatch()">
+            Passwords do not match.
+          </div>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button pButton class="edit-button no-box-shadow" type="button" (click)="onChangePassword()"
+                [disabled]="changePasswordForm.invalid || passwordMismatch()"
+                label="Confirm"></button>
+      </div>
+    </div>
+  </form>
+</p-dialog>

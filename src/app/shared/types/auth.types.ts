@@ -39,3 +39,13 @@ export interface LogoutResponse {
   code: number;
   message: string;
 }
+
+export interface ForgotPasswordResponse {
+  code: number;
+  message: string;
+}
+
+export interface ResetPasswordResponse {
+  code: number;
+  message: string;
+}

@@ -1,14 +1,14 @@
-import {Component, computed, OnInit, Signal, signal, WritableSignal} from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/forms";
+import { Component, computed, OnInit, Signal } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 
-import {ConfirmationService, MessageService} from "primeng/api";
+import { ConfirmationService, MessageService } from "primeng/api";
 
-import {UpdateProfileResponse, UserProfile, UserProfileResponse} from '../../shared/types/profile.types';
-import {API_BASE_URL, MESSAGES, UI_CONSTANTS, DEFAULTS} from '../../shared/constants';
-import { UserService } from '../../services/user/user.service';
+import { HttpErrorResponse } from "@angular/common/http";
 import { AuthService } from "../../services/auth/auth.service";
-import {ErrorResponse} from "../../shared/types/platform.types";
+import { UserService } from '../../services/user/user.service';
+import { MESSAGES, UI_CONSTANTS } from '../../shared/constants';
+import { UpdateProfileResponse, UserProfile, UserProfileResponse } from '../../shared/types/profile.types';
 
 @Component({
   selector: 'app-profile',
@@ -20,6 +20,8 @@ export class ProfileComponent implements OnInit {
   isEditing: boolean = false;
   isLoading: boolean = false;
   initialFormValues: UserProfile | null = null;
+  changePasswordVisible: boolean = false;
+  changePasswordForm: FormGroup = this.initializeChangePasswordForm();
 
   userAvatar: Signal<string> = computed(() : string => this.userService.userAvatar());
 
@@ -77,7 +79,7 @@ export class ProfileComponent implements OnInit {
             this.setFormState(false);
           }
         },
-        error: (error: ErrorResponse) : void => {
+        error: (error: HttpErrorResponse) : void => {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
@@ -202,11 +204,11 @@ export class ProfileComponent implements OnInit {
             this.setFormState(false);
           }
         },
-        error: (error: ErrorResponse) : void => {
+        error: (error: HttpErrorResponse) : void => {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
-            detail: error.message || MESSAGES.ERROR.PROFILE_UPDATE_FAILED
+            detail: error.error.message || MESSAGES.ERROR.PROFILE_UPDATE_FAILED
           });
         },
         complete: (): void => {
@@ -254,10 +256,61 @@ export class ProfileComponent implements OnInit {
           + fieldName.slice(1)} must be at least ${control.errors['minlength'].requiredLength} characters`;
       }
       if (control.errors['email']) {
-        return MESSAGES.ERROR.VALIDATION_ERROR;
+        return MESSAGES.ERROR.INVALID_EMAIL_FORMAT;
       }
     }
     return '';
   }
 
+  private initializeChangePasswordForm(): FormGroup {
+    return this.fb.group({
+      newPassword: ['', [
+        Validators.required,
+        Validators.minLength(8),
+        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\W).+$/)
+      ]],
+      confirmNewPassword: ['', [Validators.required]]
+    });
+  }
+
+  showChangePasswordDialog(): void {
+    this.changePasswordVisible = true;
+    this.changePasswordForm.reset();
+  }
+
+  passwordMismatch(): boolean {
+    const newPasswordControl = this.changePasswordForm.get('newPassword');
+    const confirmNewPasswordControl = this.changePasswordForm.get('confirmNewPassword');
+
+    const newPassword = newPasswordControl ? newPasswordControl.value : '';
+    const confirmNewPassword = confirmNewPasswordControl ? confirmNewPasswordControl.value : '';
+
+    return newPassword !== confirmNewPassword && (confirmNewPasswordControl?.touched ?? false);
+  }
+
+  getNewPasswordError(): string {
+    const newPasswordControl = this.changePasswordForm.get('newPassword');
+    if (newPasswordControl?.touched && newPasswordControl?.invalid) {
+      if (newPasswordControl.errors?.['required']) {
+        return 'Password is required.';
+      }
+      if (newPasswordControl.errors?.['minlength']) {
+        return `Password must be at least ${newPasswordControl.errors['minlength'].requiredLength} characters long.`;
+      }
+      if (newPasswordControl.errors?.['pattern']) {
+        return 'Password must include at least one uppercase letter, one lowercase letter, and one special character.';
+      }
+    }
+    return '';
+  }
+
+
+  onChangePassword(): void {
+    if (this.changePasswordForm.valid && !this.passwordMismatch()) {
+      const newPassword = this.changePasswordForm.get('newPassword')?.value.trim();
+      const changedValues: Partial<UserProfile> = { password: newPassword };
+      this.updateProfile(changedValues);
+      this.changePasswordVisible = false;
+    }
+  }
 }

@@ -12,6 +12,7 @@ import { MessageService } from 'primeng/api';
 
 import { AuthService } from '../../services/auth/auth.service';
 import { SignupRequest, SignupResponse } from "../../shared/types/auth.types";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-signup-form',
@@ -70,7 +71,7 @@ export class SignupFormComponent implements OnInit {
             });
           }
         },
-        error: (error: { error: { message: string } }): void => {
+        error: (error: HttpErrorResponse): void => {
           this.loading = false;
           this.showError(error.error.message ?? 'Signup failed. Please try again.');
         }

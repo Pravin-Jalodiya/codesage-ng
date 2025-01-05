@@ -44,6 +44,10 @@ import {PlatformComponent} from "./components/platform/platform.component";
 import {MatIcon} from "@angular/material/icon";
 import {DialogModule} from "primeng/dialog";
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
+import {DividerModule} from "primeng/divider";
+import {InputOtpModule} from "primeng/inputotp";
 
 
 @NgModule({
@@ -62,39 +66,43 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
         ProgressComponent,
         PlatformComponent,
         DateAndTimePipe,
-        NotFoundComponent
+        NotFoundComponent,
+        ForgotPasswordComponent,
+        ResetPasswordComponent
     ],
-    imports: [
-        CommonModule,
-        RouterOutlet,
-        ReactiveFormsModule,
-        HttpClientModule,
-        CommonModule,
-        RouterLink,
-        BrowserModule,
-        ButtonDirective,
-        FloatLabelModule,
-        InputTextModule,
-        PasswordModule,
-        FileUploadModule,
-        ButtonModule,
-        PaginatorModule,
-        BadgeModule,
-        ProgressBarModule,
-        Ripple,
-        ProgressSpinnerModule,
-        BrowserAnimationsModule,
-        ToastModule,
-        AvatarModule,
-        DropdownModule,
-        FormsModule,
-        MatSlideToggleModule,
-        NgCircleProgressModule,
-        ConfirmDialogModule,
-        NgOptimizedImage,
-        MatIcon,
-        DialogModule,
-    ],
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    ReactiveFormsModule,
+    HttpClientModule,
+    CommonModule,
+    RouterLink,
+    BrowserModule,
+    ButtonDirective,
+    FloatLabelModule,
+    InputTextModule,
+    PasswordModule,
+    FileUploadModule,
+    ButtonModule,
+    PaginatorModule,
+    BadgeModule,
+    ProgressBarModule,
+    Ripple,
+    ProgressSpinnerModule,
+    BrowserAnimationsModule,
+    ToastModule,
+    AvatarModule,
+    DropdownModule,
+    FormsModule,
+    MatSlideToggleModule,
+    NgCircleProgressModule,
+    ConfirmDialogModule,
+    NgOptimizedImage,
+    MatIcon,
+    DialogModule,
+    DividerModule,
+    InputOtpModule,
+  ],
     bootstrap: [AppComponent, ],
     exports: [AppHeaderComponent],
     providers: [AuthService, provideHttpClient(withInterceptors([AuthInterceptor])), provideRouter(routes), MessageService, CircleProgressOptions, ConfirmationService]

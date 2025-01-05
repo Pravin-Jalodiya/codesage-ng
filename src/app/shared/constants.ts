@@ -1,4 +1,4 @@
-import {Question} from "./types/question.types";
+import { Question } from "./types/question.types";
 
 export const HeaderConstants = {
   LOGO_TEXT: 'Codesage',
@@ -47,6 +47,7 @@ export const API_ENDPOINTS = {
     PROGRESS: (username: string): string => `${API_BASE_URL}/users/progress/${username}`,
     BAN: (username: string): string => `${API_BASE_URL}/users/update-user-ban-state?username=${username}`,
     DELETE: (username: string): string => `${API_BASE_URL}/users/delete?username=${username}`,
+    PROGRESS_LIST: (): string => `${API_BASE_URL}/users/progress-list`
   },
   QUESTIONS: {
     LIST: '/questions',
@@ -99,6 +100,7 @@ export const MESSAGES = {
     PROFILE_UPDATE_FAILED: 'Failed to update profile',
     PROGRESS_FETCH_FAILED: 'Failed to fetch progress',
     QUESTION_DELETE_FAILED: 'Failed to delete question',
+    QUESTION_STATUS_FAILED: 'Failed to load question status',
     LOADING_PROFILE: 'Failed to load profile',
     VALIDATION_ERROR: 'Please check all required fields',
     PLATFORM_FETCH_FAILED: 'Failed to fetch platform statistics',
@@ -116,6 +118,9 @@ export const MESSAGES = {
     USER_DELETE_FAILED: 'Failed to delete user',
     USER_UPDATE_FAILED: 'Failed to update user',
     LOADING_AVATAR: 'Failed to load avatar',
+    INVALID_EMAIL_FORMAT: "Enter a valid email",
+    OTP_GENERATION_FAILED: "An error occurred. Please try again later.",
+    RESET_PASSWORD_FAILED: "Password reset failed. Please try again later.",
   },
   INFO: {
     NO_CHANGES: 'No changes were made to the profile',
@@ -162,7 +167,9 @@ export const AUTH_PATHS = {
   LOGIN: `${API_BASE_URL}/auth/login`,
   SIGNUP: `${API_BASE_URL}/auth/signup`,
   ROLE: `${API_BASE_URL}/auth/member/role`,
-  LOGOUT: `${API_BASE_URL}/auth/member/logout`
+  LOGOUT: `${API_BASE_URL}/auth/member/logout`,
+  FORGOT_PASSWORD: `${API_BASE_URL}/auth/forgot-password`,
+  RESET_PASSWORD: `${API_BASE_URL}/auth/reset-password`,
 };
 
 export const PLATFORM_PATHS = {

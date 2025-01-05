@@ -8,6 +8,7 @@ import { AuthService } from '../../services/auth/auth.service';
 import { LoginConstants } from "../../shared/constants";
 import { LoginResponse } from "../../shared/types/auth.types";
 import { Role } from "../../shared/config/roles.config";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-login-form',
@@ -53,7 +54,7 @@ export class LoginFormComponent implements OnInit {
             this.showError(response.message);
           }
         },
-        error: (error: { error: { message: string } }) => {
+        error: (error: HttpErrorResponse) => {
           this.loading = false;
           this.showError(error.error.message);
         }

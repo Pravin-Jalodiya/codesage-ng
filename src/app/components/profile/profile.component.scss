@@ -21,6 +21,10 @@
   width: 100%;
 }
 
+.change-password-container {
+  width: 100%;
+}
+
 .profile-picture {
   width: 50%;
   display: flex;
@@ -60,9 +64,36 @@
   transition: background-color 0.3s;
 }
 
+.confirm-button {
+    width: 30%;
+    padding: 5px 10px;
+    background-color: white;
+    color: black;
+    font-size: 1vw;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.change-password-button {
+  width: 50%;
+  padding: 5px 10px;
+  background-color: white;
+  color: black;
+  font-size: 1vw;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
 .profile-heading {
   width: 15%;
-  /* border-radius: 30px; */
   font-family: "Raleway", sans-serif;
   font-weight: bold;
   border-radius: 50px;
@@ -101,9 +132,25 @@ label {
   margin-bottom: 30px;
 }
 
+.p-grid-2 {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
 .p-col-6 {
   flex: 0 0 50%;
   padding: 5px 10px;
+}
+
+.p-col-2 {
+  flex: 0 0 50%;
+  width: 100%;
+  padding: 12px 5px;
 }
 
 .transparent-input {
@@ -119,6 +166,10 @@ input:focus {
   outline: none;
   border-color: rgba(255, 255, 255, 0.1);
   background-color: rgba(255, 255, 255, 0.4);
+  box-shadow: none;
+}
+
+:host::ng-deep .p-inputtext:enabled:focus{
   box-shadow: none;
 }
 
@@ -148,10 +199,9 @@ input:focus {
   margin-top: 6px;
 }
 
-.profile-actions {
+.form-actions {
   display: flex;
   justify-content: center;
-  margin-top: 2rem;
   gap: 1rem;
 }
 
@@ -170,3 +220,38 @@ input:focus {
   margin: 1px;
   color: black;
 }
+
+.change-password-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 25px;
+  margin: 0 auto;
+}
+
+:host::ng-deep .p-dialog {
+  .p-dialog-header {
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+  }
+
+  .p-dialog-content {
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+  }
+}
+
+:host::ng-deep p-password {
+  width: 100%;
+  display: block;
+}
+
+:host::ng-deep .p-password-input {
+  width: 100%;
+  box-shadow: none;
+  border-radius: 30px;
+  color: white;
+}
+

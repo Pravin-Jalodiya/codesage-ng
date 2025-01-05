@@ -1,17 +1,19 @@
-import {Component, OnInit, inject, signal, computed, WritableSignal, Signal} from '@angular/core';
-import { HttpParams } from '@angular/common/http';
-import { Router, ActivatedRoute } from "@angular/router";
+import { HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { Component, computed, inject, OnInit, signal, Signal, WritableSignal } from '@angular/core';
+import { ActivatedRoute, Router } from "@angular/router";
 
-import { PaginatorState } from 'primeng/paginator';
 import { ConfirmationService, MessageService } from "primeng/api";
+import { PaginatorState } from 'primeng/paginator';
 import { debounceTime, Subject } from 'rxjs';
 
-import { FilterOption, Question, QuestionsResponse } from '../../shared/types/question.types';
-import {API_ENDPOINTS, MESSAGES, UI_CONSTANTS} from '../../shared/constants';
-import { QuestionService } from '../../services/question/question.service';
 import { AuthService } from '../../services/auth/auth.service';
+import { QuestionService } from '../../services/question/question.service';
+import { UserService } from '../../services/user/user.service';
 import { Role } from "../../shared/config/roles.config";
-import {ErrorResponse} from "../../shared/types/platform.types";
+import { API_ENDPOINTS, MESSAGES, UI_CONSTANTS } from '../../shared/constants';
+import { UserProfileResponse } from "../../shared/types/profile.types";
+import { FilterOption, Question, QuestionsResponse } from '../../shared/types/question.types';
+import { UserProgressListResponse, UserProgressResponse } from "../../shared/types/user.types";
 
 @Component({
   selector: 'app-questions-table',
@@ -26,6 +28,7 @@ export class QuestionsTableComponent implements OnInit {
   private pendingTopicFilter : WritableSignal<string | null> = signal<string | null>(null);
   private pendingCompanyFilter : WritableSignal<string | null> = signal<string | null>(null);
   private pendingDifficultyFilter : WritableSignal<string | null> = signal<string | null>(null);
+  private userService: UserService = inject(UserService);
 
   role : Signal<Role> = computed(() => this.authService.userRole());
 
@@ -56,6 +59,9 @@ export class QuestionsTableComponent implements OnInit {
 
   // Upload Question form visibility
   visible: boolean = false;
+
+  // Add new signal for progress list
+  progressList: WritableSignal<Set<string>> = signal<Set<string>>(new Set());
 
   constructor(
     private route: ActivatedRoute,
@@ -88,6 +94,11 @@ export class QuestionsTableComponent implements OnInit {
     // Initial data load
     this.loadQuestions();
     this.loadFilterOptions();
+
+    // Load progress list if user is logged in
+    if (this.role() === Role.USER) {
+      this.loadUserProgress();
+    }
   }
 
   private updateURL(): void {
@@ -148,7 +159,7 @@ export class QuestionsTableComponent implements OnInit {
   }
 
   loadQuestions(): void {
-    const params = this.buildParams();
+    const params : HttpParams = this.buildParams();
     this.questionService.getQuestions(API_ENDPOINTS.QUESTIONS.LIST, params).subscribe({
       next: (response: QuestionsResponse): void => {
         // Sort questions by ID before setting them
@@ -172,7 +183,7 @@ export class QuestionsTableComponent implements OnInit {
     // Apply topic filter if pending
     const pendingTopic: string | null = this.pendingTopicFilter();
     if (pendingTopic) {
-      const topicName = this.capitalize(pendingTopic);
+      const topicName: string = this.capitalize(pendingTopic);
       const matchingTopic: FilterOption | undefined = this.topics().find(t => t.name === topicName);
       if (matchingTopic) {
         this.selectedTopic.set(matchingTopic);
@@ -204,7 +215,7 @@ export class QuestionsTableComponent implements OnInit {
 
     // If any filters were applied, reload the questions
     if (pendingTopic || pendingCompany || pendingDifficulty) {
-      this.first.set(0);  // Reset to first page
+      this.first.set(0);
       this.loadQuestions();
       this.updateURL(); // Update URL after applying filters
     }
@@ -296,11 +307,11 @@ export class QuestionsTableComponent implements OnInit {
             });
             this.loadQuestions();
           },
-          error: (error: ErrorResponse): void => {
+          error: (error: HttpErrorResponse): void => {
             this.messageService.add({
               severity: 'error',
               summary: 'Error',
-              detail: MESSAGES.ERROR.QUESTION_DELETE_FAILED
+              detail: error.error.message || MESSAGES.ERROR.QUESTION_DELETE_FAILED
             });
           }
         });
@@ -320,6 +331,25 @@ export class QuestionsTableComponent implements OnInit {
 
   showUploadForm(): void {
     this.visible = true;
+  }
+
+  private loadUserProgress(): void {
+    this.userService.getUserProgressList().subscribe({
+      next: (response : UserProgressListResponse) => {
+        this.progressList.set(new Set(response.progress_list));
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to load progress'
+        });
+      }
+    });
+  }
+
+  isQuestionCompleted(questionSlug: string): boolean {
+    return this.progressList().has(questionSlug);
   }
 
   protected readonly Role = Role;

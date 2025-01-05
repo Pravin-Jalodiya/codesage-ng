@@ -6,7 +6,7 @@ import {catchError, EMPTY, Observable, throwError} from "rxjs";
 
 export const AuthInterceptor: HttpInterceptorFn =
   (req: HttpRequest<any>, next: HttpHandlerFn): Observable<HttpEvent<any>> => {
-    const skipUrls = ['/signup', '/login'];
+    const skipUrls : string[] = ['/signup', '/login', '/forgot-password', '/reset-password'];
     if(skipUrls.some(url => req.url.includes(url))) {
       return next(req);
     }

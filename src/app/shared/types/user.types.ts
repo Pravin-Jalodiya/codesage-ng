@@ -59,3 +59,9 @@ export interface CodesageStats {
   CompanyWiseStats: Record<string, number>;
   TopicWiseStats: Record<string, number>;
 }
+
+export interface UserProgressListResponse {
+  code: number;
+  message: string;
+  progress_list: string[];
+}

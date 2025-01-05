@@ -1,5 +1,5 @@
 import {Component, inject, signal, OnInit, WritableSignal} from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {MessageService} from "primeng/api";
 import {NavigationExtras, Router} from "@angular/router";
 
@@ -7,7 +7,6 @@ import { AuthService } from "../../services/auth/auth.service";
 import {UserProgressResponse} from "../../shared/types/user.types";
 import {MESSAGES} from "../../shared/constants";
 import {UserService} from "../../services/user/user.service";
-import {ErrorResponse} from "../../shared/types/platform.types";
 
 interface RecentSubmission {
   title: string;
@@ -21,7 +20,6 @@ interface RecentSubmission {
 })
 
 export class ProgressComponent implements OnInit{
-  private http: HttpClient = inject(HttpClient);
   private messageService: MessageService = inject(MessageService);
   private userService: UserService = inject(UserService);
 
@@ -104,7 +102,7 @@ export class ProgressComponent implements OnInit{
           this.csTotalProgress.set(this.csTotalDone()+ "/" + this.csTotalQuestions());
         }
         },
-      error: (error: ErrorResponse) : void => {
+      error: (error: HttpErrorResponse) : void => {
         this.loading.set(false);
         this.messageService.add({
           severity: 'contrast',

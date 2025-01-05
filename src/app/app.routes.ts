@@ -12,6 +12,8 @@ import {adminGuard} from "./shared/guards/admin.guard";
 import {userGuard} from "./shared/guards/user.guard";
 import {authGuard} from "./shared/guards/auth.guard";
 import {NotFoundComponent} from "./components/not-found/not-found.component";
+import {ForgotPasswordComponent} from "./components/forgot-password/forgot-password.component";
+import {ResetPasswordComponent} from "./components/reset-password/reset-password.component";
 
 export const routes: Routes = [
   { path: '', component: LandingPageComponent },
@@ -38,6 +40,14 @@ export const routes: Routes = [
   { path: 'progress',
     component: ProgressComponent,
     canActivate: [authGuard ,userGuard]
+  },
+  {
+    path: 'forgot-password',
+    component: ForgotPasswordComponent,
+  },
+  {
+    path: 'reset-password',
+    component: ResetPasswordComponent,
   },
   {
     path: '**',

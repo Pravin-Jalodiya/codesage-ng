@@ -2,6 +2,7 @@ export interface UserProfile {
   username: string;
   name: string;
   email: string;
+  password: string
   leetcodeId: string;
   organisation: string;
   country: string;
