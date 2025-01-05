@@ -23,7 +23,7 @@ export class FileUploadComponent implements OnInit {
   uploadProgress: WritableSignal<number> = signal<number>(0);
   toUpload: WritableSignal<boolean> = signal<boolean>(false);
 
-  private readonly requiredColumns: string[] = [
+  requiredColumns: string[] = [
     'title_slug', 'id', 'title', 'difficulty',
     'leetcode question link', 'topic tags', 'company tags'
   ];
@@ -139,7 +139,7 @@ export class FileUploadComponent implements OnInit {
     }
   }
 
-  private displayValidationErrors(): void {
+  displayValidationErrors(): void {
     this.messageService.add({
       severity: 'error',
       summary: MESSAGES.ERROR.CSV_VALIDATION_ERROR_SUMMARY,

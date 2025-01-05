@@ -28,6 +28,7 @@ describe('QuestionsTableComponent', () => {
     {
       question_id: '1',
       question_title: 'Test Question 1',
+      question_title_slug: 'test-question-1',
       difficulty: 'Easy',
       question_link: 'https://example.com/q1',
       topic_tags: ['Array'],
@@ -36,6 +37,7 @@ describe('QuestionsTableComponent', () => {
     {
       question_id: '2',
       question_title: 'Test Question 2',
+      question_title_slug: 'test-question-2',
       difficulty: 'Medium',
       question_link: 'https://example.com/q2',
       topic_tags: ['String'],
@@ -109,6 +111,7 @@ describe('QuestionsTableComponent', () => {
         {
           question_id: '3',
           question_title: 'Test Question 3',
+          question_title_slug: 'test-question-3',
           difficulty: 'Hard',
           question_link: 'https://example.com/q3',
           topic_tags: ['Dynamic Programming', 'Graph'],

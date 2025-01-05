@@ -25,7 +25,9 @@ describe('ProfileComponent', () => {
     email: 'test@example.com',
     leetcodeId: 'leetcode123',
     organisation: 'TestOrg',
-    country: 'TestCountry'
+    country: 'TestCountry',
+    password: 'password123',
+    avatar: 'avatar.png'
   };
 
   beforeEach(async () => {

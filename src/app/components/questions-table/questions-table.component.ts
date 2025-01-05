@@ -179,7 +179,7 @@ export class QuestionsTableComponent implements OnInit {
     });
   }
 
-  private applyPendingFilters(): void {
+  applyPendingFilters(): void {
     // Apply topic filter if pending
     const pendingTopic: string | null = this.pendingTopicFilter();
     if (pendingTopic) {

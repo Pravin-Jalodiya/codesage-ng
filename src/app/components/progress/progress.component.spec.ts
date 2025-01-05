@@ -11,7 +11,7 @@ import { UserService } from '../../services/user/user.service';
 import { AuthService } from '../../services/auth/auth.service';
 import { MESSAGES } from '../../shared/constants';
 import { UserProgressResponse } from '../../shared/types/user.types';
-import { ErrorResponse} from "../../shared/types/platform.types";
+import {HttpErrorResponse} from "@angular/common/http";
 
 describe('ProgressComponent', () => {
   let component: ProgressComponent;
@@ -162,10 +162,12 @@ describe('ProgressComponent', () => {
     }));
 
     it('should handle error when fetching progress', fakeAsync(() => {
-      const errorResponse: ErrorResponse = {
-        error_code: 500,
-        message: 'Internal Server Error'
-      };
+      const errorResponse = new HttpErrorResponse({
+        error: 'Internal Server Error',
+        status: 500,
+        statusText: 'Server Error',
+      });
+
       userServiceSpy.getUserProgress.and.returnValue(throwError(() => errorResponse));
 
       fixture = TestBed.createComponent(ProgressComponent);

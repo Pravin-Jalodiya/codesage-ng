@@ -10,8 +10,9 @@ import { AppHeaderComponent } from '../app-header/app-header.component';
 import { MessageService } from 'primeng/api';
 import { UserService } from '../../services/user/user.service';
 import { MESSAGES } from '../../shared/constants';
-import { PlatformStatsResponse, ErrorResponse, PlatformStats } from '../../shared/types/platform.types';
-import {ProgressSpinner} from "primeng/progressspinner";
+import { PlatformStatsResponse, PlatformStats } from '../../shared/types/platform.types';
+import { ProgressSpinner } from "primeng/progressspinner";
+import { HttpErrorResponse } from "@angular/common/http";
 
 describe('PlatformComponent', () => {
   let component: PlatformComponent;
@@ -20,9 +21,7 @@ describe('PlatformComponent', () => {
   let messageService: jasmine.SpyObj<MessageService>;
   let router: Router;
 
-  // Mock data with different scenarios
-  const createMockStats = (modifications: Partial<PlatformStats> = {}):
-      PlatformStatsResponse => ({
+  const createMockStats = (modifications: Partial<PlatformStats> = {}): PlatformStatsResponse => ({
     code: 200,
     message: 'Success',
     stats: {
@@ -37,13 +36,13 @@ describe('PlatformComponent', () => {
         'JavaScript': 100,
         'Python': 200,
         '': 0,
-        '  ': 0  // Testing trimmed empty string
+        '  ': 0 // Testing trimmed empty string
       },
       CompanyWiseQuestionsCount: {
         'Google': 150,
         'Microsoft': 150,
         '': 0,
-        ' ': 0   // Testing whitespace string
+        ' ': 0 // Testing whitespace string
       },
       ...modifications
     }
@@ -88,7 +87,6 @@ describe('PlatformComponent', () => {
     });
 
     it('should initialize with default values before data fetch', () => {
-      // Test initial values before detectChanges
       expect(component.loading()).toBeFalse();
       expect(component.activeUsers()).toBe(0);
       expect(component.totalQuestions()).toBe(0);
@@ -123,8 +121,8 @@ describe('PlatformComponent', () => {
       expect(component.easyQuestions()).toBe(200);
       expect(component.mediumQuestions()).toBe(200);
       expect(component.hardQuestions()).toBe(100);
-      expect(Object.keys(component.companyStats()).length).toBe(2); // Only non-empty keys
-      expect(Object.keys(component.topicStats()).length).toBe(2); // Only non-empty keys
+      expect(Object.keys(component.companyStats()).length).toBe(2);
+      expect(Object.keys(component.topicStats()).length).toBe(2);
     }));
 
     it('should handle platform stats fetch with partial data', fakeAsync(() => {
@@ -155,14 +153,16 @@ describe('PlatformComponent', () => {
       tick();
 
       expect(component.loading()).toBeTrue();
-      expect(component.activeUsers()).toBe(0); // Should retain initial values
+      expect(component.activeUsers()).toBe(0);
     }));
 
     it('should handle error when fetching platform stats', fakeAsync(() => {
-      const errorResponse: ErrorResponse = {
-        error_code: 500,
-        message: 'Internal Server Error'
-      };
+      const errorResponse = new HttpErrorResponse({
+        error: 'Internal Server Error',
+        status: 500,
+        statusText: 'Server Error'
+      });
+
       userService.fetchPlatformStats.and.returnValue(throwError(() => errorResponse));
 
       fixture = TestBed.createComponent(PlatformComponent);
@@ -307,7 +307,6 @@ describe('PlatformComponent', () => {
     }));
   });
 
-
   describe('Template Rendering', () => {
     beforeEach(() => {
       userService.fetchPlatformStats.and.returnValue(of(createMockStats()));
@@ -319,7 +318,6 @@ describe('PlatformComponent', () => {
     it('should display platform stats correctly', () => {
       const compiled = fixture.nativeElement;
 
-      // Check stats values
       expect(compiled.querySelector('.stat-value').textContent).toContain('100'); // Active users
       expect(compiled.querySelectorAll('.stat-value')[1].textContent).toContain('500'); // Total questions
       expect(compiled.querySelectorAll('.stat-value')[2].textContent).toContain('200'); // Easy questions
@@ -403,9 +401,6 @@ describe('PlatformComponent', () => {
       expect(Object.keys(filtered).length).toBe(2);
       expect(filtered['validKey']).toBe(100);
       expect(filtered['anotherValid']).toBe(200);
-      expect(filtered['']).toBeUndefined();
-      expect(filtered[' ']).toBeUndefined();
-      expect(filtered['  ']).toBeUndefined();
     });
 
     it('should handle empty object in filterEmptyKeys', () => {

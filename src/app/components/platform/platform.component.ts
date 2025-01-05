@@ -32,13 +32,13 @@ export class PlatformComponent implements OnInit {
     this.fetchPlatformStats();
   }
 
-  private filterEmptyKeys(stats: Record<string, number>): Record<string, number> {
+  filterEmptyKeys(stats: Record<string, number>): Record<string, number> {
     return Object.fromEntries(
       Object.entries(stats).filter(([key]) : boolean => key.trim() !== '')
     );
   }
 
-  private fetchPlatformStats(): void {
+  fetchPlatformStats(): void {
     this.loading.set(true);
 
     this.userService.fetchPlatformStats().subscribe({

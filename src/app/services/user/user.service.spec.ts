@@ -98,7 +98,7 @@ describe('UserService', () => {
         message: 'User ban state toggled successfully'
       };
 
-      service.toggleUserBanState(username, {}).subscribe(response => {
+      service.toggleUserBanState(username).subscribe(response => {
         expect(response).toEqual(mockResponse);
       });
 
@@ -173,7 +173,9 @@ describe('UserService', () => {
           email: 'test@example.com',
           leetcodeId: 'leetcode_test',
           organisation: 'Test Org',
-          country: 'Test Country'
+          country: 'Test Country',
+          password: 'test123@Password',
+          avatar: 'avatar.png'
         }
       };
 
