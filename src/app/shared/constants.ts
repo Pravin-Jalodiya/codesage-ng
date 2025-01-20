@@ -127,7 +127,7 @@ export const MESSAGES = {
     STATUS_UPDATED: 'Status Updated'
   },
   CONFIRM: {
-    UNSAVED_CHANGES: 'You have unsaved changes. Are you sure you want to cancel?',
+    UNSAVED_CHANGES: 'You have unsaved changes. Are you sure you want to continue?',
     DELETE_USER: (username: string): string => `Are you sure you want to delete user "${username}"?`,
     DELETE_HEADER: 'Delete Confirmation',
     DELETE_QUESTION: (question: Question): string => `Are you sure you want to delete the question "${question.question_title}"?`

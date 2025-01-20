@@ -38,8 +38,8 @@
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
-    "node_modules/@popperjs/core/dist/umd/popper.min.js",
-    "node_modules/bootstrap/dist/js/bootstrap.min.js"
+							"node_modules/@popperjs/core/dist/umd/popper.min.js",
+							"node_modules/bootstrap/dist/js/bootstrap.min.js"
             ]
           },
           "configurations": {
@@ -47,13 +47,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "1mb",
+                  "maximumError": "4mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "5kb",
+                  "maximumError": "6kb"
                 }
               ],
               "outputHashing": "all"

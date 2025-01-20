@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import {CommonModule, NgOptimizedImage} from '@angular/common';
-import {provideRouter, Router, RouterLink, RouterOutlet} from "@angular/router";
+import {provideRouter, RouterLink, RouterOutlet} from "@angular/router";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule, provideHttpClient, withInterceptors} from "@angular/common/http";
 import {BrowserModule} from "@angular/platform-browser";
@@ -46,7 +46,6 @@ import {DialogModule} from "primeng/dialog";
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
-import {DividerModule} from "primeng/divider";
 import {InputOtpModule} from "primeng/inputotp";
 
 
@@ -100,11 +99,16 @@ import {InputOtpModule} from "primeng/inputotp";
     NgOptimizedImage,
     MatIcon,
     DialogModule,
-    DividerModule,
     InputOtpModule,
   ],
     bootstrap: [AppComponent, ],
     exports: [AppHeaderComponent],
-    providers: [AuthService, provideHttpClient(withInterceptors([AuthInterceptor])), provideRouter(routes), MessageService, CircleProgressOptions, ConfirmationService]
+    providers: [AuthService,
+								provideHttpClient(withInterceptors([AuthInterceptor])),
+								provideRouter(routes),
+								MessageService,
+								CircleProgressOptions,
+								ConfirmationService
+		]
 })
 export class AppModule { }

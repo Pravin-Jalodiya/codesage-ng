@@ -8,15 +8,10 @@ import {AuthService} from "../../services/auth/auth.service";
 
 
 export const authGuard: CanActivateFn = (): Observable<boolean> => {
-  const authService = inject(AuthService);
-  const router = inject(Router);
+  const authService : AuthService = inject(AuthService);
+  const router : Router = inject(Router);
 
-  if (!authService.loggedIn()) {
-    router.navigate(['/login']);
-    return of(false);
-  }
-
-  if (!authService.isTokenValid()) {
+  if (!authService.loggedIn() || !authService.isTokenValid()) {
     router.navigate(['/login']);
     return of(false);
   }

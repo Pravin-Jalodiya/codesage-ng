@@ -26,12 +26,12 @@ export class ProfileComponent implements OnInit {
   userAvatar: Signal<string> = computed(() : string => this.userService.userAvatar());
 
   constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private messageService: MessageService,
-    private userService: UserService,
-    private router: Router,
-    private confirmationService: ConfirmationService,
+		private fb: FormBuilder,
+		private authService: AuthService,
+		private messageService: MessageService,
+		private userService: UserService,
+		private router: Router,
+		public confirmationService: ConfirmationService,
   ) {
     this.checkAndLoadProfile();
   }
@@ -97,25 +97,10 @@ export class ProfileComponent implements OnInit {
   }
 
   onCancel(): void {
-    if (this.hasFormChanged()) {
-      this.confirmationService.confirm({
-        message: MESSAGES.CONFIRM.UNSAVED_CHANGES,
-        header: 'Unsaved Changes',
-        icon: UI_CONSTANTS.ICONS.INFO_CIRCLE,
-        acceptButtonStyleClass: UI_CONSTANTS.BUTTON_STYLES.DANGER_TEXT,
-        rejectButtonStyleClass: UI_CONSTANTS.BUTTON_STYLES.TEXT,
-        acceptIcon: 'none',
-        rejectIcon: 'none',
-        accept: (): void => {
-          this.resetForm();
-        },
-      });
-    } else {
-      this.resetForm();
-    }
+    this.resetForm()
   }
 
-  private resetForm(): void {
+  resetForm(): void {
     if (this.initialFormValues) {
       this.profileForm.patchValue({
         username: this.initialFormValues.username,
