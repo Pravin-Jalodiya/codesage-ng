@@ -35,7 +35,7 @@ export const LoginConstants = {
 
 
 export const API_ENDPOINTS = {
-  BASE_URL: 'http://localhost:8080',
+  BASE_URL: 'https://zwg4rahmz7.execute-api.ap-south-1.amazonaws.com/Prod',
   AUTH: {
     SIGNUP: '/auth/signup',
     LOGIN: '/auth/login'
@@ -101,6 +101,7 @@ export const MESSAGES = {
     PROGRESS_FETCH_FAILED: 'Failed to fetch progress',
     QUESTION_DELETE_FAILED: 'Failed to delete question',
     QUESTION_STATUS_FAILED: 'Failed to load question status',
+		QUESTION_FETCH_FAILED: 'Failed to fetch questions',
     LOADING_PROFILE: 'Failed to load profile',
     VALIDATION_ERROR: 'Please check all required fields',
     PLATFORM_FETCH_FAILED: 'Failed to fetch platform statistics',
@@ -161,7 +162,7 @@ export const AddQuestionConstants = {
   ADD_QUESTION_TITLE: 'Add Questions',
 };
 
-export const API_BASE_URL = 'http://localhost:8080';
+export const API_BASE_URL = 'https://zwg4rahmz7.execute-api.ap-south-1.amazonaws.com/Prod';
 
 export const AUTH_PATHS = {
   LOGIN: `${API_BASE_URL}/auth/login`,

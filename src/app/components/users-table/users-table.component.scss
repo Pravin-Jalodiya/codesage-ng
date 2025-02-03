@@ -147,12 +147,6 @@
   // box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-.paginator {
-  width: 35%;
-  margin: 1vh auto 1vh;
-
-}
-
 .upper-half {
   height: 25em;
 }
@@ -207,6 +201,7 @@
 .paginator {
   width: 45%;
   margin: 2vh auto 2vh;
+	padding: 2rem;
   height: fit-content;
 }
 

@@ -14,6 +14,7 @@ import { API_ENDPOINTS, MESSAGES, UI_CONSTANTS } from '../../shared/constants';
 import { UserProfileResponse } from "../../shared/types/profile.types";
 import { FilterOption, Question, QuestionsResponse } from '../../shared/types/question.types';
 import { UserProgressListResponse, UserProgressResponse } from "../../shared/types/user.types";
+import {formatString} from "../../shared/utils/utils";
 
 @Component({
   selector: 'app-questions-table',
@@ -173,7 +174,7 @@ export class QuestionsTableComponent implements OnInit {
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: MESSAGES.ERROR.PROGRESS_FETCH_FAILED
+          detail: MESSAGES.ERROR.QUESTION_FETCH_FAILED
         });
       }
     });
@@ -250,6 +251,7 @@ export class QuestionsTableComponent implements OnInit {
   }
 
   onSearchChange(query: string): void {
+		query = formatString(query)
     this.searchQuery.set(query);
     this.searchSubject.next(query);
   }
@@ -334,18 +336,18 @@ export class QuestionsTableComponent implements OnInit {
   }
 
   private loadUserProgress(): void {
-    this.userService.getUserProgressList().subscribe({
-      next: (response : UserProgressListResponse) => {
-        this.progressList.set(new Set(response.progress_list));
-      },
-      error: () => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to load progress'
-        });
-      }
-    });
+			this.userService.getUserProgressList().subscribe({
+				next: (response: UserProgressListResponse) => {
+					this.progressList.set(new Set(response.progress_list));
+				},
+				error: () => {
+					this.messageService.add({
+						severity: 'error',
+						summary: 'Error',
+						detail: 'Failed to load progress'
+					});
+				}
+			});
   }
 
   isQuestionCompleted(questionSlug: string): boolean {

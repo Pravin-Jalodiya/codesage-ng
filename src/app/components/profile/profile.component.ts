@@ -119,10 +119,11 @@ export class ProfileComponent implements OnInit {
 
     // Always keep leetcodeId disabled
     this.profileForm.get('leetcodeId')?.disable();
+		this.profileForm.get('username')?.disable();
 
     // Handle other form controls
     Object.keys(this.profileForm.controls).forEach(key => {
-      if (key !== 'leetcodeId') {
+      if (key !== 'leetcodeId' && key !== 'username') {
         const control = this.profileForm.get(key);
         if (control) {
           editing ? control.enable() : control.disable();

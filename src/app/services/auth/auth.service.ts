@@ -14,6 +14,7 @@ import {
 } from "../../shared/types/auth.types";
 import { AUTH_PATHS } from '../../shared/constants';
 import { jwtDecode, JwtPayload as BaseJwtPayload } from "jwt-decode";
+import {toObservable} from "@angular/core/rxjs-interop";
 
 interface CustomJwtPayload extends BaseJwtPayload {
   username: string;
